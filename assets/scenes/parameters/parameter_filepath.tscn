@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://dfbbwpc8mey0f"]
+
+[ext_resource type="PackedScene" uid="uid://pma6pc7ka253" path="res://assets/scenes/parameters/parameter_string.tscn" id="1_s40vh"]
+[ext_resource type="Script" uid="uid://b813qse75h5vg" path="res://assets/scenes/parameters/parameter_filepath.gd" id="2_qqwis"]
+
+[node name="parameter_filepath" instance=ExtResource("1_s40vh")]
+script = ExtResource("2_qqwis")
+
+[node name="label" parent="." index="0"]
+text = "Filepath Parameter"
+
+[node name="open_button" type="Button" parent="." index="2"]
+layout_mode = 2
+text = " O "
+
+[node name="file_dialog" type="FileDialog" parent="." index="3"]
+auto_translate_mode = 1
+title = "Open a File or Directory"
+ok_button_text = "Open"
+file_mode = 3
+access = 2
+use_native_dialog = true
+
+[connection signal="pressed" from="open_button" to="." method="open_file_dialog"]
+[connection signal="dir_selected" from="file_dialog" to="." method="confirm_file_dialog" unbinds=1]
+[connection signal="file_selected" from="file_dialog" to="." method="confirm_file_dialog" unbinds=1]

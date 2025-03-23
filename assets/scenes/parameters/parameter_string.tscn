@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://pma6pc7ka253"]
+
+[ext_resource type="PackedScene" uid="uid://qw4xx0jf3pso" path="res://assets/scenes/parameter_base.tscn" id="1_7adn5"]
+[ext_resource type="Script" uid="uid://cgngbj33x1fxr" path="res://assets/scenes/parameters/parameter_string.gd" id="2_bu3d0"]
+
+[node name="parameter_string" instance=ExtResource("1_7adn5")]
+offset_right = 724.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+script = ExtResource("2_bu3d0")
+
+[node name="label" parent="." index="0"]
+text = "String Parameter"
+
+[node name="line_edit" type="LineEdit" parent="." index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+clear_button_enabled = true
+
+[connection signal="text_submitted" from="line_edit" to="." method="update_prefs" unbinds=1]

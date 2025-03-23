@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://qw4xx0jf3pso"]
+
+[ext_resource type="Script" uid="uid://00n85r4l44no" path="res://assets/scenes/parameter_base.gd" id="1_3moxj"]
+
+[node name="parameter_base" type="HBoxContainer"]
+script = ExtResource("1_3moxj")
+
+[node name="label" type="Label" parent="."]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "Parameter"

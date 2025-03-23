@@ -1,0 +1,60 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Penny Image Tools"
+run/main_scene="uid://dv20jd4m5nna2"
+config/features=PackedStringArray("4.4", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[debug]
+
+gdscript/warnings/unused_parameter=0
+gdscript/warnings/unused_signal=0
+
+[display]
+
+window/size/viewport_width=2304
+window/size/viewport_height=1296
+window/stretch/scale=2.0
+
+[editor]
+
+naming/node_name_num_separator=2
+naming/node_name_casing=2
+naming/script_name_casing=2
+
+[file_customization]
+
+folder_colors={
+"res://bin/": "gray",
+"res://include/": "gray",
+"res://lib/": "gray"
+}
+
+[layer_names]
+
+2d_render/layer_1="default"
+3d_render/layer_1="default"
+2d_physics/layer_1="default"
+2d_navigation/layer_1="default"
+3d_physics/layer_1="default"
+3d_navigation/layer_1="default"
+avoidance/layer_1="default"
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

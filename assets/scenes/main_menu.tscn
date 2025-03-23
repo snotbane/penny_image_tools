@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://cp1pm5wnmexer"]
+
+[ext_resource type="PackedScene" uid="uid://fsw37e6bhjnn" path="res://assets/scenes/program_window.tscn" id="1_uu6ob"]
+[ext_resource type="Script" uid="uid://hn4bwmkixbc1" path="res://assets/scenes/settings_panel.gd" id="2_obrqb"]
+[ext_resource type="PackedScene" uid="uid://dfbbwpc8mey0f" path="res://assets/scenes/parameters/parameter_filepath.tscn" id="2_v1ppo"]
+
+[node name="main_menu" instance=ExtResource("1_uu6ob")]
+
+[node name="button" parent="panel_container/margin_container/v_box_container/h_box_container" index="0"]
+visible = false
+
+[node name="label" parent="panel_container/margin_container/v_box_container/h_box_container" index="1"]
+text = "Penny Image Tools"
+
+[node name="execute" parent="panel_container/margin_container/v_box_container/h_box_container" index="2"]
+visible = false
+
+[node name="h_split_container" parent="panel_container/margin_container/v_box_container/control" index="0"]
+dragging_enabled = false
+
+[node name="parameter_panel" parent="panel_container/margin_container/v_box_container/control/h_split_container" index="0"]
+size_flags_horizontal = 3
+
+[node name="margin_container" parent="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container" index="0"]
+size_flags_vertical = 3
+
+[node name="parameter_list" parent="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container" index="0"]
+alignment = 1
+
+[node name="button" type="Button" parent="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list" index="0"]
+layout_mode = 2
+text = "PNG Image Compression"
+
+[node name="settings_panel" type="PanelContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("2_obrqb")
+
+[node name="margin_container" type="MarginContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel" index="0"]
+layout_mode = 2
+
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container" index="0"]
+layout_mode = 2
+
+[node name="optipng_path" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" index="0" instance=ExtResource("2_v1ppo")]
+layout_mode = 2
+save_to_prefs = true
+
+[node name="label" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/optipng_path" index="0"]
+text = "OptiPNG Path"
+
+[editable path="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/optipng_path"]

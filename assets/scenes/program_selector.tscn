@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://dv20jd4m5nna2"]
+
+[ext_resource type="PackedScene" uid="uid://4ntd0v7krgom" path="res://assets/scenes/programs/optipng_compress/compress_window.tscn" id="1_7641o"]
+[ext_resource type="PackedScene" uid="uid://cp1pm5wnmexer" path="res://assets/scenes/main_menu.tscn" id="1_ndr83"]
+
+[node name="program_selector" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="tab_container" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+tabs_visible = false
+
+[node name="main_menu" parent="tab_container" instance=ExtResource("1_ndr83")]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="compress_window" parent="tab_container" instance=ExtResource("1_7641o")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[connection signal="pressed" from="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list/button" to="tab_container" method="set_current_tab" binds= [1]]
+[connection signal="exited" from="tab_container/compress_window" to="tab_container" method="set_current_tab" binds= [0]]
+
+[editable path="tab_container/main_menu"]
+[editable path="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/optipng_path"]

@@ -1,0 +1,88 @@
+[gd_scene load_steps=5 format=3 uid="uid://fsw37e6bhjnn"]
+
+[ext_resource type="Script" uid="uid://crmuuucfppfbm" path="res://assets/scenes/program_window.gd" id="1_d4w2p"]
+[ext_resource type="PackedScene" uid="uid://c2odel3v0vcjp" path="res://assets/scenes/execute_button.tscn" id="2_7h4pu"]
+
+[sub_resource type="Theme" id="Theme_epk6w"]
+MarginContainer/constants/margin_bottom = 16
+MarginContainer/constants/margin_left = 16
+MarginContainer/constants/margin_right = 16
+MarginContainer/constants/margin_top = 16
+VBoxContainer/constants/separation = 12
+
+[sub_resource type="LabelSettings" id="LabelSettings_d4w2p"]
+font_size = 24
+
+[node name="program_window" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+theme = SubResource("Theme_epk6w")
+script = ExtResource("1_d4w2p")
+
+[node name="panel_container" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="margin_container" type="MarginContainer" parent="panel_container"]
+layout_mode = 2
+
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container"]
+layout_mode = 2
+
+[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/v_box_container"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="button" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container"]
+layout_mode = 2
+text = "  <  "
+
+[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Title"
+label_settings = SubResource("LabelSettings_d4w2p")
+vertical_alignment = 1
+
+[node name="execute" parent="panel_container/margin_container/v_box_container/h_box_container" instance=ExtResource("2_7h4pu")]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="control" type="Control" parent="panel_container/margin_container/v_box_container"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="h_split_container" type="HSplitContainer" parent="panel_container/margin_container/v_box_container/control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="parameter_panel" type="PanelContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container"]
+layout_mode = 2
+
+[node name="scroll_container" type="ScrollContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="margin_container" type="MarginContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="parameter_list" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="execute_finished" from="." to="panel_container/margin_container/v_box_container/h_box_container/execute" method="_on_toggled" binds= [false]]
+[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/button" to="." method="exit"]
+[connection signal="canceled" from="panel_container/margin_container/v_box_container/h_box_container/execute" to="." method="cancel"]
+[connection signal="executed" from="panel_container/margin_container/v_box_container/h_box_container/execute" to="." method="execute"]
