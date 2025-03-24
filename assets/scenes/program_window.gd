@@ -2,16 +2,15 @@ class_name ProgramWindow extends Control
 
 const PYTHON_VENV_PATH : String = "res://bin/python"
 var python_venv_path_global : String :
-	get: return ProjectSettings.globalize_path(PYTHON_VENV_PATH)
+	get: return actually_globalize_path(PYTHON_VENV_PATH)
 
 signal exited
 signal execute_started
 signal execute_finished
 
-
 @export_file("*.py") var script_path : String
 var script_path_global : String :
-	get: return ProjectSettings.globalize_path(script_path)
+	get: return actually_globalize_path(script_path)
 
 @export var parameters : Array[ParameterBase]
 @export var previews : Array[Node]
@@ -57,7 +56,7 @@ func execute():
 	self._execute_started()
 	execute_started.emit()
 	is_executing = true
-	thread.start(_execute_python.bind(python_venv_path_global, _get_arguments()))
+	thread.start(_execute_python.bind(ParameterBase.get_pref_value("python_path"), _get_arguments()))
 
 
 func _execute_started() -> void:
@@ -78,3 +77,11 @@ func _execute_python(python: String, args: PackedStringArray):
 
 func cancel() -> void:
 	pass
+
+
+static func actually_globalize_path(path: String) -> String:
+	if OS.has_feature("editor"):
+		return ProjectSettings.globalize_path(path)
+	else:
+		var result : String = path.substr(path.find("//") + 2)
+		return OS.get_executable_path().get_base_dir().path_join(result)

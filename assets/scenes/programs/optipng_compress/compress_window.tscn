@@ -146,7 +146,7 @@ size = Vector2i(64, 64)
 
 [node name="sprite_2d" type="AnimatedSprite2D" parent="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/subwindow_locker/texture_rect/sub_viewport" index="0"]
 sprite_frames = SubResource("SpriteFrames_ovimq")
-frame_progress = 0.271336
+frame_progress = 0.290019
 centered = false
 
 [node name="subwindow_output" type="PanelContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container" index="1"]

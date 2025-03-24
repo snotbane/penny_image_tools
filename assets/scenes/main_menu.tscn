@@ -91,21 +91,28 @@ layout_mode = 2
 [node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container" index="0"]
 layout_mode = 2
 
-[node name="optipng_path" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" index="0" instance=ExtResource("2_v1ppo")]
+[node name="python_path" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" index="0" instance=ExtResource("2_v1ppo")]
+layout_mode = 2
+save_to_prefs = true
+
+[node name="label" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/python_path" index="0"]
+text = "Python Path"
+
+[node name="optipng_path" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" index="1" instance=ExtResource("2_v1ppo")]
 layout_mode = 2
 save_to_prefs = true
 
 [node name="label" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/optipng_path" index="0"]
 text = "OptiPNG Path"
 
-[node name="laigter_path" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" index="1" instance=ExtResource("2_v1ppo")]
+[node name="laigter_path" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" index="2" instance=ExtResource("2_v1ppo")]
 layout_mode = 2
 save_to_prefs = true
 
 [node name="label" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/laigter_path" index="0"]
 text = "Laigter Path"
 
-[node name="laigter_template_path" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" index="2" instance=ExtResource("2_v1ppo")]
+[node name="laigter_template_path" parent="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" index="3" instance=ExtResource("2_v1ppo")]
 layout_mode = 2
 save_to_prefs = true
 
@@ -113,6 +120,7 @@ save_to_prefs = true
 text = "Laigter Template Path"
 label_settings = SubResource("LabelSettings_obrqb")
 
+[editable path="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/python_path"]
 [editable path="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/optipng_path"]
 [editable path="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/laigter_path"]
 [editable path="panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/laigter_template_path"]

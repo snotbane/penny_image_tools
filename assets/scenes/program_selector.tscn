@@ -39,7 +39,7 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[connection signal="pressed" from="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list/button" to="tab_container" method="set_current_tab" binds= [1]]
+[connection signal="pressed" from="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list/program_button/main_button" to="tab_container" method="set_current_tab" binds= [1]]
 [connection signal="exited" from="tab_container/compress_window" to="tab_container" method="set_current_tab" binds= [0]]
 
 [editable path="tab_container/main_menu"]
