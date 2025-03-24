@@ -9,5 +9,4 @@ func open_file_dialog() -> void:
 
 
 func confirm_file_dialog() -> void:
-	print($file_dialog.current_path)
 	text = $file_dialog.current_path

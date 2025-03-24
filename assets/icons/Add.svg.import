@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dobelhvexued5"
-path="res://.godot/imported/Progress1.svg-8177ab219b58265be0b3ae1913c8d7ff.ctex"
+uid="uid://fme535s2d2n4"
+path="res://.godot/imported/Add.svg-434d790f6f2bfdba69dfd60187dcdfa9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/Progress1.svg"
-dest_files=["res://.godot/imported/Progress1.svg-8177ab219b58265be0b3ae1913c8d7ff.ctex"]
+source_file="res://assets/icons/Add.svg"
+dest_files=["res://.godot/imported/Add.svg-434d790f6f2bfdba69dfd60187dcdfa9.ctex"]
 
 [params]
 
@@ -32,6 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=4.0
+svg/scale=1.0
 editor/scale_with_editor_scale=false
 editor/convert_colors_with_editor_theme=false

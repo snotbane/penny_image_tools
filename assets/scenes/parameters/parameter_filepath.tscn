@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dfbbwpc8mey0f"]
+[gd_scene load_steps=4 format=3 uid="uid://dfbbwpc8mey0f"]
 
 [ext_resource type="PackedScene" uid="uid://pma6pc7ka253" path="res://assets/scenes/parameters/parameter_string.tscn" id="1_s40vh"]
 [ext_resource type="Script" uid="uid://b813qse75h5vg" path="res://assets/scenes/parameters/parameter_filepath.gd" id="2_qqwis"]
+[ext_resource type="Texture2D" uid="uid://d223be0pkxgy2" path="res://assets/icons/FileBrowse.svg" id="3_kbdh8"]
 
 [node name="parameter_filepath" instance=ExtResource("1_s40vh")]
 script = ExtResource("2_qqwis")
@@ -10,8 +11,10 @@ script = ExtResource("2_qqwis")
 text = "Filepath Parameter"
 
 [node name="open_button" type="Button" parent="." index="2"]
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-text = " O "
+icon = ExtResource("3_kbdh8")
+icon_alignment = 1
 
 [node name="file_dialog" type="FileDialog" parent="." index="3"]
 auto_translate_mode = 1

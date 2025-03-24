@@ -1,0 +1,89 @@
+[gd_scene load_steps=4 format=3 uid="uid://bhvbnwx78yr8x"]
+
+[sub_resource type="GDScript" id="GDScript_m46w0"]
+resource_name = "image_preview"
+script/source = "@tool
+extends Control
+
+@export_file(\"*.png\", \"*.jpg\") var image_path : String :
+	get: return $v_box_container/h_box_container/preview_path.text
+	set(value):
+		$v_box_container/h_box_container/preview_path.text = value
+		
+		if not FileAccess.file_exists(image_path): texture = null; return
+		
+		var image = Image.new()
+		var error := image.load(image_path)
+		texture = ImageTexture.create_from_image(image) if error == OK else null
+func set_image_path(path: String) -> void:
+		image_path = path
+
+var texture : Texture2D :
+	get: return $v_box_container/panel_container/margin_container/preview_image.texture
+	set(value): $v_box_container/panel_container/margin_container/preview_image.texture = value
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yc6ja"]
+bg_color = Color(0, 0, 0, 0.25098)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_2ysao"]
+font_size = 10
+
+[node name="image_preview" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 697.0
+offset_bottom = 469.0
+size_flags_vertical = 3
+script = SubResource("GDScript_m46w0")
+
+[node name="v_box_container" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 4
+
+[node name="panel_container" type="PanelContainer" parent="v_box_container"]
+texture_filter = 1
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_yc6ja")
+
+[node name="margin_container" type="MarginContainer" parent="v_box_container/panel_container"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="preview_image" type="TextureRect" parent="v_box_container/panel_container/margin_container"]
+texture_filter = 4
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="h_box_container" type="HBoxContainer" parent="v_box_container"]
+layout_mode = 2
+
+[node name="preview_path" type="Label" parent="v_box_container/h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+label_settings = SubResource("LabelSettings_2ysao")
+horizontal_alignment = 1
+text_overrun_behavior = 4
+text_direction = 2
+
+[node name="show_preview" type="CheckButton" parent="v_box_container/h_box_container"]
+layout_mode = 2
+button_pressed = true
+
+[connection signal="toggled" from="v_box_container/h_box_container/show_preview" to="v_box_container/panel_container/margin_container/preview_image" method="set_visible"]

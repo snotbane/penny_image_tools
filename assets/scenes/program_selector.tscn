@@ -25,6 +25,15 @@ tabs_visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
+[node name="button" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/h_box_container" index="0"]
+custom_minimum_size = Vector2(0, 0)
+text = "  <  "
+icon = null
+icon_alignment = 0
+
+[node name="label_time_elapsed" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/h_box_container" index="2"]
+script = null
+
 [node name="compress_window" parent="tab_container" instance=ExtResource("1_7641o")]
 visible = false
 layout_mode = 2
@@ -35,3 +44,5 @@ metadata/_tab_index = 1
 
 [editable path="tab_container/main_menu"]
 [editable path="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/optipng_path"]
+[editable path="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/laigter_path"]
+[editable path="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/laigter_template_path"]

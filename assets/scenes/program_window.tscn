@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://fsw37e6bhjnn"]
+[gd_scene load_steps=7 format=3 uid="uid://fsw37e6bhjnn"]
 
 [ext_resource type="Script" uid="uid://crmuuucfppfbm" path="res://assets/scenes/program_window.gd" id="1_d4w2p"]
 [ext_resource type="PackedScene" uid="uid://c2odel3v0vcjp" path="res://assets/scenes/execute_button.tscn" id="2_7h4pu"]
+[ext_resource type="Texture2D" uid="uid://cn41vf4xrh8si" path="res://assets/icons/Back.svg" id="2_fviui"]
 
 [sub_resource type="Theme" id="Theme_epk6w"]
 MarginContainer/constants/margin_bottom = 16
@@ -12,6 +13,28 @@ VBoxContainer/constants/separation = 12
 
 [sub_resource type="LabelSettings" id="LabelSettings_d4w2p"]
 font_size = 24
+
+[sub_resource type="GDScript" id="GDScript_fviui"]
+resource_name = "time_elapsed"
+script/source = "extends Label
+
+@export var execute_button : Control
+
+func _process(delta: float) -> void:
+	if execute_button.is_executing:
+		self.text = get_duration_string(Time.get_ticks_msec() - execute_button.time_started)
+
+func get_duration_string(msec: int) -> String:    
+	var total_seconds : int = msec / 1000
+	var seconds : int = total_seconds % 60
+	var minutes : int = total_seconds / 60
+	var hours : int = total_seconds / 3600
+
+	if hours > 0:
+		return \"%02d:%02d:%02d\" % [hours, minutes, seconds]
+	else:
+		return \"%02d:%02d\" % [minutes, seconds]
+"
 
 [node name="program_window" type="Control"]
 layout_mode = 3
@@ -40,8 +63,10 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="button" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container"]
+custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
-text = "  <  "
+icon = ExtResource("2_fviui")
+icon_alignment = 1
 
 [node name="label" type="Label" parent="panel_container/margin_container/v_box_container/h_box_container"]
 layout_mode = 2
@@ -50,7 +75,17 @@ text = "Title"
 label_settings = SubResource("LabelSettings_d4w2p")
 vertical_alignment = 1
 
-[node name="execute" parent="panel_container/margin_container/v_box_container/h_box_container" instance=ExtResource("2_7h4pu")]
+[node name="label_time_elapsed" type="Label" parent="panel_container/margin_container/v_box_container/h_box_container" node_paths=PackedStringArray("execute_button")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:00"
+label_settings = SubResource("LabelSettings_d4w2p")
+horizontal_alignment = 2
+vertical_alignment = 1
+script = SubResource("GDScript_fviui")
+execute_button = NodePath("../execute_button")
+
+[node name="execute_button" parent="panel_container/margin_container/v_box_container/h_box_container" instance=ExtResource("2_7h4pu")]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 
@@ -82,7 +117,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 
-[connection signal="execute_finished" from="." to="panel_container/margin_container/v_box_container/h_box_container/execute" method="_on_toggled" binds= [false]]
+[connection signal="execute_finished" from="." to="panel_container/margin_container/v_box_container/h_box_container/execute_button" method="_on_toggled" binds= [false]]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/button" to="." method="exit"]
-[connection signal="canceled" from="panel_container/margin_container/v_box_container/h_box_container/execute" to="." method="cancel"]
-[connection signal="executed" from="panel_container/margin_container/v_box_container/h_box_container/execute" to="." method="execute"]
+[connection signal="canceled" from="panel_container/margin_container/v_box_container/h_box_container/execute_button" to="." method="cancel"]
+[connection signal="executed" from="panel_container/margin_container/v_box_container/h_box_container/execute_button" to="." method="execute"]

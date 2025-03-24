@@ -1,6 +1,7 @@
 extends ProgramWindow
 
-@export_file("*.cfg") var config_path : String
+# @export_file("*.cfg") var config_path : String
+static var config_path : String = "user://compress.cfg"
 @onready var config : ConfigFile = ConfigFile.new()
 
 var preview_image : Image
@@ -14,22 +15,11 @@ var progress_path : String :
 		_progress_path = value
 
 		progress_path_changed.emit(_progress_path)
-
-		preview_image = Image.new()
-		var error := preview_image.load(_progress_path)
-
-		if error != OK:	progress_image_changed.emit(null); print("Failed to load image %s" % _progress_path); return
-
-		preview_texture = ImageTexture.create_from_image(preview_image)
-		progress_image_changed.emit(preview_texture)
-
-
 signal progress_path_changed(path: String)
-signal progress_image_changed(texture: Texture2D)
 
 
 var _progress_todo : int
-@export var progress_todo : int :
+var progress_todo : int :
 	get: return _progress_todo
 	set(value):
 		if _progress_todo == value: return
@@ -39,20 +29,26 @@ var _progress_todo : int
 signal progress_todo_changed(value: int)
 
 var _progress_done : int
-@export var progress_done : int :
+var progress_done : int :
 	get: return _progress_done
 	set(value):
 		if _progress_done == value: return
 		_progress_done = value
 
 		progress_done_changed.emit(_progress_done)
+		bytes_reduced_changed.emit(config.get_value("output", "bytes_previous"))
 signal progress_done_changed(value: int)
+signal bytes_reduced_changed(bytes: int)
 
 
 func _ready() -> void:
 	super._ready()
+	print("config located at: " + ProjectSettings.globalize_path(config_path))
 	config.load(config_path)
 	config.set_value("output", "progress_path", "")
+	config.set_value("output", "progress_todo", 0)
+	config.set_value("output", "progress_done", 0)
+	config.set_value("output", "bytes_previous", 0)
 	config.set_value("input", "cancel", false)
 	config.save(config_path)
 
@@ -62,6 +58,7 @@ func _process_execute(delta: float) -> void:
 	progress_path = config.get_value("output", "progress_path")
 	progress_todo = config.get_value("output", "progress_todo")
 	progress_done = config.get_value("output", "progress_done")
+	# bytes_previous = config.get_value("output", "bytes_previous")
 
 
 func _execute_started() -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://4ntd0v7krgom"]
+[gd_scene load_steps=17 format=3 uid="uid://4ntd0v7krgom"]
 
 [ext_resource type="PackedScene" uid="uid://fsw37e6bhjnn" path="res://assets/scenes/program_window.tscn" id="1_ifvio"]
 [ext_resource type="Script" uid="uid://ymsft3s6lyd1" path="res://assets/scenes/programs/optipng_compress/compress_window.gd" id="2_4j6qr"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://8lo0qtgwop2m" path="res://assets/icons/Progress6.svg" id="10_1qg0x"]
 [ext_resource type="Texture2D" uid="uid://dvcurv44d1wax" path="res://assets/icons/Progress7.svg" id="11_g22mn"]
 [ext_resource type="Texture2D" uid="uid://dt5l6jve4grg2" path="res://assets/icons/Progress8.svg" id="12_ttjaq"]
+[ext_resource type="PackedScene" uid="uid://bhvbnwx78yr8x" path="res://assets/scenes/image_preview.tscn" id="13_yc6ja"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_hs377"]
 viewport_path = NodePath("panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/subwindow_locker/texture_rect/sub_viewport")
@@ -55,35 +56,46 @@ var progress_done : int :
 	get: return floori($total_progress_bar.value)
 	set(value):
 		$total_progress_bar.value = value
-		$h_box_container/label_progress_done.text = str(value)
+		$files_completed/label_progress_done.text = str(value)
 var progress_todo : int :
 	get: return floori($total_progress_bar.max_value)
 	set(value):
 		$total_progress_bar.max_value = value
-		$h_box_container/label_progress_todo.text = str(value)
+		$files_completed/label_progress_todo.text = str(value)
+
+var _bytes_reduced : int
+var bytes_reduced : int :
+	get: return _bytes_reduced
+	set(value):
+		_bytes_reduced = value
+		$bytes_reduced/label_bytes.text = bytes_to_string(value)
 
 func set_progress_done(value: int) -> void:
 	progress_done = value
 		
 func set_progress_todo(value: int) -> void:
 	progress_todo = value
+	
+func add_bytes_reduced(value: int) -> void:
+	bytes_reduced += value
+
+func clear_bytes_reduced() -> void:
+	bytes_reduced = 0
+	
+
+static func bytes_to_string(bytes: int) -> String:	
+	if bytes < 1024:
+		return str(bytes) + \" B\"
+	if bytes < 1024 * 1024:
+		return \"%.2f KB\" % (float(bytes) / 1024.0)
+	if bytes < 1024 * 1024 * 1024:
+		return \"%.2f MB\" % (float(bytes) / (1024.0 * 1024.0))
+	return \"%.2f GB\" % (float(bytes) / (1024.0 * 1024.0 * 1024.0))
+	
 "
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yc6ja"]
-bg_color = Color(0, 0, 0, 0.25098)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[sub_resource type="LabelSettings" id="LabelSettings_2ysao"]
-font_size = 10
 
 [node name="compress_window" node_paths=PackedStringArray("parameters") instance=ExtResource("1_ifvio")]
 script = ExtResource("2_4j6qr")
-config_path = "res://assets/scenes/programs/optipng_compress/compress.cfg"
-progress_todo = 0
-progress_done = 0
 script_path = "res://assets/scenes/programs/optipng_compress/compress.py"
 parameters = [NodePath("panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list/optipng_path"), NodePath("panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list/input")]
 
@@ -130,11 +142,11 @@ texture = SubResource("ViewportTexture_hs377")
 
 [node name="sub_viewport" type="SubViewport" parent="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/subwindow_locker/texture_rect" index="0"]
 transparent_bg = true
-size = Vector2i(128, 128)
+size = Vector2i(64, 64)
 
 [node name="sprite_2d" type="AnimatedSprite2D" parent="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/subwindow_locker/texture_rect/sub_viewport" index="0"]
 sprite_frames = SubResource("SpriteFrames_ovimq")
-frame_progress = 0.396757
+frame_progress = 0.271336
 centered = false
 
 [node name="subwindow_output" type="PanelContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container" index="1"]
@@ -149,78 +161,59 @@ layout_mode = 2
 theme_override_constants/separation = 4
 script = SubResource("GDScript_u5sgf")
 
-[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" index="0"]
+[node name="image_preview" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" index="0" instance=ExtResource("13_yc6ja")]
+layout_mode = 2
+image_path = "preview"
+
+[node name="bytes_reduced" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" index="1"]
 layout_mode = 2
 
-[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/h_box_container" index="0"]
+[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/bytes_reduced" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "File size reduced"
+
+[node name="label_bytes" type="Label" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/bytes_reduced" index="1"]
+layout_mode = 2
+text = "0 B"
+horizontal_alignment = 1
+
+[node name="files_completed" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" index="2"]
+layout_mode = 2
+
+[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/files_completed" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Files completed"
 
-[node name="label_progress_done" type="Label" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/h_box_container" index="1"]
+[node name="label_progress_done" type="Label" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/files_completed" index="1"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 2
 
-[node name="label_3" type="Label" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/h_box_container" index="2"]
+[node name="label_3" type="Label" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/files_completed" index="2"]
 layout_mode = 2
 text = "/"
 horizontal_alignment = 1
 
-[node name="label_progress_todo" type="Label" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/h_box_container" index="3"]
+[node name="label_progress_todo" type="Label" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/files_completed" index="3"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 2
 
-[node name="space" type="Control" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/h_box_container" index="4"]
-layout_mode = 2
-
-[node name="check_box" type="CheckBox" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/h_box_container" index="5"]
-layout_mode = 2
-button_pressed = true
-
-[node name="total_progress_bar" type="ProgressBar" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" index="1"]
+[node name="total_progress_bar" type="ProgressBar" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" index="3"]
 layout_mode = 2
 max_value = 4.0
 step = 1.0
 
-[node name="panel_container" type="PanelContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" index="2"]
-texture_filter = 1
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_yc6ja")
-
-[node name="margin_container" type="MarginContainer" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/panel_container" index="0"]
-layout_mode = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
-
-[node name="preview_image" type="TextureRect" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/panel_container/margin_container" index="0"]
-texture_filter = 4
-layout_mode = 2
-size_flags_horizontal = 5
-size_flags_vertical = 3
-expand_mode = 1
-stretch_mode = 5
-
-[node name="preview_path" type="Label" parent="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" index="3"]
-layout_mode = 2
-size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_2ysao")
-horizontal_alignment = 1
-text_overrun_behavior = 4
-text_direction = 2
-
+[connection signal="bytes_reduced_changed" from="." to="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" method="add_bytes_reduced"]
 [connection signal="execute_finished" from="." to="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/subwindow_locker" method="set" binds= [&"is_locked", false]]
+[connection signal="execute_started" from="." to="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" method="clear_bytes_reduced"]
 [connection signal="execute_started" from="." to="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/subwindow_locker" method="set" binds= [&"is_locked", true]]
 [connection signal="progress_done_changed" from="." to="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" method="set_progress_done"]
-[connection signal="progress_image_changed" from="." to="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/panel_container/margin_container/preview_image" method="set_texture"]
-[connection signal="progress_path_changed" from="." to="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/preview_path" method="set_text"]
+[connection signal="progress_path_changed" from="." to="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/image_preview" method="set_image_path"]
 [connection signal="progress_todo_changed" from="." to="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container" method="set_progress_todo"]
 [connection signal="visibility_changed" from="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/subwindow_locker/texture_rect/sub_viewport/sprite_2d" to="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/subwindow_locker/texture_rect/sub_viewport/sprite_2d" method="play" binds= [&"default"]]
-[connection signal="toggled" from="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/h_box_container/check_box" to="panel_container/margin_container/v_box_container/control/h_split_container/subwindow_output/margin_container/v_box_container/panel_container" method="set_visible"]
 
 [editable path="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list/optipng_path"]
 [editable path="panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list/input"]

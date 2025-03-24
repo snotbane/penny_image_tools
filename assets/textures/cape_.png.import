@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dobelhvexued5"
-path="res://.godot/imported/Progress1.svg-8177ab219b58265be0b3ae1913c8d7ff.ctex"
+uid="uid://pssx62tt25ig"
+path="res://.godot/imported/cape_.png-c127e9cd0e345215da685cc736a340be.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/Progress1.svg"
-dest_files=["res://.godot/imported/Progress1.svg-8177ab219b58265be0b3ae1913c8d7ff.ctex"]
+source_file="res://assets/textures/cape_.png"
+dest_files=["res://.godot/imported/cape_.png-c127e9cd0e345215da685cc736a340be.ctex"]
 
 [params]
 
@@ -32,6 +32,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=4.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

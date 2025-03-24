@@ -3,6 +3,9 @@ extends Button
 signal executed
 signal canceled
 
+var time_started : int
+var time_stopped : int
+
 var _is_executing : bool
 @export var is_executing : bool :
 	get: return _is_executing
@@ -12,11 +15,11 @@ var _is_executing : bool
 
 		self.button_pressed = _is_executing
 		self.text = "Cancel" if _is_executing else "Execute"
-		if _is_executing:
-			executed.emit()
-		else:
-			canceled.emit()
-		# (executed if _is_executing else canceled).emit()
+
+		if _is_executing: time_started = Time.get_ticks_msec()
+		else: time_stopped = Time.get_ticks_msec()
+
+		(executed if _is_executing else canceled).emit()
 
 
 func _ready() -> void:
