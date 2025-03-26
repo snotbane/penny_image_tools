@@ -1,0 +1,132 @@
+[gd_scene load_steps=7 format=3 uid="uid://djqm57nangv8l"]
+
+[ext_resource type="Script" uid="uid://crmuuucfppfbm" path="res://assets/scenes/program_window.gd" id="1_nfq5s"]
+[ext_resource type="Texture2D" uid="uid://cn41vf4xrh8si" path="res://assets/icons/Back.svg" id="2_srjdr"]
+[ext_resource type="PackedScene" uid="uid://c2odel3v0vcjp" path="res://assets/scenes/buttons/execute_button.tscn" id="3_4vd1n"]
+
+[sub_resource type="Theme" id="Theme_epk6w"]
+MarginContainer/constants/margin_bottom = 16
+MarginContainer/constants/margin_left = 16
+MarginContainer/constants/margin_right = 16
+MarginContainer/constants/margin_top = 16
+VBoxContainer/constants/separation = 12
+
+[sub_resource type="LabelSettings" id="LabelSettings_d4w2p"]
+font_size = 24
+
+[sub_resource type="GDScript" id="GDScript_fviui"]
+resource_name = "time_elapsed"
+script/source = "extends Label
+
+@export var execute_button : Control
+
+func _process(delta: float) -> void:
+	if execute_button.is_executing:
+		self.text = get_duration_string(Time.get_ticks_msec() - execute_button.time_started)
+
+func get_duration_string(msec: int) -> String:    
+	var total_seconds : int = msec / 1000
+	var seconds : int = total_seconds % 60
+	var minutes : int = total_seconds / 60
+	var hours : int = total_seconds / 3600
+
+	if hours > 0:
+		return \"%02d:%02d:%02d\" % [hours, minutes, seconds]
+	else:
+		return \"%02d:%02d\" % [minutes, seconds]
+"
+
+[node name="program_window" type="Window"]
+initial_position = 1
+size = Vector2i(640, 480)
+transient = true
+transient_to_focused = true
+force_native = true
+
+[node name="program_window" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_epk6w")
+script = ExtResource("1_nfq5s")
+
+[node name="panel_container" type="PanelContainer" parent="program_window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="margin_container" type="MarginContainer" parent="program_window/panel_container"]
+layout_mode = 2
+
+[node name="v_box_container" type="VBoxContainer" parent="program_window/panel_container/margin_container"]
+layout_mode = 2
+
+[node name="h_box_container" type="HBoxContainer" parent="program_window/panel_container/margin_container/v_box_container"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="button" type="Button" parent="program_window/panel_container/margin_container/v_box_container/h_box_container"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+icon = ExtResource("2_srjdr")
+icon_alignment = 1
+
+[node name="label" type="Label" parent="program_window/panel_container/margin_container/v_box_container/h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Title"
+label_settings = SubResource("LabelSettings_d4w2p")
+vertical_alignment = 1
+
+[node name="label_time_elapsed" type="Label" parent="program_window/panel_container/margin_container/v_box_container/h_box_container" node_paths=PackedStringArray("execute_button")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:00"
+label_settings = SubResource("LabelSettings_d4w2p")
+horizontal_alignment = 2
+vertical_alignment = 1
+script = SubResource("GDScript_fviui")
+execute_button = NodePath("../execute_button")
+
+[node name="execute_button" parent="program_window/panel_container/margin_container/v_box_container/h_box_container" instance=ExtResource("3_4vd1n")]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="control" type="Control" parent="program_window/panel_container/margin_container/v_box_container"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="h_split_container" type="HSplitContainer" parent="program_window/panel_container/margin_container/v_box_container/control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="parameter_panel" type="PanelContainer" parent="program_window/panel_container/margin_container/v_box_container/control/h_split_container"]
+layout_mode = 2
+
+[node name="scroll_container" type="ScrollContainer" parent="program_window/panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="margin_container" type="MarginContainer" parent="program_window/panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="parameter_list" type="VBoxContainer" parent="program_window/panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="execute_finished" from="program_window" to="program_window/panel_container/margin_container/v_box_container/h_box_container/execute_button" method="_on_toggled" binds= [false]]
+[connection signal="pressed" from="program_window/panel_container/margin_container/v_box_container/h_box_container/button" to="program_window" method="exit"]
+[connection signal="canceled" from="program_window/panel_container/margin_container/v_box_container/h_box_container/execute_button" to="program_window" method="cancel"]
+[connection signal="executed" from="program_window/panel_container/margin_container/v_box_container/h_box_container/execute_button" to="program_window" method="execute"]

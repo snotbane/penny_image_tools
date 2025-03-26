@@ -15,3 +15,5 @@ data_*/
 mono_crash.*.json
 
 [Bb]uild/
+
+.DS_Store
