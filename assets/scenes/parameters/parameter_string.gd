@@ -1,4 +1,4 @@
-class_name ParameterString extends ParameterBase
+@tool class_name ParameterString extends ParameterBase
 
 var text : String :
 	get: return $line_edit.text

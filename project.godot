@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Penny Image Tools"
 run/main_scene="uid://dv20jd4m5nna2"
+config/auto_accept_quit=false
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -25,6 +26,7 @@ gdscript/warnings/integer_division=0
 
 window/size/viewport_width=2304
 window/size/viewport_height=1296
+window/energy_saving/keep_screen_on=false
 window/stretch/scale=2.0
 
 [editor]

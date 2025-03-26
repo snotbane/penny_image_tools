@@ -1,9 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://4ntd0v7krgom"]
+[gd_scene load_steps=7 format=3 uid="uid://b07l6icfjbt0"]
 
-[ext_resource type="PackedScene" uid="uid://djqm57nangv8l" path="res://window.tscn" id="1_u5sgf"]
-[ext_resource type="Script" uid="uid://ymsft3s6lyd1" path="res://assets/scenes/programs/optipng_compress/compress_window.gd" id="2_4j6qr"]
-[ext_resource type="PackedScene" uid="uid://dfbbwpc8mey0f" path="res://assets/scenes/parameters/parameter_filepath.tscn" id="2_eai3l"]
-[ext_resource type="PackedScene" uid="uid://bhvbnwx78yr8x" path="res://assets/scenes/image_preview.tscn" id="13_yc6ja"]
+[ext_resource type="PackedScene" uid="uid://djqm57nangv8l" path="res://window.tscn" id="1_8s7ay"]
+[ext_resource type="PackedScene" uid="uid://dfbbwpc8mey0f" path="res://assets/scenes/parameters/parameter_filepath.tscn" id="2_oxixe"]
+[ext_resource type="Script" uid="uid://ymsft3s6lyd1" path="res://assets/scenes/programs/optipng_compress/compress_window.gd" id="2_yki31"]
+[ext_resource type="PackedScene" uid="uid://bhvbnwx78yr8x" path="res://assets/scenes/image_preview.tscn" id="3_3d451"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_3d451"]
 viewport_path = NodePath("control/panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport")
@@ -53,9 +53,9 @@ static func bytes_to_string(bytes: int) -> String:
 	
 "
 
-[node name="program_compress" node_paths=PackedStringArray("parameters") instance=ExtResource("1_u5sgf")]
+[node name="program_compress" node_paths=PackedStringArray("parameters") instance=ExtResource("1_8s7ay")]
 title = "OptiPNG Compress"
-script = ExtResource("2_4j6qr")
+script = ExtResource("2_yki31")
 program_name = "OptiPNG Compress"
 script_path = "res://assets/scenes/programs/optipng_compress/compress.py"
 parameters = [NodePath("control/panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/v_box_container/optipng_path"), NodePath("control/panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/v_box_container/input")]
@@ -63,7 +63,7 @@ parameters = [NodePath("control/panel_container/margin_container/v_box_container
 [node name="v_box_container" type="VBoxContainer" parent="control/panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container" index="0"]
 layout_mode = 2
 
-[node name="optipng_path" parent="control/panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/v_box_container" index="0" instance=ExtResource("2_eai3l")]
+[node name="optipng_path" parent="control/panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/v_box_container" index="0" instance=ExtResource("2_oxixe")]
 layout_mode = 2
 label_text = "OptiPNG Path"
 save_to_prefs = true
@@ -75,7 +75,7 @@ text = "OptiPNG Path"
 tooltip_text = "/opt/homebrew/bin/optipng"
 text = "/opt/homebrew/bin/optipng"
 
-[node name="input" parent="control/panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/v_box_container" index="1" instance=ExtResource("2_eai3l")]
+[node name="input" parent="control/panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/v_box_container" index="1" instance=ExtResource("2_oxixe")]
 layout_mode = 2
 label_text = "Input Path"
 save_to_prefs = true
@@ -87,14 +87,14 @@ text = "Input Path"
 texture = SubResource("ViewportTexture_3d451")
 
 [node name="sprite_2d" parent="control/panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport" index="0"]
-frame_progress = 0.413981
+frame_progress = 0.0263603
 
 [node name="v_box_container" type="VBoxContainer" parent="control/panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container" index="0"]
 layout_mode = 2
 theme_override_constants/separation = 4
 script = SubResource("GDScript_fcnkx")
 
-[node name="image_preview" parent="control/panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/v_box_container" index="0" instance=ExtResource("13_yc6ja")]
+[node name="image_preview" parent="control/panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/v_box_container" index="0" instance=ExtResource("3_3d451")]
 layout_mode = 2
 image_path = "preview"
 

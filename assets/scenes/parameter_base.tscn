@@ -4,6 +4,7 @@
 
 [node name="parameter_base" type="HBoxContainer"]
 script = ExtResource("1_3moxj")
+label_text = "Parameter"
 
 [node name="label" type="Label" parent="."]
 custom_minimum_size = Vector2(160, 0)

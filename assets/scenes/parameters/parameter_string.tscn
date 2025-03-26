@@ -8,6 +8,7 @@ offset_right = 724.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
 script = ExtResource("2_bu3d0")
+label_text = "String Parameter"
 
 [node name="label" parent="." index="0"]
 text = "String Parameter"

@@ -1,49 +1,35 @@
-[gd_scene load_steps=10 format=3 uid="uid://dv20jd4m5nna2"]
+[gd_scene load_steps=7 format=3 uid="uid://dv20jd4m5nna2"]
 
-[ext_resource type="Script" uid="uid://crmuuucfppfbm" path="res://assets/scenes/program_window.gd" id="1_un68p"]
-[ext_resource type="PackedScene" uid="uid://c2odel3v0vcjp" path="res://assets/scenes/buttons/execute_button.tscn" id="2_rnux4"]
+[ext_resource type="Theme" uid="uid://cjww2dp7ckflf" path="res://assets/theme.tres" id="1_6erst"]
 [ext_resource type="PackedScene" uid="uid://dwh0rjn7m46yv" path="res://assets/scenes/buttons/program_button.tscn" id="3_rnux4"]
 [ext_resource type="Script" uid="uid://hn4bwmkixbc1" path="res://assets/scenes/settings_panel.gd" id="4_fmc16"]
 [ext_resource type="PackedScene" uid="uid://dfbbwpc8mey0f" path="res://assets/scenes/parameters/parameter_filepath.tscn" id="5_u0rbf"]
 
-[sub_resource type="GDScript" id="GDScript_7641o"]
-resource_name = "program_tab_container"
-script/source = "extends TabContainer
+[sub_resource type="GDScript" id="GDScript_6erst"]
+script/source = "extends Control
 
-@export var program_scene_paths : PackedStringArray
-@export var button_scene_path : String
-var button_scene : PackedScene :
-	get: return load(button_scene_path)
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_WM_CLOSE_REQUEST:
+			try_close()
+			
 
-func _ready() -> void:
-	for i_path in program_scene_paths:
-		var scene : PackedScene = load(i_path)
-		self.add_child(scene.instantiate())
-
-
-func get_program_scene(idx: int) -> PackedScene:
-	return load(program_scene_paths[idx]) if idx >= 0 and idx < program_scene_paths.size() else null
-
-
-func set_main_scene(idx: int) -> void:
-	var scene := get_program_scene(idx)
-	if scene == null: return
+func quit() -> void:
+	self.get_tree().quit()
 	
-	#var node : Control = scene.instantiate()
-"
+			
+			
+func try_close() -> void:
+	if is_any_subwindow_open(): $confirmation_dialog.show()
+	else: quit()
 
-[sub_resource type="Theme" id="Theme_epk6w"]
-MarginContainer/constants/margin_bottom = 16
-MarginContainer/constants/margin_left = 16
-MarginContainer/constants/margin_right = 16
-MarginContainer/constants/margin_top = 16
-VBoxContainer/constants/separation = 12
+
+func is_any_subwindow_open() -> bool:
+	return self.get_tree().get_node_count_in_group(&\"program_window\")
+"
 
 [sub_resource type="LabelSettings" id="LabelSettings_d4w2p"]
 font_size = 24
-
-[sub_resource type="LabelSettings" id="LabelSettings_obrqb"]
-font_size = 14
 
 [node name="program_selector" type="Control"]
 layout_mode = 3
@@ -52,25 +38,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_6erst")
+script = SubResource("GDScript_6erst")
 
-[node name="tab_container" type="TabContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-current_tab = 0
-tabs_visible = false
-script = SubResource("GDScript_7641o")
-
-[node name="main_menu" type="Control" parent="tab_container"]
-layout_mode = 2
-theme = SubResource("Theme_epk6w")
-script = ExtResource("1_un68p")
-metadata/_tab_index = 0
-
-[node name="panel_container" type="PanelContainer" parent="tab_container/main_menu"]
+[node name="panel_container" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,126 +49,89 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="margin_container" type="MarginContainer" parent="tab_container/main_menu/panel_container"]
+[node name="margin_container" type="MarginContainer" parent="panel_container"]
 layout_mode = 2
 
-[node name="v_box_container" type="VBoxContainer" parent="tab_container/main_menu/panel_container/margin_container"]
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container"]
 layout_mode = 2
 
-[node name="h_box_container" type="HBoxContainer" parent="tab_container/main_menu/panel_container/margin_container/v_box_container"]
+[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/v_box_container"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="button" type="Button" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/h_box_container"]
-visible = false
-layout_mode = 2
-text = "  <  "
-
-[node name="label" type="Label" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/h_box_container"]
+[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/h_box_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Penny Image Tools"
 label_settings = SubResource("LabelSettings_d4w2p")
 vertical_alignment = 1
 
-[node name="label_time_elapsed" type="Label" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/h_box_container"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-text = "00:00"
-label_settings = SubResource("LabelSettings_d4w2p")
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="execute_button" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/h_box_container" instance=ExtResource("2_rnux4")]
-visible = false
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-
-[node name="control" type="Control" parent="tab_container/main_menu/panel_container/margin_container/v_box_container"]
+[node name="h_split_container" type="HBoxContainer" parent="panel_container/margin_container/v_box_container"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="h_split_container" type="HSplitContainer" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_vertical = 3
-dragging_enabled = false
-
-[node name="parameter_panel" type="PanelContainer" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container"]
+[node name="parameter_panel" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_split_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="scroll_container" type="ScrollContainer" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel"]
+[node name="scroll_container" type="ScrollContainer" parent="panel_container/margin_container/v_box_container/h_split_container/parameter_panel"]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="margin_container" type="MarginContainer" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container"]
+[node name="margin_container" type="MarginContainer" parent="panel_container/margin_container/v_box_container/h_split_container/parameter_panel/scroll_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="parameter_list" type="VBoxContainer" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container"]
+[node name="parameter_list" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/h_split_container/parameter_panel/scroll_container/margin_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="program_button" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list" instance=ExtResource("3_rnux4")]
+[node name="program_button" parent="panel_container/margin_container/v_box_container/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list" instance=ExtResource("3_rnux4")]
 layout_mode = 2
-text = "Something"
+text = "OptiPNG Image Lossless Compression"
 scene_path = "uid://4ntd0v7krgom"
 
-[node name="settings_panel" type="PanelContainer" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container"]
+[node name="settings_panel" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_split_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("4_fmc16")
 
-[node name="margin_container" type="MarginContainer" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel"]
+[node name="margin_container" type="MarginContainer" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel"]
 layout_mode = 2
 
-[node name="v_box_container" type="VBoxContainer" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container"]
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container"]
 layout_mode = 2
 
-[node name="python_path" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
+[node name="python_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
 layout_mode = 2
+label_text = "Python Path"
 save_to_prefs = true
 
-[node name="label" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/python_path" index="0"]
-text = "Python Path"
-
-[node name="optipng_path" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
+[node name="optipng_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
 layout_mode = 2
+label_text = "OptiPNG Path"
 save_to_prefs = true
 
-[node name="label" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/optipng_path" index="0"]
-text = "OptiPNG Path"
-
-[node name="laigter_path" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
+[node name="laigter_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
 layout_mode = 2
+label_text = "Laigter Path"
 save_to_prefs = true
 
-[node name="label" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/laigter_path" index="0"]
-text = "Laigter Path"
-
-[node name="laigter_template_path" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
+[node name="laigter_template_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
 layout_mode = 2
+label_text = "Laigter Template Path"
 save_to_prefs = true
 
-[node name="label" parent="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/laigter_template_path" index="0"]
-text = "Laigter Template Path"
-label_settings = SubResource("LabelSettings_obrqb")
+[node name="confirmation_dialog" type="ConfirmationDialog" parent="."]
+initial_position = 2
+size = Vector2i(882, 212)
+transient_to_focused = true
+force_native = true
+content_scale_factor = 2.0
+dialog_text = "Other windows are still open. Are you sure you want to
+close all windows and stop any running processes?"
 
-[connection signal="execute_finished" from="tab_container/main_menu" to="tab_container/main_menu/panel_container/margin_container/v_box_container/h_box_container/execute_button" method="_on_toggled" binds= [false]]
-[connection signal="pressed" from="tab_container/main_menu/panel_container/margin_container/v_box_container/h_box_container/button" to="tab_container/main_menu" method="exit"]
-[connection signal="canceled" from="tab_container/main_menu/panel_container/margin_container/v_box_container/h_box_container/execute_button" to="tab_container/main_menu" method="cancel"]
-[connection signal="executed" from="tab_container/main_menu/panel_container/margin_container/v_box_container/h_box_container/execute_button" to="tab_container/main_menu" method="execute"]
-
-[editable path="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/python_path"]
-[editable path="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/optipng_path"]
-[editable path="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/laigter_path"]
-[editable path="tab_container/main_menu/panel_container/margin_container/v_box_container/control/h_split_container/settings_panel/margin_container/v_box_container/laigter_template_path"]
+[connection signal="confirmed" from="confirmation_dialog" to="." method="quit"]

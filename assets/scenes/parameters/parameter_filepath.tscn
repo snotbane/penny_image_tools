@@ -6,6 +6,7 @@
 
 [node name="parameter_filepath" instance=ExtResource("1_s40vh")]
 script = ExtResource("2_qqwis")
+label_text = "Filepath Parameter"
 
 [node name="label" parent="." index="0"]
 text = "Filepath Parameter"

@@ -9,6 +9,13 @@
 font_size = 14
 
 [node name="main_menu" instance=ExtResource("1_uu6ob")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="button" parent="panel_container/margin_container/v_box_container/h_box_container" index="0"]
 visible = false

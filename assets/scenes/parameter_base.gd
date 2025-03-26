@@ -1,8 +1,14 @@
-class_name ParameterBase extends Control
+@tool class_name ParameterBase extends Control
 
 const PREFS_PATH := "user://prefs.cfg"
 const SECTION_NAME := "all"
 static var CONFIG := ConfigFile.new()
+
+@export var label_text : String :
+	get: return $label.text if $label else ""
+	set(value):
+		if not find_child("label"): return
+		$label.text = value
 
 @export var save_to_prefs : bool
 

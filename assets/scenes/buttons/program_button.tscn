@@ -3,53 +3,28 @@
 [ext_resource type="Texture2D" uid="uid://fme535s2d2n4" path="res://assets/icons/Add.svg" id="1_in7hs"]
 
 [sub_resource type="GDScript" id="GDScript_in7hs"]
-script/source = "@tool extends Control
-
-signal main_pressed
-signal instance_created(node: Node)
-
-var _text : String
-@export var text : String :
-	get: return _text
-	set(value): _text = value
-	#get: return $main_button.text
-	#set(value): $main_button.text = value
-
+script/source = "extends Button
 
 @export_file(\"*.tscn\", \"*.scn\", \"*.res\") var scene_path : String
 var scene : PackedScene :
 	get: return load(scene_path)
-	
-
-func _on_main_button_pressed() -> void:
-	main_pressed.emit()
 
 
-func _on_inst_button_pressed() -> void:
-	var window := Window.new()
+func _pressed() -> void:
+	var window : ProgramWindow = scene.instantiate()
 	window.hide()
 	window.force_native = true
+	#window.tran
 	self.get_tree().root.add_child.call_deferred(window)
-	window.popup_centered.call_deferred(Vector2i(500, 500))
-	
-	instance_created.emit(scene.instantiate())
+	#window.popup_centered.call_deferred()
 "
 
-[node name="program_button" type="HBoxContainer"]
-script = SubResource("GDScript_in7hs")
-text = null
-
-[node name="main_button" type="Button" parent="."]
-layout_mode = 2
+[node name="program_spawner_button" type="Button"]
+offset_right = 1000.0
+offset_bottom = 31.0
 size_flags_horizontal = 3
 text = "Button"
-
-[node name="inst_button" type="Button" parent="."]
-custom_minimum_size = Vector2(30, 0)
-layout_mode = 2
-tooltip_text = "Create a new instance of this scene."
 icon = ExtResource("1_in7hs")
-icon_alignment = 1
-
-[connection signal="pressed" from="main_button" to="." method="_on_main_button_pressed"]
-[connection signal="pressed" from="inst_button" to="." method="_on_inst_button_pressed"]
+icon_alignment = 2
+script = SubResource("GDScript_in7hs")
+scene_path = "uid://djqm57nangv8l"

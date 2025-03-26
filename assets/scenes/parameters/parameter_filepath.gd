@@ -1,4 +1,4 @@
-class_name ParameterFilepath extends ParameterString
+@tool class_name ParameterFilepath extends ParameterString
 
 func get_is_valid() -> bool:
 	return DirAccess.dir_exists_absolute(text)
