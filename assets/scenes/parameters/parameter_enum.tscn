@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://dntmhwq407fis"]
+
+[ext_resource type="PackedScene" uid="uid://qw4xx0jf3pso" path="res://assets/scenes/parameter_base.tscn" id="1_ymc20"]
+[ext_resource type="Script" uid="uid://bmyfo2d2xyc3m" path="res://assets/scenes/parameters/parameter_enum.gd" id="2_44n0a"]
+
+[node name="parameter_enum" instance=ExtResource("1_ymc20")]
+script = ExtResource("2_44n0a")
+options = PackedStringArray()
+value = -1
+value_as_text = ""
+label_text = "Enum"
+
+[node name="label" parent="." index="0"]
+text = "Enum"
+
+[node name="option_button" type="OptionButton" parent="." index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[connection signal="item_selected" from="option_button" to="." method="update_prefs" unbinds=1]

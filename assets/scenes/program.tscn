@@ -84,7 +84,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_fviui")
 script = ExtResource("2_8gkjr")
-execute_button = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/execute_button")
+execute_button = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/h_box_container/execute_button")
 
 [node name="panel_container" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -121,7 +121,7 @@ label_settings = SubResource("LabelSettings_d4w2p")
 horizontal_alignment = 2
 vertical_alignment = 1
 script = SubResource("GDScript_fviui")
-execute_button = NodePath("../../main/h_split_container/v_box_container/execute_button")
+execute_button = NodePath("../../main/h_split_container/v_box_container/h_box_container/execute_button")
 
 [node name="main" type="Control" parent="panel_container/margin_container/v_box_container"]
 layout_mode = 2
@@ -137,8 +137,8 @@ grow_vertical = 2
 size_flags_vertical = 3
 
 [node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container"]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="left_panel" type="PanelContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container"]
 layout_mode = 2
@@ -181,12 +181,22 @@ size = Vector2i(64, 64)
 
 [node name="sprite_2d" type="AnimatedSprite2D" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport"]
 sprite_frames = SubResource("SpriteFrames_01wmh")
-frame_progress = 0.977379
+frame_progress = 0.675266
 centered = false
 
-[node name="execute_button" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container" instance=ExtResource("2_7h4pu")]
+[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container"]
+layout_mode = 2
+
+[node name="execute_button" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/h_box_container" instance=ExtResource("2_7h4pu")]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="queue_button" type="Button" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/h_box_container"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Queue"
 
 [node name="right_panel" type="PanelContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container"]
 layout_mode = 2
@@ -207,8 +217,8 @@ size = Vector2i(281, 106)
 dialog_text = "This program is still running.
 Are you sure you want to close it?"
 
-[connection signal="execute_finished" from="." to="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/execute_button" method="set_pressed" binds= [false]]
+[connection signal="execute_finished" from="." to="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/h_box_container/execute_button" method="set_pressed" binds= [false]]
 [connection signal="visibility_changed" from="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport/sprite_2d" to="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport/sprite_2d" method="play" binds= [&"default"]]
-[connection signal="canceled" from="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/execute_button" to="." method="terminate"]
-[connection signal="executed" from="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/execute_button" to="." method="execute"]
+[connection signal="canceled" from="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/h_box_container/execute_button" to="." method="terminate"]
+[connection signal="executed" from="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/h_box_container/execute_button" to="." method="execute"]
 [connection signal="confirmed" from="close_confirmation" to="." method="exit"]

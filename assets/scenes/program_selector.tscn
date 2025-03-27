@@ -3,7 +3,6 @@
 [ext_resource type="Theme" uid="uid://cjww2dp7ckflf" path="res://assets/theme.tres" id="1_6erst"]
 [ext_resource type="PackedScene" uid="uid://dwh0rjn7m46yv" path="res://assets/scenes/buttons/program_button.tscn" id="3_rnux4"]
 [ext_resource type="Script" uid="uid://hn4bwmkixbc1" path="res://assets/scenes/settings_panel.gd" id="4_fmc16"]
-[ext_resource type="PackedScene" uid="uid://dfbbwpc8mey0f" path="res://assets/scenes/parameters/parameter_filepath.tscn" id="5_u0rbf"]
 
 [sub_resource type="GDScript" id="GDScript_6erst"]
 script/source = "extends Control
@@ -29,6 +28,9 @@ func is_any_subwindow_open() -> bool:
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_d4w2p"]
+font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_x87do"]
 font_size = 24
 
 [node name="program_selector" type="Control"]
@@ -101,47 +103,73 @@ scene_path = "uid://brxq1i2cfyqwp"
 [node name="atlasser" parent="panel_container/margin_container/v_box_container/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list" instance=ExtResource("3_rnux4")]
 layout_mode = 2
 text = "Penny Composite Sprite Atlasser"
-scene_path = "uid://brxq1i2cfyqwp"
+scene_path = "uid://uh7s1jr0me14"
 
-[node name="settings_panel" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_split_container"]
+[node name="queue_panel" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_split_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("4_fmc16")
 
-[node name="margin_container" type="MarginContainer" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel"]
+[node name="margin_container" type="MarginContainer" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel"]
 layout_mode = 2
 
-[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container"]
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container"]
 layout_mode = 2
 
-[node name="python_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
+[node name="h_box_container_3" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container"]
 layout_mode = 2
-file_mode = 0
-text = "/usr/bin/python3"
-label_text = "Python Path"
-save_to_prefs = true
 
-[node name="optipng_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
+[node name="label_2" type="Label" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container/h_box_container_3"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-file_mode = 0
-text = "/opt/homebrew/bin/optipng"
-label_text = "OptiPNG Path"
-save_to_prefs = true
+text = "ID"
+label_settings = SubResource("LabelSettings_x87do")
 
-[node name="laigter_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
+[node name="label_3" type="Label" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container/h_box_container_3"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-file_mode = 0
-text = "/Applications/laigter.app/Contents/MacOS/laigter"
-label_text = "Laigter Path"
-save_to_prefs = true
+text = "Task"
+label_settings = SubResource("LabelSettings_x87do")
 
-[node name="laigter_preset_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
+[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container/h_box_container_3"]
 layout_mode = 2
-file_mode = 0
-text = "/Users/gnuckell/Mirror/Gamedev/Charybdis (admin)/charybdis/assets_staging/charybdis5"
-label_text = "Laigter Preset"
-save_to_prefs = true
+text = "Path"
+label_settings = SubResource("LabelSettings_x87do")
+
+[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container"]
+layout_mode = 2
+
+[node name="label_2" type="Label" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container/h_box_container"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "0"
+
+[node name="label_3" type="Label" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container/h_box_container"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "OptiPNG"
+
+[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container/h_box_container"]
+layout_mode = 2
+text = "/characters/scylla"
+
+[node name="h_box_container_2" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container"]
+layout_mode = 2
+
+[node name="label_2" type="Label" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container/h_box_container_2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "1"
+
+[node name="label_3" type="Label" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container/h_box_container_2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Atlas"
+
+[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/h_split_container/queue_panel/margin_container/v_box_container/h_box_container_2"]
+layout_mode = 2
+text = "/characters/rubin"
 
 [node name="confirmation_dialog" type="ConfirmationDialog" parent="."]
 initial_position = 2

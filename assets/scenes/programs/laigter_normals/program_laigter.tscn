@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://brxq1i2cfyqwp"]
+[gd_scene load_steps=9 format=3 uid="uid://brxq1i2cfyqwp"]
 
 [ext_resource type="PackedScene" uid="uid://fsw37e6bhjnn" path="res://assets/scenes/program.tscn" id="1_5vxki"]
 [ext_resource type="Script" uid="uid://c4qqfad8c1j4w" path="res://assets/scenes/programs/laigter_normals/program_laigter.gd" id="2_oq7v6"]
 [ext_resource type="PackedScene" uid="uid://dfbbwpc8mey0f" path="res://assets/scenes/parameters/parameter_filepath.tscn" id="3_8qad5"]
 [ext_resource type="PackedScene" uid="uid://pma6pc7ka253" path="res://assets/scenes/parameters/parameter_string.tscn" id="4_663oa"]
 [ext_resource type="PackedScene" uid="uid://bhvbnwx78yr8x" path="res://assets/scenes/image_preview.tscn" id="5_miome"]
+[ext_resource type="PackedScene" uid="uid://wbeyntko06of" path="res://assets/scenes/progress_display.tscn" id="6_oq7v6"]
 
 [sub_resource type="SystemFont" id="SystemFont_v3opu"]
 font_names = PackedStringArray("Monospace")
@@ -12,13 +13,11 @@ font_names = PackedStringArray("Monospace")
 [sub_resource type="ViewportTexture" id="ViewportTexture_v3opu"]
 viewport_path = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport")
 
-[node name="program_laigter" node_paths=PackedStringArray("source_image_preview", "target_image_preview", "progress_bar", "progress_done_label", "progress_todo_label", "parameters") instance=ExtResource("1_5vxki")]
+[node name="program_laigter" node_paths=PackedStringArray("source_image_preview", "target_image_preview", "progress_display", "parameters") instance=ExtResource("1_5vxki")]
 script = ExtResource("2_oq7v6")
 source_image_preview = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/h_box_container/source_preview")
 target_image_preview = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/h_box_container/target_preview")
-progress_bar = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/progress_bar")
-progress_done_label = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed/label_progress_done")
-progress_todo_label = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed/label_progress_todo")
+progress_display = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/progress_display")
 program_name = "Laigter Normals"
 script_path = "res://assets/scenes/programs/laigter_normals/laigter.py"
 parameters = [NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/laigter_path"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/laigter_preset_path"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/laigter_filter"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/source_folder"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/target_folder")]
@@ -70,7 +69,7 @@ label_text = "Destination Folder"
 texture = SubResource("ViewportTexture_v3opu")
 
 [node name="sprite_2d" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport" index="0"]
-frame_progress = 0.0624756
+frame_progress = 0.000679975
 
 [node name="output_list" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container" index="0"]
 layout_mode = 2
@@ -87,32 +86,8 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="files_completed" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="1"]
+[node name="progress_display" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="1" instance=ExtResource("6_oq7v6")]
 layout_mode = 2
-
-[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="0"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Files completed"
-
-[node name="label_progress_done" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="1"]
-layout_mode = 2
-text = "0"
-horizontal_alignment = 2
-
-[node name="label_3" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="2"]
-layout_mode = 2
-text = "/"
-horizontal_alignment = 1
-
-[node name="label_progress_todo" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="3"]
-layout_mode = 2
-text = "0"
-horizontal_alignment = 2
-
-[node name="progress_bar" type="ProgressBar" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="2"]
-layout_mode = 2
-max_value = 4.0
-step = 1.0
+label_text = ""
 
 [editable path="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/laigter_filter"]

@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://4ntd0v7krgom"]
+[gd_scene load_steps=8 format=3 uid="uid://4ntd0v7krgom"]
 
 [ext_resource type="PackedScene" uid="uid://fsw37e6bhjnn" path="res://assets/scenes/program.tscn" id="1_vvo8o"]
 [ext_resource type="Script" uid="uid://ymsft3s6lyd1" path="res://assets/scenes/programs/optipng_compress/program_compress.gd" id="2_8of0n"]
 [ext_resource type="PackedScene" uid="uid://dfbbwpc8mey0f" path="res://assets/scenes/parameters/parameter_filepath.tscn" id="3_eu163"]
 [ext_resource type="PackedScene" uid="uid://bhvbnwx78yr8x" path="res://assets/scenes/image_preview.tscn" id="4_mff5a"]
+[ext_resource type="PackedScene" uid="uid://wbeyntko06of" path="res://assets/scenes/progress_display.tscn" id="5_8of0n"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_u5sgf"]
 viewport_path = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport")
@@ -11,29 +12,12 @@ viewport_path = NodePath("panel_container/margin_container/v_box_container/main/
 [sub_resource type="GDScript" id="GDScript_fcnkx"]
 script/source = "extends VBoxContainer
 
-var progress_done : int :
-	get: return floori($progress_bar.value)
-	set(value):
-		$progress_bar.value = value
-		$files_completed/label_progress_done.text = str(value)
-var progress_todo : int :
-	get: return floori($progress_bar.max_value)
-	set(value):
-		$progress_bar.max_value = value
-		$files_completed/label_progress_todo.text = str(value)
-
 var _bytes_reduced : int
 var bytes_reduced : int :
 	get: return _bytes_reduced
 	set(value):
 		_bytes_reduced = value
 		$bytes_reduced/label_bytes.text = bytes_to_string(value)
-
-func set_progress_done(value: int) -> void:
-	progress_done = value
-		
-func set_progress_todo(value: int) -> void:
-	progress_todo = value
 	
 func add_bytes_reduced(value: int) -> void:
 	bytes_reduced += value
@@ -53,12 +37,10 @@ static func bytes_to_string(bytes: int) -> String:
 	
 "
 
-[node name="program_compress" node_paths=PackedStringArray("source_image_preview", "progress_bar", "progress_done_label", "progress_todo_label", "parameters") instance=ExtResource("1_vvo8o")]
+[node name="program_compress" node_paths=PackedStringArray("source_image_preview", "progress_display", "parameters") instance=ExtResource("1_vvo8o")]
 script = ExtResource("2_8of0n")
 source_image_preview = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/image_preview")
-progress_bar = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/progress_bar")
-progress_done_label = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed/label_progress_done")
-progress_todo_label = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed/label_progress_todo")
+progress_display = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/progress_display")
 program_name = "OptiPNG Compress"
 script_path = "res://assets/scenes/programs/optipng_compress/compress.py"
 parameters = [NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/optipng_path"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/input")]
@@ -81,7 +63,7 @@ label_text = "Source"
 texture = SubResource("ViewportTexture_u5sgf")
 
 [node name="sprite_2d" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport" index="0"]
-frame_progress = 0.945791
+frame_progress = 0.596555
 
 [node name="output_list" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container" index="0"]
 layout_mode = 2
@@ -104,33 +86,9 @@ layout_mode = 2
 text = "0 B"
 horizontal_alignment = 1
 
-[node name="files_completed" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="2"]
+[node name="progress_display" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="2" instance=ExtResource("5_8of0n")]
 layout_mode = 2
-
-[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="0"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Files completed"
-
-[node name="label_progress_done" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="1"]
-layout_mode = 2
-text = "0"
-horizontal_alignment = 2
-
-[node name="label_3" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="2"]
-layout_mode = 2
-text = "/"
-horizontal_alignment = 1
-
-[node name="label_progress_todo" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="3"]
-layout_mode = 2
-text = "0"
-horizontal_alignment = 2
-
-[node name="progress_bar" type="ProgressBar" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="3"]
-layout_mode = 2
-max_value = 4.0
-step = 1.0
+label_text = ""
 
 [connection signal="bytes_reduced_changed" from="." to="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" method="add_bytes_reduced"]
 [connection signal="execute_started" from="." to="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" method="clear_bytes_reduced"]

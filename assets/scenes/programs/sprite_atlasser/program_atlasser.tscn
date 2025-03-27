@@ -1,14 +1,151 @@
-[gd_scene load_steps=3 format=3 uid="uid://uh7s1jr0me14"]
+[gd_scene load_steps=11 format=3 uid="uid://uh7s1jr0me14"]
 
 [ext_resource type="PackedScene" uid="uid://fsw37e6bhjnn" path="res://assets/scenes/program.tscn" id="1_bpmuy"]
+[ext_resource type="Script" uid="uid://bgacmfw3x0s6h" path="res://assets/scenes/programs/sprite_atlasser/program_atlasser.gd" id="2_gbhkx"]
+[ext_resource type="PackedScene" uid="uid://pma6pc7ka253" path="res://assets/scenes/parameters/parameter_string.tscn" id="3_ae4sk"]
+[ext_resource type="PackedScene" uid="uid://dfbbwpc8mey0f" path="res://assets/scenes/parameters/parameter_filepath.tscn" id="4_my7tn"]
+[ext_resource type="PackedScene" uid="uid://crdfbqq0aysfu" path="res://assets/scenes/parameters/parameter_numeric.tscn" id="5_ae4sk"]
+[ext_resource type="PackedScene" uid="uid://dntmhwq407fis" path="res://assets/scenes/parameters/parameter_enum.tscn" id="5_my7tn"]
+[ext_resource type="PackedScene" uid="uid://bhvbnwx78yr8x" path="res://assets/scenes/image_preview.tscn" id="7_8od8d"]
+[ext_resource type="PackedScene" uid="uid://wbeyntko06of" path="res://assets/scenes/progress_display.tscn" id="8_grv5h"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_w2082"]
 viewport_path = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport")
 
-[node name="program_atlasser" instance=ExtResource("1_bpmuy")]
+[sub_resource type="GDScript" id="GDScript_8od8d"]
+resource_name = "target_preview_grid"
+script/source = "extends GridContainer
+
+const image_preview_scene : PackedScene = preload(\"res://assets/scenes/image_preview.tscn\")
+
+var previews : Dictionary
+
+
+func update_image(path: String) -> void:
+	if previews.has(path):
+		previews[path].refresh_texture()
+	else:
+		var preview : ImagePreview = image_preview_scene.instantiate()
+		preview.label.visible = false
+		self.add_child(preview)
+		
+		previews[path] = preview
+		self.columns = floori(sqrt(previews.size()))
+"
+
+[node name="program_atlasser" node_paths=PackedStringArray("parameters") instance=ExtResource("1_bpmuy")]
+script = ExtResource("2_gbhkx")
+parameters = [NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/source"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/target"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/name"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/image_format"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/filter_include"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/filter_separate"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/island_crop_mode"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/island_size_min"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/island_opacity"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/island_margin")]
+
+[node name="input_list" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container" index="0"]
+layout_mode = 2
+
+[node name="name" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="0" instance=ExtResource("3_ae4sk")]
+layout_mode = 2
+tooltip_text = "Project name and also the name of the resulting .json file."
+text = "sprite"
+label_text = "Project Name"
+
+[node name="source" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="1" instance=ExtResource("4_my7tn")]
+layout_mode = 2
+file_mode = 2
+label_text = "Source Directory"
+
+[node name="target" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="2" instance=ExtResource("4_my7tn")]
+layout_mode = 2
+file_mode = 2
+label_text = "Target Directory"
+
+[node name="h_separator" type="HSeparator" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="3"]
+layout_mode = 2
+
+[node name="image_format" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="4" instance=ExtResource("3_ae4sk")]
+visible = false
+layout_mode = 2
+text = "RGBA"
+label_text = "Image Format"
+
+[node name="filter_include" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="5" instance=ExtResource("3_ae4sk")]
+layout_mode = 2
+tooltip_text = "Filenames (INCLUDING extension) matching this regex filter will be added to the final image(s)."
+text = ".*?\\.(?:png)"
+label_text = "Inclusion Filter"
+
+[node name="filter_separate" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="6" instance=ExtResource("3_ae4sk")]
+layout_mode = 2
+tooltip_text = "Filenames (EXCLUDING extension) matching this regex filter will be separated into different images.
+This is important! If you don't understand what this does, you probably don't need to use this tool!
+Default: \"_[a-zA-Z]$\""
+text = "_[a-zA-Z]$"
+label_text = "Separation Filter"
+
+[node name="h_separator_2" type="HSeparator" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="7"]
+layout_mode = 2
+
+[node name="island_crop_mode" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="8" instance=ExtResource("5_my7tn")]
+layout_mode = 2
+tooltip_text = "The method to crop islands.
+Skip: Do not perform any modifications to the image. Fastest option.
+All Islands Together: Crop all islands and include as a single sprite. (default)
+All Islands Separately: Crop all islands as separate images. Good for sprite sheets where all pixels in each frame are contiguous.
+Largest Island Only: Crops only the island with the largest area.
+"
+options = PackedStringArray("<Skip>", "All Islands Together", "All Islands Separately", "Largest Island Only")
+value = 1
+value_as_text = "All Islands Together"
+label_text = "Island Crop Mode"
+save_to_prefs = true
+
+[node name="island_size_min" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="9" instance=ExtResource("5_ae4sk")]
+layout_mode = 2
+tooltip_text = "Pixel islands with a larger rectangular area than this will be included in the final image.
+Pixel islands with a smaller rectangular area than this will be discarded. Use this value to clean up loose pixels.
+Default: 128"
+max_value = 65536.0
+value = 128.0
+label_text = "Island Minimum Size"
+save_to_prefs = true
+
+[node name="island_opacity" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="10" instance=ExtResource("5_ae4sk")]
+layout_mode = 2
+tooltip_text = "Pixels with an opacity (0–255) greater than this value will be considered part of a contiguous island.
+Default: 0.01"
+max_value = 255.0
+value = 1.0
+label_text = "Island Opacity"
+save_to_prefs = true
+
+[node name="island_margin" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="11" instance=ExtResource("5_ae4sk")]
+layout_mode = 2
+tooltip_text = "Sprites included in the final image will have this many pixels of margin from the edges and between each other.
+Default: 2"
+max_value = 128.0
+value = 2.0
+label_text = "Island Margin"
+save_to_prefs = true
 
 [node name="texture_rect" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker" index="0"]
 texture = SubResource("ViewportTexture_w2082")
 
 [node name="sprite_2d" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport" index="0"]
-frame_progress = 0.844794
+frame_progress = 0.331725
+
+[node name="output_list" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container" index="0"]
+layout_mode = 2
+
+[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="0"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="source_preview" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/h_box_container" index="0" instance=ExtResource("7_8od8d")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="target_previews" type="GridContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/h_box_container" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = SubResource("GDScript_8od8d")
+
+[node name="progress_display" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="1" instance=ExtResource("8_grv5h")]
+layout_mode = 2
+label_text = ""
