@@ -1,8 +1,9 @@
 @tool class_name ParameterString extends ParameterBase
 
-var text : String :
-	get: return $line_edit.text
+@export var text : String :
+	get: return $line_edit.text if $line_edit else ""
 	set(value):
+		if find_child("line_edit") == null: return
 		$line_edit.tooltip_text = text
 
 		if text == value: return

@@ -5,18 +5,21 @@
 [sub_resource type="GDScript" id="GDScript_in7hs"]
 script/source = "extends Button
 
+#const window_scene_path : String = \"res://assets/scenes/generic_program_window.tscn\"
+const window_scene : PackedScene = preload(\"res://assets/scenes/program_window.tscn\")
+
+
 @export_file(\"*.tscn\", \"*.scn\", \"*.res\") var scene_path : String
 var scene : PackedScene :
 	get: return load(scene_path)
 
 
 func _pressed() -> void:
-	var window : ProgramWindow = scene.instantiate()
+	var window : ProgramWindow = window_scene.instantiate()
 	window.hide()
 	window.force_native = true
-	#window.tran
+	window.populate(scene)
 	self.get_tree().root.add_child.call_deferred(window)
-	#window.popup_centered.call_deferred()
 "
 
 [node name="program_spawner_button" type="Button"]

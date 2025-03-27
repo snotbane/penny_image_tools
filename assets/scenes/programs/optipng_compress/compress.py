@@ -46,7 +46,7 @@ def compress_png_lossless(args, source):
 	global progress_done
 	global difference_total
 	try:
-		set_config(args, "progress_path", f"\"{source}\"")
+		set_config(args, "source_preview", f"\"{source}\"")
 
 		file_size_before = os.path.getsize(source)
 
@@ -61,10 +61,11 @@ def compress_png_lossless(args, source):
 		file_size_after = os.path.getsize(source)
 
 		set_config(args, "bytes_previous", file_size_before - file_size_after)
-		progress_done += 1
-		set_config(args, "progress_done", progress_done)
 	except Exception as e:
 		sys.stderr.write(f"Error compressing {source}: {e}")
+
+	progress_done += 1
+	set_config(args, "progress_done", progress_done)
 
 
 
@@ -80,22 +81,20 @@ if __name__ == "__main__":
 	config.read(args.config_path)
 
 	set_config(args, 'cancel', "false", "input")
-	set_config(args, 'progress_path', "\"\"")
+	set_config(args, 'source_preview', "\"\"")
 	set_config(args, 'progress_todo', 0)
 	set_config(args, 'progress_done', 0)
 	set_config(args, 'bytes_previous', 0)
 
-	if os.path.exists(args.source):
-		if os.path.isdir(args.source):
-			set_config(args, 'progress_todo', get_files_todo(args, args.source))
-			compress_folder(args, args.source)
-			progress_done += 1
-			set_config(args, "progress_done", progress_done)
-		elif os.path.isfile(args.source):
-			set_config(args, 'progress_todo', 1)
-			compress_png_lossless(args, args.source)
-		else: sys.stderr.write("Input path is not a file nor directory.")
-		sys.exit(0)
+	if os.path.isdir(args.source):
+		set_config(args, 'progress_todo', get_files_todo(args, args.source))
+		compress_folder(args, args.source)
+		progress_done += 1
+		set_config(args, "progress_done", progress_done)
+	elif os.path.isfile(args.source):
+		set_config(args, 'progress_todo', 1)
+		compress_png_lossless(args, args.source)
 	else:
-		sys.stderr.write("Input path does not exist.")
+		sys.stderr.write("Input path is not a valid file nor directory.")
 		sys.exit(1)
+	sys.exit(0)

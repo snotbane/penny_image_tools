@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://uh7s1jr0me14"]
+
+[ext_resource type="PackedScene" uid="uid://fsw37e6bhjnn" path="res://assets/scenes/program.tscn" id="1_bpmuy"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_w2082"]
+viewport_path = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport")
+
+[node name="program_atlasser" instance=ExtResource("1_bpmuy")]
+
+[node name="texture_rect" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker" index="0"]
+texture = SubResource("ViewportTexture_w2082")
+
+[node name="sprite_2d" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport" index="0"]
+frame_progress = 0.844794

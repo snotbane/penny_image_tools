@@ -6,5 +6,3 @@
 toggle_mode = true
 text = "Execute"
 script = ExtResource("1_eusir")
-
-[connection signal="toggled" from="." to="." method="_on_toggled"]

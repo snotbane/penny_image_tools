@@ -1,27 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bhvbnwx78yr8x"]
+[gd_scene load_steps=5 format=3 uid="uid://bhvbnwx78yr8x"]
 
-[sub_resource type="GDScript" id="GDScript_m46w0"]
-resource_name = "image_preview"
-script/source = "@tool
-extends Control
-
-@export_file(\"*.png\", \"*.jpg\") var image_path : String :
-	get: return $v_box_container/h_box_container/preview_path.text
-	set(value):
-		$v_box_container/h_box_container/preview_path.text = value
-		
-		if not FileAccess.file_exists(image_path): texture = null; return
-		
-		var image = Image.new()
-		var error := image.load(image_path)
-		texture = ImageTexture.create_from_image(image) if error == OK else null
-func set_image_path(path: String) -> void:
-		image_path = path
-
-var texture : Texture2D :
-	get: return $v_box_container/panel_container/margin_container/preview_image.texture
-	set(value): $v_box_container/panel_container/margin_container/preview_image.texture = value
-"
+[ext_resource type="Script" uid="uid://b1tl7s8twawyg" path="res://assets/scenes/image_preview.gd" id="1_jach2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yc6ja"]
 bg_color = Color(0, 0, 0, 0.25098)
@@ -29,6 +8,9 @@ corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_m46w0"]
+size = Vector2(0, 0)
 
 [sub_resource type="LabelSettings" id="LabelSettings_2ysao"]
 font_size = 10
@@ -40,7 +22,8 @@ anchors_preset = 0
 offset_right = 697.0
 offset_bottom = 469.0
 size_flags_vertical = 3
-script = SubResource("GDScript_m46w0")
+mouse_filter = 2
+script = ExtResource("1_jach2")
 
 [node name="v_box_container" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -72,10 +55,14 @@ size_flags_vertical = 3
 expand_mode = 1
 stretch_mode = 5
 
-[node name="h_box_container" type="HBoxContainer" parent="v_box_container"]
+[node name="check_button" type="CheckButton" parent="v_box_container/panel_container"]
 layout_mode = 2
+theme_override_icons/checked = SubResource("PlaceholderTexture2D_m46w0")
+theme_override_icons/unchecked = SubResource("PlaceholderTexture2D_m46w0")
+button_pressed = true
+flat = true
 
-[node name="preview_path" type="Label" parent="v_box_container/h_box_container"]
+[node name="preview_path" type="Label" parent="v_box_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 label_settings = SubResource("LabelSettings_2ysao")
@@ -83,8 +70,4 @@ horizontal_alignment = 1
 text_overrun_behavior = 4
 text_direction = 2
 
-[node name="show_preview" type="CheckButton" parent="v_box_container/h_box_container"]
-layout_mode = 2
-button_pressed = true
-
-[connection signal="toggled" from="v_box_container/h_box_container/show_preview" to="v_box_container/panel_container/margin_container/preview_image" method="set_visible"]
+[connection signal="toggled" from="v_box_container/panel_container/check_button" to="v_box_container/panel_container/margin_container/preview_image" method="set_visible"]

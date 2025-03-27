@@ -1,0 +1,136 @@
+[gd_scene load_steps=7 format=3 uid="uid://4ntd0v7krgom"]
+
+[ext_resource type="PackedScene" uid="uid://fsw37e6bhjnn" path="res://assets/scenes/program.tscn" id="1_vvo8o"]
+[ext_resource type="Script" uid="uid://ymsft3s6lyd1" path="res://assets/scenes/programs/optipng_compress/program_compress.gd" id="2_8of0n"]
+[ext_resource type="PackedScene" uid="uid://dfbbwpc8mey0f" path="res://assets/scenes/parameters/parameter_filepath.tscn" id="3_eu163"]
+[ext_resource type="PackedScene" uid="uid://bhvbnwx78yr8x" path="res://assets/scenes/image_preview.tscn" id="4_mff5a"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_u5sgf"]
+viewport_path = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport")
+
+[sub_resource type="GDScript" id="GDScript_fcnkx"]
+script/source = "extends VBoxContainer
+
+var progress_done : int :
+	get: return floori($progress_bar.value)
+	set(value):
+		$progress_bar.value = value
+		$files_completed/label_progress_done.text = str(value)
+var progress_todo : int :
+	get: return floori($progress_bar.max_value)
+	set(value):
+		$progress_bar.max_value = value
+		$files_completed/label_progress_todo.text = str(value)
+
+var _bytes_reduced : int
+var bytes_reduced : int :
+	get: return _bytes_reduced
+	set(value):
+		_bytes_reduced = value
+		$bytes_reduced/label_bytes.text = bytes_to_string(value)
+
+func set_progress_done(value: int) -> void:
+	progress_done = value
+		
+func set_progress_todo(value: int) -> void:
+	progress_todo = value
+	
+func add_bytes_reduced(value: int) -> void:
+	bytes_reduced += value
+
+func clear_bytes_reduced() -> void:
+	bytes_reduced = 0
+	
+
+static func bytes_to_string(bytes: int) -> String:	
+	if bytes < 1024:
+		return str(bytes) + \" B\"
+	if bytes < 1024 * 1024:
+		return \"%.2f KB\" % (float(bytes) / 1024.0)
+	if bytes < 1024 * 1024 * 1024:
+		return \"%.2f MB\" % (float(bytes) / (1024.0 * 1024.0))
+	return \"%.2f GB\" % (float(bytes) / (1024.0 * 1024.0 * 1024.0))
+	
+"
+
+[node name="program_compress" node_paths=PackedStringArray("source_image_preview", "progress_bar", "progress_done_label", "progress_todo_label", "parameters") instance=ExtResource("1_vvo8o")]
+script = ExtResource("2_8of0n")
+source_image_preview = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/image_preview")
+progress_bar = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/progress_bar")
+progress_done_label = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed/label_progress_done")
+progress_todo_label = NodePath("panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed/label_progress_todo")
+program_name = "OptiPNG Compress"
+script_path = "res://assets/scenes/programs/optipng_compress/compress.py"
+parameters = [NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/optipng_path"), NodePath("panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/input")]
+
+[node name="input_list" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container" index="0"]
+layout_mode = 2
+
+[node name="optipng_path" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="0" instance=ExtResource("3_eu163")]
+layout_mode = 2
+file_mode = 0
+text = "/opt/homebrew/bin/optipng"
+label_text = "OptiPNG Path"
+save_to_prefs = true
+
+[node name="input" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="1" instance=ExtResource("3_eu163")]
+layout_mode = 2
+label_text = "Source"
+
+[node name="texture_rect" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker" index="0"]
+texture = SubResource("ViewportTexture_u5sgf")
+
+[node name="sprite_2d" parent="panel_container/margin_container/v_box_container/main/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport" index="0"]
+frame_progress = 0.945791
+
+[node name="output_list" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container" index="0"]
+layout_mode = 2
+theme_override_constants/separation = 4
+script = SubResource("GDScript_fcnkx")
+
+[node name="image_preview" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="0" instance=ExtResource("4_mff5a")]
+layout_mode = 2
+
+[node name="bytes_reduced" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="1"]
+layout_mode = 2
+
+[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/bytes_reduced" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "File size reduced"
+
+[node name="label_bytes" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/bytes_reduced" index="1"]
+layout_mode = 2
+text = "0 B"
+horizontal_alignment = 1
+
+[node name="files_completed" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="2"]
+layout_mode = 2
+
+[node name="label" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Files completed"
+
+[node name="label_progress_done" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="1"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+
+[node name="label_3" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="2"]
+layout_mode = 2
+text = "/"
+horizontal_alignment = 1
+
+[node name="label_progress_todo" type="Label" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list/files_completed" index="3"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+
+[node name="progress_bar" type="ProgressBar" parent="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" index="3"]
+layout_mode = 2
+max_value = 4.0
+step = 1.0
+
+[connection signal="bytes_reduced_changed" from="." to="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" method="add_bytes_reduced"]
+[connection signal="execute_started" from="." to="panel_container/margin_container/v_box_container/main/h_split_container/right_panel/scroll_container/margin_container/output_list" method="clear_bytes_reduced"]

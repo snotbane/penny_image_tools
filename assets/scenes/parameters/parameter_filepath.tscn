@@ -6,10 +6,15 @@
 
 [node name="parameter_filepath" instance=ExtResource("1_s40vh")]
 script = ExtResource("2_qqwis")
+access = 2
+file_mode = 3
 label_text = "Filepath Parameter"
 
 [node name="label" parent="." index="0"]
 text = "Filepath Parameter"
+
+[node name="line_edit" parent="." index="1"]
+clear_button_enabled = false
 
 [node name="open_button" type="Button" parent="." index="2"]
 custom_minimum_size = Vector2(30, 0)

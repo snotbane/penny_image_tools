@@ -88,10 +88,20 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="program_button" parent="panel_container/margin_container/v_box_container/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list" instance=ExtResource("3_rnux4")]
+[node name="optipng" parent="panel_container/margin_container/v_box_container/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list" instance=ExtResource("3_rnux4")]
 layout_mode = 2
-text = "OptiPNG Image Lossless Compression"
+text = "OptiPNG Compression (Lossless)"
 scene_path = "uid://4ntd0v7krgom"
+
+[node name="laigter" parent="panel_container/margin_container/v_box_container/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list" instance=ExtResource("3_rnux4")]
+layout_mode = 2
+text = "Laigter Bulk Normal Generation"
+scene_path = "uid://brxq1i2cfyqwp"
+
+[node name="atlasser" parent="panel_container/margin_container/v_box_container/h_split_container/parameter_panel/scroll_container/margin_container/parameter_list" instance=ExtResource("3_rnux4")]
+layout_mode = 2
+text = "Penny Composite Sprite Atlasser"
+scene_path = "uid://brxq1i2cfyqwp"
 
 [node name="settings_panel" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_split_container"]
 layout_mode = 2
@@ -107,22 +117,30 @@ layout_mode = 2
 
 [node name="python_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
 layout_mode = 2
+file_mode = 0
+text = "/usr/bin/python3"
 label_text = "Python Path"
 save_to_prefs = true
 
 [node name="optipng_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
 layout_mode = 2
+file_mode = 0
+text = "/opt/homebrew/bin/optipng"
 label_text = "OptiPNG Path"
 save_to_prefs = true
 
 [node name="laigter_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
 layout_mode = 2
+file_mode = 0
+text = "/Applications/laigter.app/Contents/MacOS/laigter"
 label_text = "Laigter Path"
 save_to_prefs = true
 
-[node name="laigter_template_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
+[node name="laigter_preset_path" parent="panel_container/margin_container/v_box_container/h_split_container/settings_panel/margin_container/v_box_container" instance=ExtResource("5_u0rbf")]
 layout_mode = 2
-label_text = "Laigter Template Path"
+file_mode = 0
+text = "/Users/gnuckell/Mirror/Gamedev/Charybdis (admin)/charybdis/assets_staging/charybdis5"
+label_text = "Laigter Preset"
 save_to_prefs = true
 
 [node name="confirmation_dialog" type="ConfirmationDialog" parent="."]
