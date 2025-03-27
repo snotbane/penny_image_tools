@@ -1,0 +1,94 @@
+[gd_scene load_steps=8 format=3 uid="uid://4ntd0v7krgom"]
+
+[ext_resource type="PackedScene" uid="uid://fsw37e6bhjnn" path="res://assets/scenes/program.tscn" id="1_vvo8o"]
+[ext_resource type="Script" uid="uid://ymsft3s6lyd1" path="res://assets/scenes/programs/program_compress.gd" id="2_8of0n"]
+[ext_resource type="PackedScene" uid="uid://dfbbwpc8mey0f" path="res://assets/scenes/parameters/parameter_filepath.tscn" id="3_eu163"]
+[ext_resource type="PackedScene" uid="uid://bhvbnwx78yr8x" path="res://assets/scenes/image_preview.tscn" id="4_mff5a"]
+[ext_resource type="PackedScene" uid="uid://wbeyntko06of" path="res://assets/scenes/progress_display.tscn" id="5_8of0n"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_8of0n"]
+viewport_path = NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport")
+
+[sub_resource type="GDScript" id="GDScript_fcnkx"]
+script/source = "extends VBoxContainer
+
+var _bytes_reduced : int
+var bytes_reduced : int :
+	get: return _bytes_reduced
+	set(value):
+		_bytes_reduced = value
+		$bytes_reduced/label_bytes.text = bytes_to_string(value)
+	
+func add_bytes_reduced(value: int) -> void:
+	bytes_reduced += value
+
+func clear_bytes_reduced() -> void:
+	bytes_reduced = 0
+	
+
+static func bytes_to_string(bytes: int) -> String:	
+	if bytes < 1024:
+		return str(bytes) + \" B\"
+	if bytes < 1024 * 1024:
+		return \"%.2f KB\" % (float(bytes) / 1024.0)
+	if bytes < 1024 * 1024 * 1024:
+		return \"%.2f MB\" % (float(bytes) / (1024.0 * 1024.0))
+	return \"%.2f GB\" % (float(bytes) / (1024.0 * 1024.0 * 1024.0))
+	
+"
+
+[node name="program_compress" node_paths=PackedStringArray("source_image_preview", "progress_display", "parameters") instance=ExtResource("1_vvo8o")]
+script = ExtResource("2_8of0n")
+source_image_preview = NodePath("panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list/image_preview")
+progress_display = NodePath("panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list/progress_display")
+program_name = "OptiPNG Compress"
+script_path = "res://assets/scenes/programs/compress.py"
+parameters = [NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/optipng_path"), NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list/input")]
+
+[node name="input_list" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container" index="0"]
+layout_mode = 2
+
+[node name="optipng_path" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="0" instance=ExtResource("3_eu163")]
+layout_mode = 2
+file_mode = 0
+text = "/opt/homebrew/bin/optipng"
+label_text = "OptiPNG Path"
+save_to_prefs = true
+
+[node name="input" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/input_list" index="1" instance=ExtResource("3_eu163")]
+layout_mode = 2
+label_text = "Source"
+
+[node name="texture_rect" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/subwindow_locker" index="0"]
+texture = SubResource("ViewportTexture_8of0n")
+
+[node name="sprite_2d" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport" index="0"]
+frame_progress = 0.700143
+
+[node name="output_list" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container" index="0"]
+layout_mode = 2
+theme_override_constants/separation = 4
+script = SubResource("GDScript_fcnkx")
+
+[node name="image_preview" parent="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list" index="0" instance=ExtResource("4_mff5a")]
+layout_mode = 2
+
+[node name="bytes_reduced" type="HBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list" index="1"]
+layout_mode = 2
+
+[node name="label" type="Label" parent="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list/bytes_reduced" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "File size reduced"
+
+[node name="label_bytes" type="Label" parent="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list/bytes_reduced" index="1"]
+layout_mode = 2
+text = "0 B"
+horizontal_alignment = 1
+
+[node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list" index="2" instance=ExtResource("5_8of0n")]
+layout_mode = 2
+max_value = 1
+
+[connection signal="bytes_reduced_changed" from="." to="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list" method="add_bytes_reduced"]
+[connection signal="execute_started" from="." to="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list" method="clear_bytes_reduced"]
