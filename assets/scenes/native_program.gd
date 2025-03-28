@@ -1,21 +1,19 @@
 class_name NativeProgram extends Control
 
 signal execute_started
-signal execute_stopped(result: Variant)
+signal execute_stopped
+
+@export var print_output : bool
 
 @export var program_name : String = "Program"
+@export var program_nickname : String = "Program"
 @export var parameters_container : Control
 @export var execute_button : Button
-
 
 var parameters : Array[ParameterBase]
 var thread : Thread
 var window : ProgramWindow
-var termination_requested : bool
-
-
-var is_executing : bool :
-	get: return thread != null and thread.is_alive()
+var is_executing : bool
 
 
 func _ready() -> void:
@@ -27,9 +25,11 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if is_executing:
-		refresh_window_title()
+	if thread.is_alive():
+		self.refresh_window_title()
 		self._execute_process(delta)
+	else:
+		self.terminate()
 func _execute_process(delta: float) -> void:
 	pass
 
@@ -42,8 +42,8 @@ func populate(_window: ProgramWindow) -> void:
 
 func execute() -> void:
 	if is_executing: return
+	is_executing = true
 
-	termination_requested = false
 	_execute_started()
 	execute_started.emit()
 	thread.start(_program.bind(_get_arguments()))
@@ -51,11 +51,11 @@ func execute() -> void:
 
 func terminate() -> void:
 	if not is_executing: return
+	is_executing = false
 
-	termination_requested = true
 	var result : Variant = thread.wait_to_finish()
 	_execute_stopped(result)
-	execute_stopped.emit(result)
+	execute_stopped.emit()
 
 
 func _execute_started() -> void:

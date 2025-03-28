@@ -1,6 +1,6 @@
 class_name ProgramWindow extends Window
 
-var program : Program
+var program : NativeProgram
 
 func populate(scene: PackedScene) -> void:
 	program = scene.instantiate()

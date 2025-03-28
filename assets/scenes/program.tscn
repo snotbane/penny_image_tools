@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://cjww2dp7ckflf" path="res://assets/theme.tres" id="1_fviui"]
 [ext_resource type="PackedScene" uid="uid://c2odel3v0vcjp" path="res://assets/scenes/buttons/execute_button.tscn" id="2_7h4pu"]
-[ext_resource type="Script" uid="uid://crmuuucfppfbm" path="res://assets/scenes/program.gd" id="2_8gkjr"]
+[ext_resource type="Script" uid="uid://bgu4sunecmf3b" path="res://assets/scenes/native_program.gd" id="2_ioj0w"]
 [ext_resource type="Script" uid="uid://dk66k0b0qeyc5" path="res://assets/scripts/subwindow_locker.gd" id="3_4dhct"]
 [ext_resource type="Texture2D" uid="uid://dobelhvexued5" path="res://assets/icons/Progress1.svg" id="4_hhpkv"]
 [ext_resource type="Texture2D" uid="uid://ciecbyccj4ly0" path="res://assets/icons/Progress2.svg" id="5_aq2xk"]
@@ -48,7 +48,7 @@ animations = [{
 "speed": 12.0
 }]
 
-[node name="program" type="Control" node_paths=PackedStringArray("execute_button")]
+[node name="program" type="Control" node_paths=PackedStringArray("parameters_container", "execute_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -58,7 +58,8 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_fviui")
-script = ExtResource("2_8gkjr")
+script = ExtResource("2_ioj0w")
+parameters_container = NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters")
 execute_button = NodePath("panel_container/margin_container/h_split_container/v_box_container/h_box_container/execute_button")
 
 [node name="panel_container" type="PanelContainer" parent="."]
@@ -94,6 +95,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="parameters" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container"]
+layout_mode = 2
+
 [node name="subwindow_locker" type="Control" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel"]
 visible = false
 layout_mode = 2
@@ -121,7 +125,7 @@ size = Vector2i(64, 64)
 
 [node name="sprite_2d" type="AnimatedSprite2D" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport"]
 sprite_frames = SubResource("SpriteFrames_01wmh")
-frame_progress = 0.529748
+frame_progress = 0.541499
 centered = false
 
 [node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/h_split_container/v_box_container"]
@@ -157,7 +161,7 @@ size = Vector2i(281, 106)
 dialog_text = "This program is still running.
 Are you sure you want to close it?"
 
-[connection signal="execute_finished" from="." to="panel_container/margin_container/h_split_container/v_box_container/h_box_container/execute_button" method="set_pressed" binds= [false]]
+[connection signal="execute_stopped" from="." to="panel_container/margin_container/h_split_container/v_box_container/h_box_container/execute_button" method="set_pressed" binds= [false]]
 [connection signal="visibility_changed" from="panel_container/margin_container/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport/sprite_2d" to="panel_container/margin_container/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport/sprite_2d" method="play" binds= [&"default"]]
 [connection signal="canceled" from="panel_container/margin_container/h_split_container/v_box_container/h_box_container/execute_button" to="." method="terminate"]
 [connection signal="executed" from="panel_container/margin_container/h_split_container/v_box_container/h_box_container/execute_button" to="." method="execute"]
