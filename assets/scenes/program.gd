@@ -47,6 +47,8 @@ func _ready() -> void:
 
 	config_path = "%s/%s.cfg" % [config_dir.get_current_dir(), self.name]
 	config = ConfigFile.new()
+	config.set_value("input", "cancel", false)
+	config.set_value("output", "dummy", false)
 	config.save(config_path)
 
 	thread = Thread.new()

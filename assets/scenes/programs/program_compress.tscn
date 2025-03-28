@@ -63,7 +63,7 @@ label_text = "Source"
 texture = SubResource("ViewportTexture_8of0n")
 
 [node name="sprite_2d" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport" index="0"]
-frame_progress = 0.700143
+frame_progress = 0.454389
 
 [node name="output_list" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container" index="0"]
 layout_mode = 2
