@@ -10,6 +10,8 @@ signal execute_stopped
 @export var parameters_container : Control
 @export var execute_button : Button
 
+var transmission : ConfigFile
+var transmission_path : String
 var parameters : Array[ParameterBase]
 var thread : Thread
 var window : ProgramWindow
@@ -17,15 +19,36 @@ var is_executing : bool
 
 
 func _ready() -> void:
+	transmission_path = "%s/%s.cfg" % ["user:/", self.name]
+	transmission = ConfigFile.new()
+	transmission.set_value("input", "cancel", false)
+	transmission.set_value("output", "dummy", false)
+	transmission.save(transmission_path)
+
 	parameters = []
 	for child in parameters_container.get_children():
 		if child is not ParameterBase: continue
 		parameters.push_back(child)
+
 	thread = Thread.new()
+
+
+func _exit_tree() -> void:
+	remove_transmission()
+
+
+func refresh_transmission() -> void:
+	transmission.load(transmission_path)
+
+
+func remove_transmission() -> void:
+	var dir := DirAccess.open("user://")
+	dir.remove(transmission_path)
 
 
 func _process(delta: float) -> void:
 	if thread.is_alive():
+		self.refresh_transmission()
 		self.refresh_window_title()
 		self._execute_process(delta)
 	else:
@@ -66,11 +89,12 @@ func _execute_stopped(result: Variant) -> void:
 	pass
 
 
-func _program(args: Array) -> Variant:
+func _program(args: PackedStringArray) -> Variant:
+	OS.execute("/opt/homebrew/bin/python3", args)
 	return 0
 
 
-func _get_arguments() -> Array:
+func _get_arguments() -> PackedStringArray:
 	var result : Array = []
 	for param in parameters:
 		result.push_back(param._get_arg_value())

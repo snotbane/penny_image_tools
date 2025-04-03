@@ -41,13 +41,13 @@ static func bytes_to_string(bytes: int) -> String:
 
 [node name="program_compress" node_paths=PackedStringArray("param_optipng_path", "param_source_path", "source_preview", "progress_display", "bytes_display") instance=ExtResource("1_vvo8o")]
 script = ExtResource("2_b6npd")
+program_name = "OptiPNG Compression"
+program_nickname = "OptiPNG"
 param_optipng_path = NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/optipng_path")
 param_source_path = NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/input")
 source_preview = NodePath("panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list/image_preview")
 progress_display = NodePath("panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list/progress_display")
 bytes_display = NodePath("panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list/bytes_reduced/label_bytes")
-program_name = "OptiPNG Compression"
-program_nickname = "OptiPNG"
 
 [node name="optipng_path" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("3_eu163")]
 layout_mode = 2
@@ -64,7 +64,7 @@ label_text = "Source"
 texture = SubResource("ViewportTexture_8of0n")
 
 [node name="sprite_2d" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/subwindow_locker/texture_rect/sub_viewport" index="0"]
-frame_progress = 0.38053
+frame_progress = 0.208805
 
 [node name="output_list" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container" index="0"]
 layout_mode = 2
@@ -89,6 +89,4 @@ script = SubResource("GDScript_b6npd")
 
 [node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list" index="2" instance=ExtResource("5_8of0n")]
 layout_mode = 2
-label_text = ""
-
-[connection signal="execute_started" from="." to="panel_container/margin_container/h_split_container/right_panel/scroll_container/margin_container/output_list" method="clear_bytes_reduced"]
+max_value = 1
