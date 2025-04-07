@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://dc1jeh7ogl2x8"]
+
+[ext_resource type="Script" uid="uid://j3koq36e68tg" path="res://game/scenes/parameter/parameter.gd" id="1_wa0kh"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_0wmf6"]
+
+[node name="parameter" type="Control"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+script = ExtResource("1_wa0kh")
+label_text = "Parameter"
+persistent = null
+
+[node name="hbox" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="label" type="Label" parent="hbox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Parameter"
+label_settings = SubResource("LabelSettings_0wmf6")

@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0sk7730ilig6"]
+
+[ext_resource type="PackedScene" uid="uid://dc1jeh7ogl2x8" path="res://game/scenes/parameter/parameter.tscn" id="1_lok67"]
+[ext_resource type="Script" uid="uid://b3qqaqfwjoubs" path="res://game/scenes/parameter/parameter_number.gd" id="2_qdfxf"]
+
+[node name="parameter_number" instance=ExtResource("1_lok67")]
+script = ExtResource("2_qdfxf")
+min_value = 0.0
+max_value = 100.0
+value = 0.0
+step = 1.0
+label_text = "Number Parameter"
+
+[node name="label" parent="hbox" index="0"]
+text = "Number Parameter"
+
+[node name="space" type="Control" parent="hbox" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="spin_box" type="SpinBox" parent="hbox" index="2"]
+layout_mode = 2
+size_flags_horizontal = 8
+alignment = 1
+
+[connection signal="value_changed" from="hbox/spin_box" to="." method="set_value"]

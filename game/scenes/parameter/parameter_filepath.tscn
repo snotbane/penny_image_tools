@@ -1,0 +1,36 @@
+[gd_scene load_steps=4 format=3 uid="uid://dpgx3mb2c87sw"]
+
+[ext_resource type="PackedScene" uid="uid://bsbif7qroffug" path="res://game/scenes/parameter/parameter_string.tscn" id="1_6hdmo"]
+[ext_resource type="Script" uid="uid://tnex6swotckj" path="res://game/scenes/parameter/parameter_filepath.gd" id="2_kh3ra"]
+[ext_resource type="Texture2D" uid="uid://d223be0pkxgy2" path="res://game/icons/FileBrowse.svg" id="3_e22mt"]
+
+[node name="parameter_filepath" instance=ExtResource("1_6hdmo")]
+custom_minimum_size = Vector2(0, 24)
+script = ExtResource("2_kh3ra")
+file_mode = 3
+access = 2
+label_text = "Filepath Parameter"
+
+[node name="label" parent="hbox" index="0"]
+custom_minimum_size = Vector2(0, 0)
+text = "Filepath Parameter"
+
+[node name="line_edit" parent="hbox" index="1"]
+clear_button_enabled = false
+
+[node name="button" type="Button" parent="hbox" index="2"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+icon = ExtResource("3_e22mt")
+icon_alignment = 1
+
+[node name="file_dialog" type="FileDialog" parent="." index="1"]
+title = "Open a File or Directory"
+ok_button_text = "Open"
+file_mode = 3
+access = 2
+use_native_dialog = true
+
+[connection signal="pressed" from="hbox/button" to="file_dialog" method="popup_centered_ratio" binds= [0.8]]
+[connection signal="dir_selected" from="file_dialog" to="hbox/line_edit" method="set_text"]
+[connection signal="file_selected" from="file_dialog" to="hbox/line_edit" method="set_text"]

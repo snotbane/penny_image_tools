@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://bte4xo8vh1jd6"]
+
+[ext_resource type="PackedScene" uid="uid://om4cv5l72pyt" path="res://addons/tools_mincuz/scenes/debug_play_from_view_3d.tscn" id="1_3rtx2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hpx3p"]
+
+[sub_resource type="Sky" id="Sky_3rtx2"]
+sky_material = SubResource("ProceduralSkyMaterial_hpx3p")
+
+[sub_resource type="Environment" id="Environment_uw00e"]
+background_mode = 2
+sky = SubResource("Sky_3rtx2")
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_hpx3p"]
+
+[node name="world_3d" type="Node3D"]
+
+[node name="debug_play_from_view_3d" parent="." node_paths=PackedStringArray("position_node", "rotation_node_x", "rotation_node_y") instance=ExtResource("1_3rtx2")]
+transform = Transform3D(0.671878, -0.442514, 0.593937, 0, 0.8019, 0.597458, -0.740662, -0.401419, 0.538779, 1.81241, 1.82315, 1.64409)
+start_in_debug_ghost_mode = true
+position_node = NodePath("../camera_3d")
+rotation_node_x = NodePath("../camera_3d")
+rotation_node_y = NodePath("../camera_3d")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_uw00e")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="camera_3d" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="mesh_instance_3d" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_hpx3p")

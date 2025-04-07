@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://b10hspyn3i6l8"]
+
+[ext_resource type="PackedScene" uid="uid://dc1jeh7ogl2x8" path="res://game/scenes/parameter/parameter.tscn" id="1_co3il"]
+[ext_resource type="Script" uid="uid://bee2blo325h4b" path="res://game/scenes/parameter/parameter_option.gd" id="2_p0nls"]
+
+[node name="parameter_option" instance=ExtResource("1_co3il")]
+script = ExtResource("2_p0nls")
+options = PackedStringArray()
+value = -1
+label_text = "Option Parameter"
+
+[node name="label" parent="hbox" index="0"]
+text = "Option Parameter"
+
+[node name="control" type="Control" parent="hbox" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="option_button" type="OptionButton" parent="hbox" index="2"]
+layout_mode = 2

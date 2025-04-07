@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://1vhcrt3tadog"]
+
+[ext_resource type="PackedScene" uid="uid://dc1jeh7ogl2x8" path="res://game/scenes/parameter/parameter.tscn" id="1_5x1vy"]
+[ext_resource type="Script" uid="uid://b1fufv2uhbi7y" path="res://game/scenes/parameter/parameter_bool.gd" id="2_wqpyk"]
+
+[node name="parameter_bool" instance=ExtResource("1_5x1vy")]
+script = ExtResource("2_wqpyk")
+toggled = false
+label_text = "Boolean Parameter"
+persistent = null
+
+[node name="label" parent="hbox" index="0"]
+text = "Boolean Parameter"
+
+[node name="space" type="Control" parent="hbox" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="check_box" type="CheckBox" parent="hbox" index="2"]
+layout_mode = 2
+
+[connection signal="toggled" from="hbox/check_box" to="." method="set_value"]

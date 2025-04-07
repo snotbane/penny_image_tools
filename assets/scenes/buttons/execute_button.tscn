@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://c2odel3v0vcjp"]
-
-[ext_resource type="Script" uid="uid://dwtiruydkgnku" path="res://assets/scenes/buttons/execute_button.gd" id="1_eusir"]
-
-[node name="execute" type="Button"]
-toggle_mode = true
-text = "Execute"
-script = ExtResource("1_eusir")
