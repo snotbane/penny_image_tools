@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://cu75ls07is6n0"]
+
+[ext_resource type="Script" uid="uid://cbxy0cs38xrtj" path="res://game/scenes/elements/progress_display.gd" id="1_5cdlw"]
+
+[node name="progress_display" type="VBoxContainer"]
+offset_right = 400.0
+offset_bottom = 31.0
+script = ExtResource("1_5cdlw")
+
+[node name="h_box_container" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="label" type="Label" parent="h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Completed"
+
+[node name="value_label" type="Label" parent="h_box_container"]
+layout_mode = 2
+text = "0 / 1"
+
+[node name="progress_bar" type="ProgressBar" parent="."]
+layout_mode = 2
+max_value = 1.0
+step = 1.0

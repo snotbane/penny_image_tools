@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://d37ink161ont1"]
+
+[ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_qdlne"]
+[ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_og4v3"]
+[ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="3_oxj4r"]
+[ext_resource type="PackedScene" uid="uid://dmim1yoep7vyk" path="res://game/scenes/elements/bytes_display.tscn" id="4_06mrk"]
+[ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="4_ik2mn"]
+
+[node name="program_optipng" instance=ExtResource("1_qdlne")]
+program_name = "OptiPNG Image Compression"
+program_nickname = "OptiPNG"
+
+[node name="optipng_path" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("2_og4v3")]
+layout_mode = 2
+label_text = "OptiPNG Path"
+persistent = true
+
+[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" instance=ExtResource("2_og4v3")]
+layout_mode = 2
+label_text = "Target"
+
+[node name="progress" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker/control" index="0"]
+frame_progress = 0.271579
+
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0"]
+layout_mode = 2
+
+[node name="image_preview" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="0" instance=ExtResource("3_oxj4r")]
+layout_mode = 2
+
+[node name="bytes_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("4_06mrk")]
+layout_mode = 2
+
+[node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="2" instance=ExtResource("4_ik2mn")]
+layout_mode = 2

@@ -5,14 +5,13 @@
 [sub_resource type="LabelSettings" id="LabelSettings_0wmf6"]
 
 [node name="parameter" type="Control"]
-custom_minimum_size = Vector2(0, 28)
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 3
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
 script = ExtResource("1_wa0kh")
 label_text = "Parameter"
-persistent = null
 
 [node name="hbox" type="HBoxContainer" parent="."]
 layout_mode = 1

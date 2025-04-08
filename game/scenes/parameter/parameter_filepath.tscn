@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://d223be0pkxgy2" path="res://game/icons/FileBrowse.svg" id="3_e22mt"]
 
 [node name="parameter_filepath" instance=ExtResource("1_6hdmo")]
-custom_minimum_size = Vector2(0, 24)
 script = ExtResource("2_kh3ra")
 file_mode = 3
 access = 2

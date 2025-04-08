@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bawmnff216mol"]
+
+[ext_resource type="Script" uid="uid://ckwex7yi7kh0b" path="res://game/scenes/program_window.gd" id="1_e338y"]
+
+[node name="program_window" type="Window" groups=["program_window"]]
+initial_position = 4
+size = Vector2i(720, 480)
+script = ExtResource("1_e338y")

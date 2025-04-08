@@ -9,6 +9,11 @@ static func _static_init() -> void:
 	if err == ERR_DOES_NOT_EXIST:
 		CONFIG.save(CONFIG_PATH)
 
+
+static func get_persistent_parameter(key: StringName) -> Variant:
+	return CONFIG.get_value(SECTION_NAME, key)
+
+
 @export var label_text : String :
 	get: return $hbox/label.text if self.find_child("label") else ""
 	set(value):
