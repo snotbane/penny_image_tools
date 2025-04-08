@@ -55,29 +55,26 @@ layout_mode = 2
 [node name="parameter" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("2_jbjdl")]
 layout_mode = 2
 label_text = "Something"
-persistent = false
 
 [node name="parameter_string" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("3_gp8w2")]
 layout_mode = 2
-persistent = true
 
 [node name="parameter_filepath" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("4_8buom")]
 layout_mode = 2
-persistent = true
 
 [node name="parameter_number" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("5_ejk4j")]
 layout_mode = 2
-persistent = true
+persistent = false
 
 [node name="parameter_option" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("6_l3qal")]
 layout_mode = 2
 options = PackedStringArray("Option 1", "Option 2", "Option 3")
 value = 0
-persistent = true
+persistent = null
 
 [node name="parameter_bool" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("7_uk16q")]
 layout_mode = 2
-persistent = true
+persistent = null
 
 [node name="programs_list" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container"]
 layout_mode = 2

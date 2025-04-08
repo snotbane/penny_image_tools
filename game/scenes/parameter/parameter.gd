@@ -16,7 +16,17 @@ static func _static_init() -> void:
 		$hbox/label.text = value
 
 ## If enabled, this value will be saved to a configuration file and loaded whenever a parameter of the same node name appears.
-@export var persistent : bool
+var _persistent : bool
+@export var persistent : bool :
+	get: return _persistent
+	set(value):
+		if _persistent == value: return
+		_persistent = value
+
+		if _persistent:
+			save_persistent()
+		else:
+			clear_persistent()
 
 @export_tool_button("Clear Persistent") var clear_persistent_ := clear_persistent
 
