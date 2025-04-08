@@ -14,16 +14,12 @@
 
 @export var value : float :
 	get: return $hbox/spin_box.value if $hbox/spin_box else -1
-	set(value):
+	set(val):
 		if not find_child("spin_box"): return
-		$hbox/spin_box.value = value
+		$hbox/spin_box.value = val
 
 @export var step : float :
 	get: return $hbox/spin_box.step if $hbox/spin_box else -1
 	set(value):
 		if not find_child("spin_box"): return
 		$hbox/spin_box.step = value
-
-
-func _load_persistent() -> void:
-	value = argument

@@ -32,5 +32,7 @@ access = 2
 use_native_dialog = true
 
 [connection signal="pressed" from="hbox/button" to="file_dialog" method="popup_centered_ratio" binds= [0.8]]
+[connection signal="dir_selected" from="file_dialog" to="." method="set_value"]
 [connection signal="dir_selected" from="file_dialog" to="hbox/line_edit" method="set_text"]
+[connection signal="file_selected" from="file_dialog" to="." method="set_value"]
 [connection signal="file_selected" from="file_dialog" to="hbox/line_edit" method="set_text"]

@@ -1,10 +1,7 @@
 @tool class_name ParameterString extends Parameter
 
-@export var text : String :
+@export var value : String :
 	get: return $hbox/line_edit.text if self.find_child("line_edit") else ""
-	set(value):
+	set(val):
 		if not self.find_child("line_edit"): return
-		$hbox/line_edit.text = value
-
-func _load_persistent() -> void:
-	text = argument
+		$hbox/line_edit.text = val

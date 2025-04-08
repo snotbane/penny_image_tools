@@ -5,9 +5,9 @@
 
 [node name="parameter_string" instance=ExtResource("1_ihlqs")]
 script = ExtResource("2_b31fq")
-text = ""
+value = ""
 label_text = "String Parameter"
-persistent = null
+persistent = false
 
 [node name="label" parent="hbox" index="0"]
 text = "String Parameter"
@@ -18,4 +18,4 @@ size_flags_horizontal = 3
 alignment = 1
 clear_button_enabled = true
 
-[connection signal="text_submitted" from="hbox/line_edit" to="." method="set_value"]
+[connection signal="text_changed" from="hbox/line_edit" to="." method="set_value"]

@@ -31,7 +31,3 @@ func _ready() -> void:
 	options = options
 	value = value
 	super._ready()
-
-
-func _load_persistent() -> void:
-	value = argument

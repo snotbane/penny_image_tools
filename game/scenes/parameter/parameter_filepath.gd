@@ -14,4 +14,4 @@
 
 
 func get_is_valid() -> bool:
-	return DirAccess.dir_exists_absolute(text)
+	return DirAccess.dir_exists_absolute(value)

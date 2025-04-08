@@ -5,9 +5,9 @@
 
 [node name="parameter_bool" instance=ExtResource("1_5x1vy")]
 script = ExtResource("2_wqpyk")
-toggled = false
+value = false
 label_text = "Boolean Parameter"
-persistent = null
+persistent = false
 
 [node name="label" parent="hbox" index="0"]
 text = "Boolean Parameter"
