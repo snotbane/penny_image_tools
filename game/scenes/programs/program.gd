@@ -49,10 +49,7 @@ func _process(delta: float) -> void:
 	if is_running:
 		if thread.is_alive():
 			self.refresh_window_title()
-			bus.load(bus_path)
-			for i in elements:
-				if not i.has_method(&"set_value"): continue
-				i.call(&"set_value", bus.get_value("output", i.name))
+			self.refresh_elements()
 		else:
 			thread.wait_to_finish()
 			thread_stopped()
@@ -66,9 +63,9 @@ func get_python_arguments() -> PackedStringArray:
 	var result : PackedStringArray
 	result.push_back(ProjectSettings.globalize_path(python_script_path))
 	result.push_back(ProjectSettings.globalize_path(bus_path))
-	# for i in parameters_container.get_children():
-	# 	if i is not Parameter: continue
-	# 	result.push_back(i.argument_as_python_argument)
+	for i in parameters_container.get_children():
+		if i is not Parameter: continue
+		result.push_back(i.argument_as_python_argument)
 	print("Arguments: ", result)
 	return result
 
@@ -95,6 +92,7 @@ func stop() -> void:
 
 
 func thread_stopped() -> void:
+	refresh_elements()
 	is_running = false
 	BUS_DIR.remove(bus_path)
 	bus = null
@@ -116,6 +114,16 @@ func force_close_window() -> void:
 	self.stop()
 	window.hide()
 	window.queue_free()
+
+
+func refresh_elements() -> void:
+	bus.load(bus_path)
+	for i in elements:
+		if not i.has_method(&"set_value"): continue
+		i.call(&"set_value", bus.get_value("output", i.name))
+	_refresh_elements()
+func _refresh_elements() -> void:
+	pass
 
 
 func refresh_window_title() -> void:

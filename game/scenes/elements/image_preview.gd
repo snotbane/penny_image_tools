@@ -1,10 +1,11 @@
 @tool class_name ImagePreview extends Control
 
 @export var value : String :
-	get: return $v_box_container/path_label.text if $v_box_container/path_label else ""
-	set(value):
-		if not self.is_inside_tree(): return
-		$v_box_container/path_label.text = value
+	get: return $v_box_container/path_label.text if find_child("path_label") else ""
+	set(val):
+		if not find_child("path_label"): return
+		if value == val: return
+		$v_box_container/path_label.text = val
 
 		refresh()
 func set_value(val: String) -> void:

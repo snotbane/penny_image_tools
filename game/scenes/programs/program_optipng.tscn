@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://d37ink161ont1"]
+[gd_scene load_steps=7 format=3 uid="uid://d37ink161ont1"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_qdlne"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_og4v3"]
@@ -6,10 +6,21 @@
 [ext_resource type="PackedScene" uid="uid://dmim1yoep7vyk" path="res://game/scenes/elements/bytes_display.tscn" id="4_06mrk"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="4_ik2mn"]
 
+[sub_resource type="GDScript" id="GDScript_06mrk"]
+script/source = "extends Program
+
+func _refresh_elements() -> void:
+	super._refresh_elements()
+	$panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display \\
+	.max_value = bus.get_value(\"output\", \"progress_display_max\", 1)
+"
+
 [node name="program_optipng" node_paths=PackedStringArray("elements") instance=ExtResource("1_qdlne")]
+script = SubResource("GDScript_06mrk")
 print_output = true
 program_name = "OptiPNG Image Compression"
 program_nickname = "OptiPNG"
+python_script_path = "res://game/scenes/programs/program_optipng.py"
 elements = [NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/image_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/bytes_display"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")]
 
 [node name="optipng_path" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("2_og4v3")]

@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://ce3bly82xcqc2"]
+
+[ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_hcuvc"]
+
+[node name="program_dummy" instance=ExtResource("1_hcuvc")]
+program_name = "Dummy Program"
+program_nickname = "Dummy"
+
+[node name="label" type="Label" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0"]
+layout_mode = 2
+text = "This is a dummy program. It will not stop running until it is canceled."
+horizontal_alignment = 1
+autowrap_mode = 3

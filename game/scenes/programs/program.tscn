@@ -68,6 +68,7 @@ size_flags_horizontal = 3
 text = "Queue"
 
 [node name="right_panel" type="PanelContainer" parent="panel_container/margin_container/h_split_container"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
 [node name="margin_container" type="MarginContainer" parent="panel_container/margin_container/h_split_container/right_panel"]

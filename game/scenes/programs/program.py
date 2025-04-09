@@ -17,6 +17,11 @@ def bus_set(section: str, key: str, value):
 		bus.write(file, space_around_delimiters=False)
 
 
+def main():
+	while bus_get("input", "stop") != "true":
+		time.sleep(0.05)
+
+
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("bus_path", type=str, help="Path to the data bus associated with this program instance.")
@@ -26,7 +31,6 @@ if __name__ == "__main__":
 	bus = configparser.ConfigParser()
 	bus.read(bus_path)
 
-	while bus_get("input", "stop") != "true":
-		time.sleep(1.0)
+	main()
 
 	sys.exit(0)
