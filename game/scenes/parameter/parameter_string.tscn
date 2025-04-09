@@ -7,9 +7,9 @@
 script = ExtResource("2_b31fq")
 value = ""
 label_text = "String Parameter"
-persistent = false
 
 [node name="label" parent="hbox" index="0"]
+custom_minimum_size = Vector2(160, 0)
 text = "String Parameter"
 
 [node name="line_edit" type="LineEdit" parent="hbox" index="1"]

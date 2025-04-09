@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://djx5tlrjuqe28"]
+
+[ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_01eyl"]
+[ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_xvs5m"]
+[ext_resource type="PackedScene" uid="uid://bsbif7qroffug" path="res://game/scenes/parameter/parameter_string.tscn" id="3_vi1c7"]
+[ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="4_0j3eq"]
+[ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="5_ijscp"]
+
+[node name="program_laigter" node_paths=PackedStringArray("elements") instance=ExtResource("1_01eyl")]
+program_name = "Laigter Normals"
+program_nickname = "Laigter"
+python_script_path = "res://game/scenes/programs/program_laigter.py"
+elements = [NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_box_container/source_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_box_container/target_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")]
+
+[node name="laigter_path" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("2_xvs5m")]
+layout_mode = 2
+file_mode = 0
+label_text = "Laigter Path"
+persistent = true
+
+[node name="laigter_preset" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" instance=ExtResource("2_xvs5m")]
+layout_mode = 2
+label_text = "Preset Path"
+persistent = true
+
+[node name="laigter_filter" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2" instance=ExtResource("3_vi1c7")]
+layout_mode = 2
+value = ".+(?<!_n)\\.png$"
+label_text = "Inclusion Filter"
+persistent = true
+
+[node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3"]
+layout_mode = 2
+
+[node name="source" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" instance=ExtResource("2_xvs5m")]
+layout_mode = 2
+label_text = "Source Path"
+
+[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" instance=ExtResource("2_xvs5m")]
+layout_mode = 2
+label_text = "Target Path"
+
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0"]
+layout_mode = 2
+
+[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="0"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="source_preview" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_box_container" index="0" instance=ExtResource("4_0j3eq")]
+layout_mode = 2
+
+[node name="target_preview" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_box_container" index="1" instance=ExtResource("4_0j3eq")]
+layout_mode = 2
+
+[node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("5_ijscp")]
+layout_mode = 2

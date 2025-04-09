@@ -93,6 +93,11 @@ layout_mode = 2
 text = "OptiPNG Image Compression"
 scene_path = "uid://d37ink161ont1"
 
+[node name="laigter" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
+layout_mode = 2
+text = "Laigter Normal Generation"
+scene_path = "uid://djx5tlrjuqe28"
+
 [node name="job_queue" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_box_container"]
 layout_mode = 2
 size_flags_horizontal = 3

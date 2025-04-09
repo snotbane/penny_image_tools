@@ -12,6 +12,7 @@ def bus_get(section: str, key: str):
 def bus_set(section: str, key: str, value):
 	bus.read(bus_path)
 	value = str(value)
+	if not bus.has_section(section): bus.add_section(section)
 	bus.set(section, key, value)
 	with open(bus_path, 'w') as file:
 		bus.write(file, space_around_delimiters=False)

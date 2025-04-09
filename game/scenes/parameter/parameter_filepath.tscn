@@ -11,7 +11,6 @@ access = 2
 label_text = "Filepath Parameter"
 
 [node name="label" parent="hbox" index="0"]
-custom_minimum_size = Vector2(0, 0)
 text = "Filepath Parameter"
 
 [node name="line_edit" parent="hbox" index="1"]

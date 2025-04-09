@@ -94,8 +94,9 @@ func stop() -> void:
 func thread_stopped() -> void:
 	refresh_elements()
 	is_running = false
-	BUS_DIR.remove(bus_path)
-	bus = null
+	if not OS.is_debug_build():
+		BUS_DIR.remove(bus_path)
+		bus = null
 	stopped.emit()
 
 
