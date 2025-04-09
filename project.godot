@@ -50,11 +50,13 @@ folder_colors={
 "res://addons/tools_mincuz/scripts/": "blue",
 "res://addons/tools_mincuz/shaders/": "purple",
 "res://addons/tools_mincuz/textures/": "pink",
+"res://build/": "red",
 "res://game/audio/": "red",
 "res://game/scenes/": "green",
 "res://game/scripts/": "blue",
 "res://game/shaders/": "purple",
-"res://game/shaders_materials/": "pink"
+"res://game/shaders_materials/": "pink",
+"res://venv/": "gray"
 }
 
 [input]

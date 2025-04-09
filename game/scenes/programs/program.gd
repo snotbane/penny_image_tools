@@ -61,8 +61,8 @@ func _exit_tree() -> void:
 
 func get_python_arguments() -> PackedStringArray:
 	var result : PackedStringArray
-	result.push_back(actually_globalize_path(python_script_path))
-	result.push_back(actually_globalize_path(bus_path))
+	result.push_back(get_python_path(python_script_path))
+	result.push_back(ProjectSettings.globalize_path(bus_path))
 	for i in parameters_container.get_children():
 		if i is not Parameter: continue
 		result.push_back(i.argument_as_python_argument)
@@ -150,10 +150,9 @@ func _on_start_button_pressed() -> void:
 		start()
 
 
-static func actually_globalize_path(path: String) -> String:
+static func get_python_path(path: String) -> String:
 	if OS.has_feature("editor"):
 		return ProjectSettings.globalize_path(path)
 	else:
-		var result : String = path.substr(path.find("//") + 2)
-		return OS.get_executable_path().get_base_dir().path_join(result)
-
+		var result : String = path.substr(path.rfind("/") + 1)
+		return OS.get_executable_path().get_base_dir().path_join("python").path_join(result)
