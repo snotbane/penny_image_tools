@@ -6,7 +6,7 @@ static var CONFIG := ConfigFile.new()
 
 static func _static_init() -> void:
 	var err := CONFIG.load(CONFIG_PATH)
-	if err == ERR_DOES_NOT_EXIST:
+	if err != OK:
 		CONFIG.save(CONFIG_PATH)
 
 
@@ -28,6 +28,7 @@ var _persistent : bool
 		if _persistent == value: return
 		_persistent = value
 
+		if Engine.is_editor_hint(): return
 		if _persistent:
 			save_persistent()
 		else:
@@ -44,17 +45,19 @@ var argument : Variant
 var argument_as_config_data : Variant :
 	get: return argument
 
+var argument_as_python_argument : String :
+	get: return str(argument)
+
 
 func _ready() -> void:
 	argument = get(&"value")
-	if persistent:
-		load_persistent()
+	if Engine.is_editor_hint(): return
+	if persistent: load_persistent()
 
 
 func set_value(new_value: Variant) -> void:
 	argument = new_value
 	if persistent: save_persistent()
-	print("Set parameter value to " + str(argument))
 
 
 func load_persistent() -> void:

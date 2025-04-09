@@ -1,48 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://wfssq6mqkmrt"]
+[gd_scene load_steps=4 format=3 uid="uid://wfssq6mqkmrt"]
 
 [ext_resource type="Script" uid="uid://cryk7g02kikmi" path="res://game/scenes/programs/program.gd" id="1_57qps"]
 [ext_resource type="Theme" uid="uid://cjww2dp7ckflf" path="res://game/theme.tres" id="1_evvk3"]
-[ext_resource type="Texture2D" uid="uid://dvp3hlokwd4ac" path="res://addons/tools_mincuz/textures/marquee_border.png" id="3_7ummq"]
-[ext_resource type="Texture2D" uid="uid://dobelhvexued5" path="res://game/icons/Progress1.svg" id="3_anxji"]
-[ext_resource type="Texture2D" uid="uid://ciecbyccj4ly0" path="res://game/icons/Progress2.svg" id="4_7ummq"]
-[ext_resource type="Texture2D" uid="uid://cci2wg3061fgr" path="res://game/icons/Progress3.svg" id="5_uqs18"]
-[ext_resource type="Texture2D" uid="uid://7sko2bbqlc0f" path="res://game/icons/Progress4.svg" id="6_vconp"]
-[ext_resource type="Texture2D" uid="uid://cjbls0use7e1i" path="res://game/icons/Progress5.svg" id="7_w1ypp"]
-[ext_resource type="Texture2D" uid="uid://8lo0qtgwop2m" path="res://game/icons/Progress6.svg" id="8_d863q"]
-[ext_resource type="Texture2D" uid="uid://dvcurv44d1wax" path="res://game/icons/Progress7.svg" id="9_7n7ga"]
-[ext_resource type="Texture2D" uid="uid://dt5l6jve4grg2" path="res://game/icons/Progress8.svg" id="10_g43tx"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_do5hd"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_anxji")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_7ummq")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_uqs18")
-}, {
-"duration": 1.0,
-"texture": ExtResource("6_vconp")
-}, {
-"duration": 1.0,
-"texture": ExtResource("7_w1ypp")
-}, {
-"duration": 1.0,
-"texture": ExtResource("8_d863q")
-}, {
-"duration": 1.0,
-"texture": ExtResource("9_7n7ga")
-}, {
-"duration": 1.0,
-"texture": ExtResource("10_g43tx")
-}],
-"loop": true,
-"name": &"default",
-"speed": 12.0
-}]
+[ext_resource type="PackedScene" uid="uid://b3l4crsncffoh" path="res://game/scenes/elements/panel_locker.tscn" id="3_b4wpg"]
 
 [node name="program" type="Control" node_paths=PackedStringArray("parameters_container", "execute_button")]
 layout_mode = 3
@@ -53,6 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_evvk3")
 script = ExtResource("1_57qps")
+python_script_path = "res://game/scenes/programs/program.py"
 parameters_container = NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters")
 execute_button = NodePath("panel_container/margin_container/h_split_container/v_box_container/h_box_container/start_button")
 
@@ -89,36 +50,9 @@ size_flags_vertical = 3
 [node name="parameters" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container"]
 layout_mode = 2
 
-[node name="panel_locker" type="Control" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel"]
+[node name="panel_locker" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel" instance=ExtResource("3_b4wpg")]
 visible = false
 layout_mode = 2
-mouse_default_cursor_shape = 8
-
-[node name="texture_rect" type="TextureRect" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker"]
-self_modulate = Color(0, 0, 0, 0.25098)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_7ummq")
-stretch_mode = 1
-
-[node name="control" type="Control" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="progress" type="AnimatedSprite2D" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker/control"]
-sprite_frames = SubResource("SpriteFrames_do5hd")
-frame_progress = 0.895269
 
 [node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/h_split_container/v_box_container"]
 layout_mode = 2
@@ -148,6 +82,5 @@ You wanna?"
 
 [connection signal="started" from="." to="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker" method="set_visible" binds= [true]]
 [connection signal="stopped" from="." to="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker" method="set_visible" binds= [false]]
-[connection signal="ready" from="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker/control/progress" to="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker/control/progress" method="play" binds= [&"default"]]
 [connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/h_box_container/start_button" to="." method="_on_start_button_pressed"]
 [connection signal="confirmed" from="close_confirmation" to="." method="force_close_window"]

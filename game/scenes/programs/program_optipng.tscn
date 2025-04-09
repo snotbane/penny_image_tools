@@ -6,9 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://dmim1yoep7vyk" path="res://game/scenes/elements/bytes_display.tscn" id="4_06mrk"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="4_ik2mn"]
 
-[node name="program_optipng" instance=ExtResource("1_qdlne")]
+[node name="program_optipng" node_paths=PackedStringArray("elements") instance=ExtResource("1_qdlne")]
+print_output = true
 program_name = "OptiPNG Image Compression"
 program_nickname = "OptiPNG"
+elements = [NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/image_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/bytes_display"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")]
 
 [node name="optipng_path" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("2_og4v3")]
 layout_mode = 2
@@ -18,9 +20,6 @@ persistent = true
 [node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" instance=ExtResource("2_og4v3")]
 layout_mode = 2
 label_text = "Target"
-
-[node name="progress" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker/control" index="0"]
-frame_progress = 0.271579
 
 [node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0"]
 layout_mode = 2

@@ -35,7 +35,6 @@ layout_mode = 2
 label_settings = SubResource("LabelSettings_eyi8r")
 horizontal_alignment = 1
 text_overrun_behavior = 4
-text_direction = 2
 
 [node name="check_button" type="CheckButton" parent="."]
 layout_mode = 2

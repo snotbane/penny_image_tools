@@ -1,6 +1,5 @@
 @tool extends VBoxContainer
 
-
 @export var label_text : String = "Completed" :
 	get: return $h_box_container/label.text if $h_box_container/label else ""
 	set(value):
@@ -10,10 +9,12 @@
 
 @export var value : int = 0 :
 	get: return $progress_bar.value if $progress_bar else 0
-	set(value):
+	set(val):
 		if not self.is_inside_tree(): return
-		$progress_bar.value = value
+		$progress_bar.value = val
 		refresh_value_label()
+func set_value(val: int) -> void:
+	value = val
 
 
 @export var max_value : int = 1 :

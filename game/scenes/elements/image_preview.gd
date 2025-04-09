@@ -1,24 +1,24 @@
-class_name ImagePreview extends Control
+@tool class_name ImagePreview extends Control
 
-var image_path : String :
+@export var value : String :
 	get: return $v_box_container/path_label.text if $v_box_container/path_label else ""
 	set(value):
-		if not $v_box_container/path_label: return
+		if not self.is_inside_tree(): return
 		$v_box_container/path_label.text = value
 
 		refresh()
-func set_image_path(path: String) -> void:
-	image_path = path
+func set_value(val: String) -> void:
+	value = val
 
 
 var texture : Texture2D :
-	get: return $v_box_container/panel_container/margin_container/preview_image.texture
-	set(value): $v_box_container/panel_container/margin_container/preview_image.texture = value
+	get: return $v_box_container/margin_container/texture_rect.texture
+	set(value): $v_box_container/margin_container/texture_rect.texture = value
 
 
 func refresh() -> void:
-	if not FileAccess.file_exists(image_path): texture = null; return
+	if not FileAccess.file_exists(value): texture = null; return
 
 	var image := Image.new()
-	var error := image.load(image_path)
+	var error := image.load(value)
 	texture = ImageTexture.create_from_image(image) if error == OK else null

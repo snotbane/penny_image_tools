@@ -1,0 +1,85 @@
+[gd_scene load_steps=11 format=3 uid="uid://b3l4crsncffoh"]
+
+[ext_resource type="Texture2D" uid="uid://dvp3hlokwd4ac" path="res://addons/tools_mincuz/textures/marquee_border.png" id="1_asyt8"]
+[ext_resource type="Texture2D" uid="uid://dobelhvexued5" path="res://game/icons/Progress1.svg" id="2_x1n45"]
+[ext_resource type="Texture2D" uid="uid://ciecbyccj4ly0" path="res://game/icons/Progress2.svg" id="3_78m5f"]
+[ext_resource type="Texture2D" uid="uid://cci2wg3061fgr" path="res://game/icons/Progress3.svg" id="4_07owx"]
+[ext_resource type="Texture2D" uid="uid://7sko2bbqlc0f" path="res://game/icons/Progress4.svg" id="5_iey1m"]
+[ext_resource type="Texture2D" uid="uid://cjbls0use7e1i" path="res://game/icons/Progress5.svg" id="6_7en80"]
+[ext_resource type="Texture2D" uid="uid://8lo0qtgwop2m" path="res://game/icons/Progress6.svg" id="7_kl8f7"]
+[ext_resource type="Texture2D" uid="uid://dvcurv44d1wax" path="res://game/icons/Progress7.svg" id="8_rloak"]
+[ext_resource type="Texture2D" uid="uid://dt5l6jve4grg2" path="res://game/icons/Progress8.svg" id="9_ao0yd"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_do5hd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_x1n45")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_78m5f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_07owx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_iey1m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_7en80")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_kl8f7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_rloak")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_ao0yd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="panel_locker" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+mouse_default_cursor_shape = 8
+
+[node name="color_rect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.25098)
+
+[node name="texture_rect" type="TextureRect" parent="color_rect"]
+self_modulate = Color(0, 0, 0, 0.25098)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_asyt8")
+stretch_mode = 1
+
+[node name="control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="progress" type="AnimatedSprite2D" parent="control"]
+sprite_frames = SubResource("SpriteFrames_do5hd")
+frame_progress = 0.55674
+
+[connection signal="ready" from="control/progress" to="control/progress" method="play" binds= [&"default"]]
