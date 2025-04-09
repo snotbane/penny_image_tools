@@ -24,21 +24,92 @@ def bus_set(section: str, key: str, value):
 		bus.write(file, space_around_delimiters=False)
 
 
-class Rect:
-	def __init__(self, x, y, w, h):
-		self.x : int = x
-		self.y : int = y
-		self.w : int = w
-		self.h : int = h
+class Point:
+	def __init__(self, x: int, y: int):
+		self.x = x
+		self.y = y
 
-	def contains(other) -> bool:
-		return False
+
+class Rect:
+	def __init__(self, *args):
+		if len(args) == 4 and all(isinstance(arg, int) for arg in args):
+			self.x, self.y, self.w, self.h = args
+		elif len(args) == 2 and all(isinstance(arg, tuple) and len(arg) == 2 for arg in args):
+			(self.x, self.y), (self.w, self.h) = args
+		else:
+			raise TypeError("Expected 4 integers or 2 (x, y) tuples")
+
+
+	def __repr__(self):
+		return f"Rect({self.x}, {self.y} ... {self.w}, {self.h})"
+
+
+	@property
+	def xy(self) -> tuple[int, int]:
+		return (self.x, self.y)
+	@xy.setter
+	def xy(self, value: tuple[int, int]):
+		self.x = value[0]
+		self.y = value[1]
+
+
+	@property
+	def size(self) -> tuple[int, int]:
+		return (self.w, self.h)
+	@size.setter
+	def size(self, value: tuple[int, int]):
+		self.w = value[0]
+		self.h = value[1]
+
+
+	@property
+	def r(self) -> int:
+		return self.x + self.w
+	@r.setter
+	def r(self, value):
+		self.w = value - self.x
+
+
+	@property
+	def b(self) -> int:
+		return self.y + self.h
+	@b.setter
+	def b(self, value):
+		self.h = value - self.y
+
+
+	@property
+	def rb(self) -> tuple[int, int]:
+		return (self.r, self.b)
+	@rb.setter
+	def rb(self, value: tuple[int, int]):
+		self.r = value[0]
+		self.b = value[1]
+
+
+	## Returns true if the other Rect is completely inside self
+	def contains(self, other) -> bool:
+		if not isinstance(other, Rect):
+			raise TypeError("Expected a Rect instance")
+		return (
+			self.x <= other.x and self.y <= other.y and
+			self.r >= other.r and self.b >= other.b
+		)
+
+	## Returns true if the Rects touch at all
+	def overlaps(self, other) -> bool:
+		if not isinstance(other, Rect):
+			raise TypeError("Expected a Rect instance")
+		return not (
+			self.r <= other.x or self.x >= other.r or
+			self.b <= other.y or self.y >= other.b
+		)
 
 	def union(self, other):
-		return self
-
-	def colliderect(self, other):
-		return False
+		result = Rect(min(self.x, other.x), min(self.y, other.y), max(self.r, other.r), max(self.b, other.b))
+		result.r = result.w
+		result.b = result.h
+		return result
 
 
 class PathedImage:
@@ -55,7 +126,7 @@ class PathedImage:
 
 	@property
 	def json_path(self) -> str:
-		return f"{self.root}\\{self.name}.json"
+		return os.path.join(self.root, self.name + ".json")
 
 
 class SourceImage(PathedImage):
@@ -191,15 +262,15 @@ class TargetImage(PathedImage):
 		super().__init__(root, file)
 
 		self.sources = []
-		self.margin = (margin, margin)
-		self.snaps = [ self.margin ]
+		self.margin = margin
+		self.snaps = [ [ self.margin, self.margin ] ]
 
 		self.image : Image = Image.new(format, [1, 1])
 		self.full_rect : Rect = Rect(0, 0, 1, 1)
 
 
 	def expand(self, size):
-		new_size = (size[0] + self.margin[0], size[1] + self.margin[1])
+		new_size = (size[0] + self.margin, size[1] + self.margin)
 		delta = (0, 0, new_size[0] - self.full_rect.size[0], new_size[1] - self.full_rect.size[1])
 		self.full_rect.size = new_size
 		self.image = ImageOps.expand(self.image, delta)
@@ -221,12 +292,12 @@ class TargetImage(PathedImage):
 		try:
 			self.snaps.remove(source.target_offset)
 		except ValueError: pass
-		snap1 = (source.target_offset[0] + source.source_region.width + self.margin[0], source.target_offset[1])
+		snap1 = (source.target_offset[0] + source.source_region.w + self.margin, source.target_offset[1])
 		try:
 			_ = self.snaps.index(snap1)
 		except ValueError:
 			self.snaps.append(snap1)
-		snap2 = (source.target_offset[0], source.target_offset[1] + source.source_region.height + self.margin[1])
+		snap2 = (source.target_offset[0], source.target_offset[1] + source.source_region.h + self.margin)
 		try:
 			_ = self.snaps.index(snap2)
 		except ValueError:
@@ -237,17 +308,17 @@ class TargetImage(PathedImage):
 		candidates = []
 		for snap in self.snaps:
 			query = Rect(snap[0], snap[1], size[0], size[1])
-			intersects = False
+			overlaps = False
 			for source in self.sources:
-				if source.target_region.colliderect(query):
-					intersects = True
+				if source.target_region.overlaps(query):
+					overlaps = True
 					break
-			if not intersects:
+			if not overlaps:
 				candidates.append(query)
 
 		if len(candidates) == 0: return self.snaps[0]
 		candidates.sort(key=lambda rect: not self.full_rect.contains(rect))
-		return (candidates[0][0], candidates[0][1])
+		return (candidates[0].x, candidates[0].y)
 
 
 	def save(self):
@@ -269,16 +340,13 @@ def assign_image_sources():
 
 
 def assign_image_targets(sources):
-	result = []
 	pattern = re.compile(args.filter_separate)
 	targets_dict = dict()
 	for source in sources:
-		print(f"Pattern: {pattern}, source.name: {source.name}")
 		match_string = re.search(pattern, source.name).group()
 		if targets_dict.get(match_string) == None:
-			name, ext = os.path.splitext(args.project_name)
-			path = f"{name}{match_string}{ext}"
-			targets_dict[match_string] = TargetImage(args.target, path, args.target_format, args.island_margin)
+			path = f"{args.project_name}{match_string}.png"
+			targets_dict[match_string] = TargetImage(args.target, path, args.image_format, args.island_margin)
 		source.target_match = match_string
 	return (sources, targets_dict)
 
@@ -344,13 +412,13 @@ def main():
 	sources, targets = assign_image_targets(sources)
 	bus_set("output", "progress_display_max", len(sources))
 
-	target = TargetImage(args.target, args.project_name, args.image_format, args.island_margin)
+	project_json_path = os.path.join(args.target, args.project_name + ".json")
 
 	maps_data = dict()
 
 	for source in sources:
 		# if args.test_limit > -1 and i > args.test_limit: break
-		if args.island_crop:
+		if args.island_crop == "True":
 			print(f"Cropping image '{source.name}' ({progress_display + 1}/{len(sources)}) ...")
 			source = source.crop_islands()
 		target_file = targets[source.target_match].file
@@ -370,13 +438,12 @@ def main():
 
 	json_data = {"maps": maps_data, "composites": comp_data}
 
-	os.makedirs(os.path.dirname(target.json_path), exist_ok=True)
-	with open(target.json_path, "w") as file:
+	os.makedirs(os.path.dirname(project_json_path), exist_ok=True)
+	with open(project_json_path, "w") as file:
 		json.dump(json_data, file)
 
 	for k in targets.keys():
-		target = targets[k]
-		target.save()
+		targets[k].save()
 
 
 if __name__ == "__main__":
@@ -385,14 +452,14 @@ if __name__ == "__main__":
 	parser.add_argument("project_name", type=str, help="Target template path for each atlas.")
 	parser.add_argument("source", type=str, help="Source folder to compile images from.")
 	parser.add_argument("target", type=str, help="Target folder to export atlases to.")
-	parser.add_argument("image_size_limit", help="The max pixel dimensions a target image can be. If an island cannot be placed within one image, a new one will be created. Use to limit the size of target images.")
+	parser.add_argument("image_size_limit", type=int, help="The max pixel dimensions a target image can be. If an island cannot be placed within one image, a new one will be created. Use to limit the size of target images.")
 	parser.add_argument("image_format", type=str, help="Image format.")
 	parser.add_argument("filter_include", type=str, help="Only file paths that match this regex will be included (considers extensions)." )
 	parser.add_argument("filter_separate", type=str, help="File names (not including extension) that match this regex will be separated into different images.")
-	parser.add_argument("island_margin", help="Islands above this threshold will have their regions expanded by this margin to include any surrounding pixels.")
-	parser.add_argument("island_crop")
-	parser.add_argument("island_opacity", help="Pixels with an opacity above this threshold will be considered part of a contiguous island.")
-	parser.add_argument("island_size", help="Islands with an area smaller than this will be discarded.")
+	parser.add_argument("island_margin", type=int, help="Islands above this threshold will have their regions expanded by this margin to include any surrounding pixels.")
+	parser.add_argument("island_crop", type=bool)
+	parser.add_argument("island_opacity", type=int, help="Pixels with an opacity above this threshold will be considered part of a contiguous island.")
+	parser.add_argument("island_size", type=int, help="Islands with an area smaller than this will be discarded.")
 	args = parser.parse_args()
 
 	bus_path = args.bus_path

@@ -41,7 +41,7 @@ elements = [NodePath("panel_container/margin_container/h_split_container/right_p
 
 [node name="project_name" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("2_hi4ns")]
 layout_mode = 2
-tooltip_text = "Project name and also the name of the resulting .json file. This can't be blank!"
+tooltip_text = "Project name and also the name of the resulting image files and json data file."
 value = "sprite"
 label_text = "Project Name"
 
@@ -59,7 +59,6 @@ layout_mode = 2
 [node name="image_size_limit" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" instance=ExtResource("5_6t3gx")]
 layout_mode = 2
 tooltip_text = "The max pixel dimensions (square) a target image can be. If an island cannot be placed without expanding the target image beyond this limit, a new target image will be created. "
-force_int = true
 min_value = 1.0
 max_value = 65536.0
 value = 65536.0
@@ -78,9 +77,9 @@ label_text = "Inclusion Filter"
 
 [node name="filter_separate" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="7" instance=ExtResource("2_hi4ns")]
 layout_mode = 2
-tooltip_text = "Filenames (EXCLUDING extension) matching this regex filter will be separated into different images.
-This is important! If you don't understand what this does, you probably don't need to use this tool!
-Default: \"_[a-zA-Z]$\""
+tooltip_text = "Filenames (EXCLUDING extension) matching this regex filter will be separated into different images. This is primarily used to keep different kinds of images together, such as albedo and normal maps. The match found will be placed at the end of the resulting target file.
+For example, use \"_[a-zA-Z]$\" to separate files ending with an alphabetic character, like \"_n\", \"_o\", \"_m\", etc. 
+Default: \"^\" (The default value will combine all images into a single image.)"
 value = "_[a-zA-Z]$"
 label_text = "Separation Filter"
 
@@ -91,7 +90,6 @@ layout_mode = 2
 layout_mode = 2
 tooltip_text = "Sprites included in the final image will have this many pixels of margin from the edges and between each other.
 Default: 2"
-force_int = true
 max_value = 256.0
 value = 2.0
 label_text = "Island Margin"
@@ -107,7 +105,6 @@ layout_mode = 2
 tooltip_text = "Pixel islands with a larger rectangular area than this will be included in the final image.
 Pixel islands with a smaller rectangular area than this will be discarded. Use this value to clean up loose pixels.
 Default: 128"
-force_int = true
 max_value = 65536.0
 value = 128.0
 label_text = "Island Minimum Size"
@@ -116,7 +113,6 @@ label_text = "Island Minimum Size"
 layout_mode = 2
 tooltip_text = "Pixels with an opacity (0–255) greater than this value will be considered part of a contiguous island.
 Default: 0.01"
-force_int = true
 max_value = 255.0
 value = 1.0
 label_text = "Island Minimum Opacity"
