@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://djx5tlrjuqe28"]
+[gd_scene load_steps=7 format=3 uid="uid://djx5tlrjuqe28"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_01eyl"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_xvs5m"]
@@ -6,7 +6,17 @@
 [ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="4_0j3eq"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="5_ijscp"]
 
+[sub_resource type="GDScript" id="GDScript_0j3eq"]
+script/source = "extends Program
+
+func _refresh_elements() -> void:
+	super._refresh_elements()
+	$panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display \\
+	.max_value = bus.get_value(\"output\", \"progress_display_max\", 1)
+"
+
 [node name="program_laigter" node_paths=PackedStringArray("elements") instance=ExtResource("1_01eyl")]
+script = SubResource("GDScript_0j3eq")
 program_name = "Laigter Normals"
 program_nickname = "Laigter"
 python_script_path = "res://game/scenes/programs/program_laigter.py"
@@ -55,3 +65,4 @@ layout_mode = 2
 
 [node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("5_ijscp")]
 layout_mode = 2
+label_text = "Files completed"

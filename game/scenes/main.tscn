@@ -59,6 +59,7 @@ custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 tooltip_text = "How many programs in the queue can be run concurrently.
 Any number of windows may be opened and run manually."
+force_int = null
 max_value = 64.0
 value = 1.0
 label_text = "Maximum Concurrent Processes"
@@ -97,6 +98,11 @@ scene_path = "uid://d37ink161ont1"
 layout_mode = 2
 text = "Laigter Normal Generation"
 scene_path = "uid://djx5tlrjuqe28"
+
+[node name="fatlas" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
+layout_mode = 2
+text = "Fatlas Sprite Packer"
+scene_path = "uid://bnsd7innb8evy"
 
 [node name="job_queue" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_box_container"]
 layout_mode = 2

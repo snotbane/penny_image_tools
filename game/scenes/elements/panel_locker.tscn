@@ -88,7 +88,7 @@ mouse_filter = 2
 
 [node name="progress" type="AnimatedSprite2D" parent="v_box_container/control"]
 sprite_frames = SubResource("SpriteFrames_do5hd")
-frame_progress = 0.418295
+frame_progress = 0.190431
 centered = false
 
 [node name="label" type="Label" parent="v_box_container"]

@@ -63,10 +63,11 @@ func get_python_arguments() -> PackedStringArray:
 	var result : PackedStringArray
 	result.push_back(get_python_path(python_script_path))
 	result.push_back(ProjectSettings.globalize_path(bus_path))
+	print("Arguments:")
 	for i in parameters_container.get_children():
 		if i is not Parameter: continue
 		result.push_back(i.argument_as_python_argument)
-	print("Arguments: ", result)
+		print("%s : '%s'" % [i.name, i.argument_as_python_argument])
 	return result
 
 

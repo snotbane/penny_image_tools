@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0ihkarg2nvgg"]
+
+[ext_resource type="Script" uid="uid://dsej1ccp3uck8" path="res://game/scenes/elements/image_preview_grid.gd" id="1_rjq68"]
+
+[node name="target_grid" type="GridContainer"]
+script = ExtResource("1_rjq68")

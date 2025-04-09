@@ -32,7 +32,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/h_split_container"]
-custom_minimum_size = Vector2(400, 0)
+custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 
 [node name="left_panel" type="PanelContainer" parent="panel_container/margin_container/h_split_container/v_box_container"]

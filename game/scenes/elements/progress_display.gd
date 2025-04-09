@@ -1,10 +1,10 @@
-@tool extends VBoxContainer
+@tool extends Control
 
 @export var label_text : String = "Completed" :
-	get: return $h_box_container/label.text if $h_box_container/label else ""
+	get: return $progress_bar/margin_container/h_box_container/label.text if self.find_child("label") else ""
 	set(value):
-		if not self.is_inside_tree(): return
-		$h_box_container/label.text = value
+		if not self.find_child("label"): return
+		$progress_bar/margin_container/h_box_container/label.text = value
 
 
 @export var value : int = 0 :
@@ -26,7 +26,7 @@ func set_value(val: int) -> void:
 
 
 func refresh_value_label() -> void:
-	$h_box_container/value_label.text = "%s / %s" % [str(int($progress_bar.value)), str(int($progress_bar.max_value))]
+	$progress_bar/margin_container/h_box_container/value_label.text = "%s / %s" % [str(int($progress_bar.value)), str(int($progress_bar.max_value))]
 
 
 func complete() -> void:

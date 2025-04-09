@@ -1,0 +1,144 @@
+[gd_scene load_steps=10 format=3 uid="uid://bnsd7innb8evy"]
+
+[ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_vuhxw"]
+[ext_resource type="PackedScene" uid="uid://bsbif7qroffug" path="res://game/scenes/parameter/parameter_string.tscn" id="2_hi4ns"]
+[ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="3_d0uvx"]
+[ext_resource type="PackedScene" uid="uid://1vhcrt3tadog" path="res://game/scenes/parameter/parameter_bool.tscn" id="4_tqatl"]
+[ext_resource type="PackedScene" uid="uid://d0sk7730ilig6" path="res://game/scenes/parameter/parameter_number.tscn" id="5_6t3gx"]
+[ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="6_4wcr6"]
+[ext_resource type="PackedScene" uid="uid://d0ihkarg2nvgg" path="res://game/scenes/elements/image_preview_grid.tscn" id="7_20joi"]
+[ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="8_4l84p"]
+
+[sub_resource type="GDScript" id="GDScript_20joi"]
+script/source = "extends Program
+
+signal image_updated(path: String)
+
+var _last_updated_image : String
+var last_updated_image : String :
+	get: return _last_updated_image
+	set(value):
+		if _last_updated_image == value: return
+		_last_updated_image = value
+		
+		if _last_updated_image: image_updated.emit(_last_updated_image)
+
+
+func _refresh_elements() -> void:
+	super._refresh_elements()
+	$panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display \\
+	.max_value = bus.get_value(\"output\", \"progress_display_max\", 1)
+	last_updated_image = bus.get_value(\"output\", \"last_updated_image\", \"\")
+"
+
+[node name="program_fatlas" node_paths=PackedStringArray("elements") instance=ExtResource("1_vuhxw")]
+script = SubResource("GDScript_20joi")
+print_output = true
+program_name = "Fatlas Conglomeration Tool"
+program_nickname = "Fatlas"
+python_script_path = "res://game/scenes/programs/program_fatlas.py"
+elements = [NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/source_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")]
+
+[node name="project_name" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("2_hi4ns")]
+layout_mode = 2
+tooltip_text = "Project name and also the name of the resulting .json file. This can't be blank!"
+value = "sprite"
+label_text = "Project Name"
+
+[node name="source" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" instance=ExtResource("3_d0uvx")]
+layout_mode = 2
+label_text = "Source Directory"
+
+[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2" instance=ExtResource("3_d0uvx")]
+layout_mode = 2
+label_text = "Target Directory"
+
+[node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3"]
+layout_mode = 2
+
+[node name="image_size_limit" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" instance=ExtResource("5_6t3gx")]
+layout_mode = 2
+tooltip_text = "The max pixel dimensions (square) a target image can be. If an island cannot be placed without expanding the target image beyond this limit, a new target image will be created. "
+force_int = true
+min_value = 1.0
+max_value = 65536.0
+value = 65536.0
+label_text = "Image Size Limit"
+
+[node name="image_format" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" instance=ExtResource("2_hi4ns")]
+layout_mode = 2
+value = "RGBA"
+label_text = "Image Format"
+
+[node name="filter_include" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="6" instance=ExtResource("2_hi4ns")]
+layout_mode = 2
+tooltip_text = "Filenames (INCLUDING extension) matching this regex filter will be added to the final image(s)."
+value = ".*?\\.(?:png)"
+label_text = "Inclusion Filter"
+
+[node name="filter_separate" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="7" instance=ExtResource("2_hi4ns")]
+layout_mode = 2
+tooltip_text = "Filenames (EXCLUDING extension) matching this regex filter will be separated into different images.
+This is important! If you don't understand what this does, you probably don't need to use this tool!
+Default: \"_[a-zA-Z]$\""
+value = "_[a-zA-Z]$"
+label_text = "Separation Filter"
+
+[node name="h_separator_2" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="8"]
+layout_mode = 2
+
+[node name="island_margin" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="9" instance=ExtResource("5_6t3gx")]
+layout_mode = 2
+tooltip_text = "Sprites included in the final image will have this many pixels of margin from the edges and between each other.
+Default: 2"
+force_int = true
+max_value = 256.0
+value = 2.0
+label_text = "Island Margin"
+
+[node name="island_crop" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="10" instance=ExtResource("4_tqatl")]
+layout_mode = 2
+tooltip_text = "If enabled, this method will clean up stray pixel islands under the specified size and crop each sprite to the minimum size. A slow process, but it's totally worth it."
+value = true
+label_text = "Clean Up Islands"
+
+[node name="island_min_size" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="11" instance=ExtResource("5_6t3gx")]
+layout_mode = 2
+tooltip_text = "Pixel islands with a larger rectangular area than this will be included in the final image.
+Pixel islands with a smaller rectangular area than this will be discarded. Use this value to clean up loose pixels.
+Default: 128"
+force_int = true
+max_value = 65536.0
+value = 128.0
+label_text = "Island Minimum Size"
+
+[node name="island_min_opacity" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="12" instance=ExtResource("5_6t3gx")]
+layout_mode = 2
+tooltip_text = "Pixels with an opacity (0–255) greater than this value will be considered part of a contiguous island.
+Default: 0.01"
+force_int = true
+max_value = 255.0
+value = 1.0
+label_text = "Island Minimum Opacity"
+
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0"]
+layout_mode = 2
+
+[node name="h_split_container" type="HSplitContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="0"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="source_preview" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container" index="0" instance=ExtResource("6_4wcr6")]
+layout_mode = 2
+
+[node name="target_grid" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container" index="1" instance=ExtResource("7_20joi")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("8_4l84p")]
+layout_mode = 2
+
+[connection signal="image_updated" from="." to="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/target_grid" method="update_image"]
+[connection signal="started" from="." to="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/target_grid" method="clear"]
+[connection signal="toggled" from="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_crop" to="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_min_size" method="set_visible"]
+[connection signal="toggled" from="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_crop" to="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_min_opacity" method="set_visible"]

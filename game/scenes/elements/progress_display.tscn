@@ -2,24 +2,41 @@
 
 [ext_resource type="Script" uid="uid://cbxy0cs38xrtj" path="res://game/scenes/elements/progress_display.gd" id="1_5cdlw"]
 
-[node name="progress_display" type="VBoxContainer"]
-offset_right = 400.0
-offset_bottom = 31.0
+[node name="progress_display" type="Control"]
+custom_minimum_size = Vector2(210, 26)
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1_5cdlw")
 
-[node name="h_box_container" type="HBoxContainer" parent="."]
+[node name="progress_bar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 27.0
+grow_horizontal = 2
+max_value = 1.0
+step = 1.0
+
+[node name="margin_container" type="MarginContainer" parent="progress_bar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 0
+
+[node name="h_box_container" type="HBoxContainer" parent="progress_bar/margin_container"]
 layout_mode = 2
 
-[node name="label" type="Label" parent="h_box_container"]
+[node name="label" type="Label" parent="progress_bar/margin_container/h_box_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Completed"
 
-[node name="value_label" type="Label" parent="h_box_container"]
+[node name="value_label" type="Label" parent="progress_bar/margin_container/h_box_container"]
 layout_mode = 2
 text = "0 / 1"
-
-[node name="progress_bar" type="ProgressBar" parent="."]
-layout_mode = 2
-max_value = 1.0
-step = 1.0

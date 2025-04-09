@@ -7,7 +7,6 @@
 script = ExtResource("2_wqpyk")
 value = false
 label_text = "Boolean Parameter"
-persistent = false
 
 [node name="label" parent="hbox" index="0"]
 text = "Boolean Parameter"
