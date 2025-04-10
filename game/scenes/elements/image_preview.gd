@@ -25,3 +25,7 @@ func refresh() -> void:
 	var image := Image.new()
 	var error := image.load(value)
 	texture = ImageTexture.create_from_image(image) if error == OK else null
+
+
+func clear() -> void:
+	value = ""

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b3l4crsncffoh"]
+[gd_scene load_steps=12 format=3 uid="uid://b3l4crsncffoh"]
 
 [ext_resource type="Texture2D" uid="uid://dvp3hlokwd4ac" path="res://addons/tools_mincuz/textures/marquee_border.png" id="1_asyt8"]
 [ext_resource type="Texture2D" uid="uid://dobelhvexued5" path="res://game/icons/Progress1.svg" id="2_x1n45"]
@@ -9,6 +9,13 @@
 [ext_resource type="Texture2D" uid="uid://8lo0qtgwop2m" path="res://game/icons/Progress6.svg" id="7_kl8f7"]
 [ext_resource type="Texture2D" uid="uid://dvcurv44d1wax" path="res://game/icons/Progress7.svg" id="8_rloak"]
 [ext_resource type="Texture2D" uid="uid://dt5l6jve4grg2" path="res://game/icons/Progress8.svg" id="9_ao0yd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_asyt8"]
+bg_color = Color(0, 0, 0, 0.501961)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_do5hd"]
 animations = [{
@@ -56,7 +63,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.25098)
+color = Color(0, 0, 0, 0.501961)
 
 [node name="texture_rect" type="TextureRect" parent="color_rect"]
 self_modulate = Color(0, 0, 0, 0.12549)
@@ -69,32 +76,47 @@ grow_vertical = 2
 texture = ExtResource("1_asyt8")
 stretch_mode = 1
 
-[node name="v_box_container" type="VBoxContainer" parent="."]
+[node name="panel_container" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 14
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -109.5
+offset_top = -62.5
+offset_right = 109.5
+offset_bottom = 62.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_asyt8")
+
+[node name="margin_container" type="MarginContainer" parent="panel_container"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container"]
+layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="control" type="Control" parent="v_box_container"]
+[node name="control" type="Control" parent="panel_container/margin_container/v_box_container"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
 
-[node name="progress" type="AnimatedSprite2D" parent="v_box_container/control"]
+[node name="progress" type="AnimatedSprite2D" parent="panel_container/margin_container/v_box_container/control"]
 sprite_frames = SubResource("SpriteFrames_do5hd")
-frame_progress = 0.190431
+frame_progress = 0.893119
 centered = false
 
-[node name="label" type="Label" parent="v_box_container"]
+[node name="label" type="Label" parent="panel_container/margin_container/v_box_container"]
 layout_mode = 2
-text = "Program is running...
-Do not modify affected files!"
+text = "Program is running..."
 horizontal_alignment = 1
 
-[connection signal="ready" from="v_box_container/control/progress" to="v_box_container/control/progress" method="play" binds= [&"default"]]
+[connection signal="ready" from="panel_container/margin_container/v_box_container/control/progress" to="panel_container/margin_container/v_box_container/control/progress" method="play" binds= [&"default"]]

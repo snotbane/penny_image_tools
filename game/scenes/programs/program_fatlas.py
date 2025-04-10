@@ -146,7 +146,7 @@ class SourceImage(PathedImage):
 	def image_cropped(self) -> Image:
 		if self.bitmap == None: return self.image
 
-		result : Image = self.image.crop((self.source_region.x, self.source_region.y, self.source_region.w, self.source_region.h))
+		result : Image = self.image.crop((self.source_region.x, self.source_region.y, self.source_region.r, self.source_region.b))
 		r, g, b, a = result.split()
 		mask = self.bitmap.convert("L")
 		mask_pixels = mask.load()
@@ -239,8 +239,10 @@ class SourceImage(PathedImage):
 			full_bitmap_pixels = full_bitmap.load()
 
 			for px, py in bitms:
-				full_bitmap_pixels[px - full_rect.left, py - full_rect.top] = 1
-			return SourceImage(self.root, self.file, full_rect, full_bitmap)
+				full_bitmap_pixels[px - full_rect.x, py - full_rect.y] = 1
+			result = SourceImage(self.root, self.file, full_rect, full_bitmap)
+			result.target_match = self.target_match
+			return result
 
 		return crop_islands_accumulate()
 
@@ -289,9 +291,12 @@ class TargetImage(PathedImage):
 
 		self.sources.append(source)
 
+		# Remove the existing snap point
 		try:
 			self.snaps.remove(source.target_offset)
 		except ValueError: pass
+
+		## Add new snap points at the top right and bottom left corners, if they don't exist
 		snap1 = (source.target_offset[0] + source.source_region.w + self.margin, source.target_offset[1])
 		try:
 			_ = self.snaps.index(snap1)
@@ -420,9 +425,10 @@ def main():
 	maps_data = dict()
 
 	for source in sources:
-		# if args.test_limit > -1 and i > args.test_limit: break
+		if bus_get("input", "stop") == "true": break
+
 		bus_set("output", "source_preview", f"\"{source.full}\"")
-		if args.island_crop == "True":
+		if args.island_crop:
 			print(f"Cropping image '{source.name}' ({progress_display + 1}/{len(sources)}) ...")
 			source = source.crop_islands()
 		target = targets[source.target_match]
@@ -453,6 +459,17 @@ def main():
 		targets[k].save()
 
 
+def str2bool(value):
+    if isinstance(value, bool):
+        return value
+    val = value.lower()
+    if val in ('yes', 'true', 't', '1'):
+        return True
+    elif val in ('no', 'false', 'f', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("bus_path", type=str, help="Path to the data bus associated with this program instance.")
@@ -463,10 +480,10 @@ if __name__ == "__main__":
 	parser.add_argument("image_format", type=str, help="Image format.")
 	parser.add_argument("filter_include", type=str, help="Only file paths that match this regex will be included (considers extensions)." )
 	parser.add_argument("filter_separate", type=str, help="File names (not including extension) that match this regex will be separated into different images.")
+	parser.add_argument("island_crop", type=str2bool)
 	parser.add_argument("island_margin", type=int, help="Islands above this threshold will have their regions expanded by this margin to include any surrounding pixels.")
-	parser.add_argument("island_crop", type=bool)
-	parser.add_argument("island_opacity", type=int, help="Pixels with an opacity above this threshold will be considered part of a contiguous island.")
 	parser.add_argument("island_size", type=int, help="Islands with an area smaller than this will be discarded.")
+	parser.add_argument("island_opacity", type=int, help="Pixels with an opacity above this threshold will be considered part of a contiguous island.")
 	args = parser.parse_args()
 
 	bus_path = args.bus_path

@@ -98,19 +98,19 @@ label_text = "Separation Filter"
 [node name="h_separator_2" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="8"]
 layout_mode = 2
 
-[node name="island_margin" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="9" instance=ExtResource("5_6t3gx")]
+[node name="island_crop" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="9" instance=ExtResource("4_tqatl")]
+layout_mode = 2
+tooltip_text = "If enabled, this method will clean up stray pixel islands under the specified size and crop each sprite to the minimum size. A slow process, but it's totally worth it."
+value = true
+label_text = "Clean Up Islands"
+
+[node name="island_margin" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="10" instance=ExtResource("5_6t3gx")]
 layout_mode = 2
 tooltip_text = "Sprites included in the final image will have this many pixels of margin from the edges and between each other.
 Default: 2"
 max_value = 256.0
 value = 2.0
 label_text = "Island Margin"
-
-[node name="island_crop" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="10" instance=ExtResource("4_tqatl")]
-layout_mode = 2
-tooltip_text = "If enabled, this method will clean up stray pixel islands under the specified size and crop each sprite to the minimum size. A slow process, but it's totally worth it."
-value = true
-label_text = "Clean Up Islands"
 
 [node name="island_min_size" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="11" instance=ExtResource("5_6t3gx")]
 layout_mode = 2
@@ -152,6 +152,7 @@ size_flags_horizontal = 3
 [node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("8_4l84p")]
 layout_mode = 2
 
+[connection signal="started" from="." to="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/source_preview" method="clear"]
 [connection signal="started" from="." to="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/target_grid" method="clear"]
 [connection signal="toggled" from="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_crop" to="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_min_size" method="set_visible"]
 [connection signal="toggled" from="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_crop" to="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_min_opacity" method="set_visible"]

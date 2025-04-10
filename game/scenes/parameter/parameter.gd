@@ -47,8 +47,8 @@ var argument_as_config_data : Variant :
 
 var argument_as_python_argument : String :
 	get:
-		if argument is bool:
-			return "True" if argument else "False"
+		# if argument is bool:
+		# 	return "True" if argument else "False"
 		if argument is float and fmod(argument, 1.0) == 0.0:
 			return str(int(argument))
 		return str(argument)
