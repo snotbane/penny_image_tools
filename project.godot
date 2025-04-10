@@ -22,6 +22,8 @@ debug_fullscreen_controller="*res://addons/tools_mincuz/scripts/debug_fullscreen
 
 [debug]
 
+gdscript/warnings/unused_variable=0
+gdscript/warnings/unused_private_class_variable=0
 gdscript/warnings/unused_parameter=0
 gdscript/warnings/unused_signal=0
 gdscript/warnings/integer_division=0

@@ -44,8 +44,6 @@ func _ready() -> void:
 
 	thread = Thread.new()
 
-	load_parameters({ &"target": "/Users/snotbane/Desktop/fatlas" })
-
 
 func _process(delta: float) -> void:
 	if is_running:
@@ -65,7 +63,13 @@ func load_parameters(data: Dictionary) -> void:
 	for i in parameters_container.get_children():
 		if not data.has(i.name): continue
 		i.value = data[i.name]
-		print(i.value)
+
+
+func save_parameters() -> Dictionary:
+	var result : Dictionary = {}
+	for i in parameters_container.get_children():
+		result[i.name] = i.value
+	return result
 
 
 func get_python_arguments() -> PackedStringArray:

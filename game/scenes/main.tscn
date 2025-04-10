@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://coxdxohawk630"]
+[gd_scene load_steps=7 format=3 uid="uid://coxdxohawk630"]
 
 [ext_resource type="Theme" uid="uid://cjww2dp7ckflf" path="res://game/theme.tres" id="1_20rwd"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="4_8buom"]
 [ext_resource type="PackedScene" uid="uid://1vhcrt3tadog" path="res://game/scenes/parameter/parameter_bool.tscn" id="4_ejk4j"]
 [ext_resource type="PackedScene" uid="uid://d0sk7730ilig6" path="res://game/scenes/parameter/parameter_number.tscn" id="5_ejk4j"]
+[ext_resource type="Script" uid="uid://c5sj1vas0pq26" path="res://game/scenes/task_queue.gd" id="6_l3qal"]
 [ext_resource type="PackedScene" uid="uid://ndp7267wdyw1" path="res://game/scenes/program_window_button.tscn" id="8_7j1va"]
 
 [node name="main" type="Control"]
@@ -13,6 +14,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource("1_20rwd")
 
 [node name="panel_container" type="PanelContainer" parent="."]
@@ -118,9 +121,32 @@ size_flags_horizontal = 3
 [node name="margin_container" type="MarginContainer" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue"]
 layout_mode = 2
 
-[node name="scroll_container" type="ScrollContainer" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container"]
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container"]
 layout_mode = 2
 
-[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/scroll_container"]
+[node name="task_queue" type="Tree" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 6
+column_titles_visible = true
+hide_folding = true
+hide_root = true
+select_mode = 1
+scroll_horizontal_enabled = false
+script = ExtResource("6_l3qal")
+
+[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container"]
+layout_mode = 2
+
+[node name="queue_load" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container/h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Load"
+
+[node name="queue_save" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container/h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save"
+
+[connection signal="button_clicked" from="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container/task_queue" to="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container/task_queue" method="_on_button_clicked"]
