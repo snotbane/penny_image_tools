@@ -4,8 +4,8 @@ var _options : PackedStringArray
 @export var options : PackedStringArray :
 	get:
 		return _options
-	set(value):
-		_options = value
+	set(val):
+		_options = val
 
 		if not self.find_child("option_button"): return
 
@@ -14,20 +14,20 @@ var _options : PackedStringArray
 			$hbox/option_button.add_item(_options[i])
 
 
-var _value : int
-@export var value : int :
-	get: return _value
+var __value : int
+@export var _value : int :
+	get: return __value
 	set(val):
 		if not self.find_child("option_button"): return
-		_value = clampi(val, -1, options.size() - 1)
-		$hbox/option_button.selected = _value
+		__value = clampi(val, -1, options.size() - 1)
+		$hbox/option_button.selected = __value
 
 
 var value_as_text : String :
-	get: return _options[self.value] if value > -1 else ""
+	get: return _options[self._value] if _value > -1 else ""
 
 
 func _ready() -> void:
 	options = options
-	value = value
+	_value = _value
 	super._ready()

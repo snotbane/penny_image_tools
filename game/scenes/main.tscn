@@ -61,13 +61,14 @@ layout_mode = 2
 tooltip_text = "How many programs in the queue can be run concurrently.
 Any number of windows may be opened and run manually."
 max_value = 64.0
-value = 1.0
+_value = 1.0
 label_text = "Maximum Concurrent Processes"
 persistent = true
 
 [node name="privacy_default" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("4_ejk4j")]
 layout_mode = 2
 tooltip_text = "All new opened windows will keep their preview contents hidden by default."
+_value = false
 label_text = "Start in Private Mode"
 persistent = true
 

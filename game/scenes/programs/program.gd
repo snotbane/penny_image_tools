@@ -44,6 +44,8 @@ func _ready() -> void:
 
 	thread = Thread.new()
 
+	load_parameters({ &"target": "/Users/snotbane/Desktop/fatlas" })
+
 
 func _process(delta: float) -> void:
 	if is_running:
@@ -57,6 +59,13 @@ func _process(delta: float) -> void:
 
 func _exit_tree() -> void:
 	BUS_DIR.remove(bus_path)
+
+
+func load_parameters(data: Dictionary) -> void:
+	for i in parameters_container.get_children():
+		if not data.has(i.name): continue
+		i.value = data[i.name]
+		print(i.value)
 
 
 func get_python_arguments() -> PackedStringArray:

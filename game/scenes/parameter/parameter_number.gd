@@ -12,7 +12,7 @@
 		if not find_child("spin_box"): return
 		$hbox/spin_box.max_value = value
 
-@export var value : float :
+@export var _value : float :
 	get: return $hbox/spin_box.value if $hbox/spin_box else -1
 	set(val):
 		if not find_child("spin_box"): return

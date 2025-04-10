@@ -5,7 +5,7 @@
 
 [node name="parameter_string" instance=ExtResource("1_ihlqs")]
 script = ExtResource("2_b31fq")
-value = ""
+_value = ""
 label_text = "String Parameter"
 
 [node name="label" parent="hbox" index="0"]

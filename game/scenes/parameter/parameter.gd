@@ -40,45 +40,43 @@ var _persistent : bool
 	CONFIG = ConfigFile.new()
 	CONFIG.save(CONFIG_PATH)
 
-var argument : Variant
+var value : Variant :
+	get: return get(&"_value")
+	set(val):
+		set(&"_value", val)
+		if persistent: save_persistent()
+func set_value(val: Variant) -> void:
+	value = val
 
-var argument_as_config_data : Variant :
-	get: return argument
+var value_as_config_data : Variant :
+	get: return value
 
-var argument_as_python_argument : String :
+var value_as_python_argument : String :
 	get:
 		# if argument is bool:
 		# 	return "True" if argument else "False"
-		if argument is float and fmod(argument, 1.0) == 0.0:
-			return str(int(argument))
-		return str(argument)
+		if value is float and fmod(value, 1.0) == 0.0:
+			return str(int(value))
+		return str(value)
 
 
 func _ready() -> void:
-	argument = get(&"value")
 	if Engine.is_editor_hint(): return
 	if persistent: load_persistent()
 
 
-func set_value(new_value: Variant) -> void:
-	argument = new_value
-	if persistent: save_persistent()
-
-
 func load_persistent() -> void:
-	if not CONFIG.has_section_key(SECTION_NAME, self.name):
-		save_persistent()
-	argument = CONFIG.get_value(SECTION_NAME, self.name)
-	if argument == null: return
-	set(&"value", argument)
-	_load_persistent()
-func _load_persistent() -> void:
-	pass
+	if not CONFIG.has_section_key(SECTION_NAME, self.name): save_persistent()
+	var persistent_value = CONFIG.get_value(SECTION_NAME, self.name)
+	prints(self.name, persistent_value)
+	if persistent_value == null: return
+	value = persistent_value
 
 
 func save_persistent() -> void:
-	CONFIG.set_value(SECTION_NAME, self.name, self.argument_as_config_data)
+	CONFIG.set_value(SECTION_NAME, self.name, self.value_as_config_data)
 	CONFIG.save(CONFIG_PATH)
+	prints(self.name, CONFIG.get_value(SECTION_NAME, self.name))
 
 
 func clear_persistent() -> void:
