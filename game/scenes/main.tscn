@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://coxdxohawk630"]
+[gd_scene load_steps=6 format=3 uid="uid://coxdxohawk630"]
 
 [ext_resource type="Theme" uid="uid://cjww2dp7ckflf" path="res://game/theme.tres" id="1_20rwd"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="4_8buom"]
+[ext_resource type="PackedScene" uid="uid://1vhcrt3tadog" path="res://game/scenes/parameter/parameter_bool.tscn" id="4_ejk4j"]
 [ext_resource type="PackedScene" uid="uid://d0sk7730ilig6" path="res://game/scenes/parameter/parameter_number.tscn" id="5_ejk4j"]
 [ext_resource type="PackedScene" uid="uid://ndp7267wdyw1" path="res://game/scenes/program_window_button.tscn" id="8_7j1va"]
 
@@ -62,6 +63,12 @@ Any number of windows may be opened and run manually."
 max_value = 64.0
 value = 1.0
 label_text = "Maximum Concurrent Processes"
+persistent = true
+
+[node name="privacy_default" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("4_ejk4j")]
+layout_mode = 2
+tooltip_text = "All new opened windows will keep their preview contents hidden by default."
+label_text = "Start in Private Mode"
 persistent = true
 
 [node name="programs_list" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container"]

@@ -1,12 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://scqegb5pvl8d"]
+[gd_scene load_steps=3 format=3 uid="uid://scqegb5pvl8d"]
 
 [ext_resource type="Script" uid="uid://dc6ibiqg03lac" path="res://game/scenes/elements/image_preview.gd" id="1_eyi8r"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_eyi8r"]
 font_size = 10
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_svq1h"]
-size = Vector2(0, 0)
 
 [node name="image_preview" type="PanelContainer" node_paths=PackedStringArray("label")]
 anchors_preset = 15
@@ -36,19 +33,3 @@ layout_mode = 2
 label_settings = SubResource("LabelSettings_eyi8r")
 horizontal_alignment = 1
 text_overrun_behavior = 4
-
-[node name="check_button" type="CheckButton" parent="."]
-layout_mode = 2
-theme_override_icons/icon = SubResource("PlaceholderTexture2D_svq1h")
-theme_override_icons/checked = SubResource("PlaceholderTexture2D_svq1h")
-theme_override_icons/unchecked = SubResource("PlaceholderTexture2D_svq1h")
-theme_override_icons/checked_disabled = SubResource("PlaceholderTexture2D_svq1h")
-theme_override_icons/unchecked_disabled = SubResource("PlaceholderTexture2D_svq1h")
-theme_override_icons/checked_mirrored = SubResource("PlaceholderTexture2D_svq1h")
-theme_override_icons/unchecked_mirrored = SubResource("PlaceholderTexture2D_svq1h")
-theme_override_icons/checked_disabled_mirrored = SubResource("PlaceholderTexture2D_svq1h")
-theme_override_icons/unchecked_disabled_mirrored = SubResource("PlaceholderTexture2D_svq1h")
-button_pressed = true
-flat = true
-
-[connection signal="toggled" from="check_button" to="v_box_container/margin_container/texture_rect" method="set_visible"]

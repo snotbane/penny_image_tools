@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dvakdya5nf7if"
-path="res://.godot/imported/cape_mini.png-9c7021db3d61169b2772de8d59cb74a7.ctex"
+uid="uid://bggj3ve5le5sq"
+path="res://.godot/imported/GuiVisibilityVisible.svg-b83d2e6e1d3a16e18d305567f3d2ee65.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://cape_mini.png"
-dest_files=["res://.godot/imported/cape_mini.png-9c7021db3d61169b2772de8d59cb74a7.ctex"]
+source_file="res://game/icons/GuiVisibilityVisible.svg"
+dest_files=["res://.godot/imported/GuiVisibilityVisible.svg-b83d2e6e1d3a16e18d305567f3d2ee65.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=4.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

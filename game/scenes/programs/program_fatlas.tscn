@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bnsd7innb8evy"]
+[gd_scene load_steps=11 format=3 uid="uid://bnsd7innb8evy"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_vuhxw"]
 [ext_resource type="PackedScene" uid="uid://bsbif7qroffug" path="res://game/scenes/parameter/parameter_string.tscn" id="2_hi4ns"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="6_4wcr6"]
 [ext_resource type="PackedScene" uid="uid://d0ihkarg2nvgg" path="res://game/scenes/elements/image_preview_grid.tscn" id="7_20joi"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="8_4l84p"]
+[ext_resource type="PackedScene" uid="uid://xx07uwu4xf5i" path="res://game/scenes/elements/privacy_mask.tscn" id="8_irdv1"]
 
 [sub_resource type="GDScript" id="GDScript_20joi"]
 script/source = "extends Program
@@ -148,6 +149,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
+
+[node name="privacy_mask" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container" index="2" instance=ExtResource("8_irdv1")]
+layout_mode = 1
 
 [node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("8_4l84p")]
 layout_mode = 2
