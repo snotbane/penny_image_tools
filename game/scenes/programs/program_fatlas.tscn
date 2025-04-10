@@ -12,23 +12,35 @@
 [sub_resource type="GDScript" id="GDScript_20joi"]
 script/source = "extends Program
 
-signal image_updated(path: String)
-
-var _last_updated_image : String
-var last_updated_image : String :
-	get: return _last_updated_image
-	set(value):
-		if _last_updated_image == value: return
-		_last_updated_image = value
-		
-		if _last_updated_image: image_updated.emit(_last_updated_image)
-
+var target_paths : Array[String]
 
 func _refresh_elements() -> void:
 	super._refresh_elements()
 	$panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display \\
 	.max_value = bus.get_value(\"output\", \"progress_display_max\", 1)
-	last_updated_image = bus.get_value(\"output\", \"last_updated_image\", \"\")
+	
+	var target_updated = bus.get_value(\"output\", \"target_updated\", \"\")
+	if target_paths.has(target_updated) or target_updated == \"\": return
+	target_paths.push_back(target_updated)
+
+
+func start() -> void:
+	target_paths.clear()
+	$panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/source_preview.visible = true
+	$panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/target_grid.visible = false
+	
+	super.start()
+
+
+func thread_stopped() -> void:
+	super.thread_stopped()
+	
+	$panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/source_preview.visible = false
+	$panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/target_grid.visible = true
+	
+	for path in target_paths:
+		$panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/target_grid \\
+		.update_image(path)
 "
 
 [node name="program_fatlas" node_paths=PackedStringArray("elements") instance=ExtResource("1_vuhxw")]
@@ -80,7 +92,7 @@ layout_mode = 2
 tooltip_text = "Filenames (EXCLUDING extension) matching this regex filter will be separated into different images. This is primarily used to keep different kinds of images together, such as albedo and normal maps. The match found will be placed at the end of the resulting target file.
 For example, use \"_[a-zA-Z]$\" to separate files ending with an alphabetic character, like \"_n\", \"_o\", \"_m\", etc. 
 Default: \"^\" (The default value will combine all images into a single image.)"
-value = "_[a-zA-Z]$"
+value = "^"
 label_text = "Separation Filter"
 
 [node name="h_separator_2" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="8"]
@@ -120,21 +132,26 @@ label_text = "Island Minimum Opacity"
 [node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0"]
 layout_mode = 2
 
-[node name="h_split_container" type="HSplitContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="0"]
+[node name="h_split_container" type="Control" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="0"]
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="source_preview" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container" index="0" instance=ExtResource("6_4wcr6")]
-layout_mode = 2
+layout_mode = 1
 
 [node name="target_grid" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container" index="1" instance=ExtResource("7_20joi")]
-layout_mode = 2
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 
 [node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("8_4l84p")]
 layout_mode = 2
 
-[connection signal="image_updated" from="." to="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/target_grid" method="update_image"]
 [connection signal="started" from="." to="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/target_grid" method="clear"]
 [connection signal="toggled" from="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_crop" to="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_min_size" method="set_visible"]
 [connection signal="toggled" from="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_crop" to="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/island_min_opacity" method="set_visible"]

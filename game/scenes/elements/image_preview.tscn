@@ -8,7 +8,7 @@ font_size = 10
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_svq1h"]
 size = Vector2(0, 0)
 
-[node name="image_preview" type="PanelContainer"]
+[node name="image_preview" type="PanelContainer" node_paths=PackedStringArray("label")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,6 +17,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_eyi8r")
+label = NodePath("v_box_container/path_label")
 
 [node name="v_box_container" type="VBoxContainer" parent="."]
 layout_mode = 2

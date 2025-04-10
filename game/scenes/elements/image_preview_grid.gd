@@ -9,14 +9,17 @@ func update_image(path: String) -> void:
 		previews[path].refresh()
 	else:
 		var preview : ImagePreview = image_preview_scene.instantiate()
-		preview.label.visible = false
+		# preview.label.visible = false
 		self.add_child(preview)
 
 		previews[path] = preview
-		self.columns = floori(sqrt(previews.size()))
+		previews[path].value = path
+
+		self.columns = ceili(sqrt(previews.size()))
 
 
 func clear() -> void:
+	previews.clear()
 	for i in self.get_children():
 		i.queue_free()
 

@@ -24,10 +24,10 @@ def bus_set(section: str, key: str, value):
 		bus.write(file, space_around_delimiters=False)
 
 
-class Point:
-	def __init__(self, x: int, y: int):
-		self.x = x
-		self.y = y
+# class Point:
+# 	def __init__(self, x: int, y: int):
+# 		self.x = x
+# 		self.y = y
 
 
 class Rect:
@@ -408,6 +408,9 @@ def assign_comp_data(maps : dict) -> dict:
 def main():
 	global progress_display
 
+	bus_set("output", "progress_display", 0)
+	bus_set("output", "progress_display_max", 0)
+
 	sources = assign_image_sources()
 	sources, targets = assign_image_targets(sources)
 	bus_set("output", "progress_display_max", len(sources))
@@ -418,16 +421,20 @@ def main():
 
 	for source in sources:
 		# if args.test_limit > -1 and i > args.test_limit: break
+		bus_set("output", "source_preview", f"\"{source.full}\"")
 		if args.island_crop == "True":
 			print(f"Cropping image '{source.name}' ({progress_display + 1}/{len(sources)}) ...")
 			source = source.crop_islands()
-		target_file = targets[source.target_match].file
-		print(f"Appending image '{source.name}' to '{target_file}'...")
-		targets[source.target_match].add(source)
+		target = targets[source.target_match]
+		print(f"Appending image '{source.name}' to '{target.file}'...")
+		target.add(source)
+		target.save()
+		bus_set("output", "target_updated", f"\"{target.full}\"")
 
-		if maps_data.get(target_file) == None:
-			maps_data[target_file] = []
-		maps_data[target_file].append(source.json_data)
+
+		if maps_data.get(target.file) == None:
+			maps_data[target.file] = []
+		maps_data[target.file].append(source.json_data)
 
 		progress_display += 1
 		bus_set("output", "progress_display", progress_display)
