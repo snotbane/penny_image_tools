@@ -1,11 +1,48 @@
-[gd_resource type="Theme" format=3 uid="uid://cjww2dp7ckflf"]
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://cjww2dp7ckflf"]
+
+[ext_resource type="FontFile" uid="uid://847p2h26v2lb" path="res://game/fonts/Inter_18pt-Medium.ttf" id="1_7un0a"]
+[ext_resource type="FontFile" uid="uid://bw0qtqbeh2r75" path="res://game/fonts/Inter_18pt-MediumItalic.ttf" id="2_dy2q2"]
+[ext_resource type="FontFile" uid="uid://doqbvkmwkw5u5" path="res://game/fonts/Inter_24pt-ExtraBold.ttf" id="3_h5lvh"]
 
 [resource]
+Button/font_sizes/font_size = 18
+Button/fonts/font = ExtResource("1_7un0a")
+CheckBox/fonts/font = null
+CheckButton/fonts/font = null
+CodeEdit/fonts/font = null
+ColorPickerButton/fonts/font = null
+GraphNodeTitleLabel/fonts/font = null
 HBoxContainer/constants/separation = 8
 HSplitContainer/constants/separation = 8
+ItemList/fonts/font = null
+Label/font_sizes/font_size = 18
+Label/fonts/font = ExtResource("1_7un0a")
+LineEdit/font_sizes/font_size = 18
+LineEdit/fonts/font = ExtResource("1_7un0a")
+LinkButton/fonts/font = null
 MarginContainer/constants/margin_bottom = 16
 MarginContainer/constants/margin_left = 16
 MarginContainer/constants/margin_right = 16
 MarginContainer/constants/margin_top = 16
+MenuBar/fonts/font = null
+MenuButton/fonts/font = null
+OptionButton/fonts/font = null
+PopupMenu/fonts/font = ExtResource("1_7un0a")
+PopupMenu/fonts/font_separator = null
+ProgressBar/fonts/font = ExtResource("3_h5lvh")
+RichTextLabel/fonts/bold_font = null
+RichTextLabel/fonts/bold_italics_font = null
+RichTextLabel/fonts/italics_font = null
+RichTextLabel/fonts/mono_font = null
+RichTextLabel/fonts/normal_font = null
+TabBar/fonts/font = ExtResource("1_7un0a")
+TabContainer/fonts/font = null
+TextEdit/fonts/font = ExtResource("1_7un0a")
+TooltipLabel/fonts/font = ExtResource("2_dy2q2")
+Tree/font_sizes/font_size = 18
+Tree/font_sizes/title_button_font_size = 18
+Tree/fonts/font = ExtResource("1_7un0a")
+Tree/fonts/title_button_font = ExtResource("3_h5lvh")
 VBoxContainer/constants/separation = 8
 VSplitContainer/constants/separation = 8
+Window/fonts/title_font = null

@@ -10,8 +10,8 @@ static func _static_init() -> void:
 		CONFIG.save(CONFIG_PATH)
 
 
-static func get_persistent_parameter(key: StringName) -> Variant:
-	return CONFIG.get_value(SECTION_NAME, key)
+static func get_persistent_parameter(key: StringName, default: Variant = null) -> Variant:
+	return CONFIG.get_value(SECTION_NAME, key, default)
 
 
 @export var label_text : String :

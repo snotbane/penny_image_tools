@@ -11,10 +11,12 @@ signal stopped
 
 
 @export var print_output : bool
+@export var identifier : StringName = &"program"
 @export var program_name : String = "Program"
 @export var program_nickname : String = "Program"
 @export_file("*.py") var python_script_path : String
 @export var parameters_container : Control
+@export var target_parameter : ParameterString
 @export var elements : Array[Control]
 @export var execute_button : Button
 
@@ -59,6 +61,10 @@ func _exit_tree() -> void:
 	BUS_DIR.remove(bus_path)
 
 
+func add_to_queue() -> void:
+	pass
+
+
 func load_parameters(data: Dictionary) -> void:
 	for i in parameters_container.get_children():
 		if not data.has(i.name): continue
@@ -79,9 +85,13 @@ func get_python_arguments() -> PackedStringArray:
 	print("Arguments:")
 	for i in parameters_container.get_children():
 		if i is not Parameter: continue
-		result.push_back(i.argument_as_python_argument)
-		print("%s : '%s'" % [i.name, i.argument_as_python_argument])
+		result.push_back(i.value_as_python_argument)
+		print("%s : '%s'" % [i.name, i.value_as_python_argument])
 	return result
+
+
+func get_progress() -> float:
+	return 0.0
 
 
 func start() -> void:

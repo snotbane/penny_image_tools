@@ -14,3 +14,4 @@ func _pressed() -> void:
 	window.force_native = true
 	window.populate(scene)
 	self.get_tree().root.add_child.call_deferred(window)
+	window.show()
