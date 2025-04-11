@@ -1,14 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://coxdxohawk630"]
+[gd_scene load_steps=7 format=3 uid="uid://coxdxohawk630"]
 
 [ext_resource type="Theme" uid="uid://cjww2dp7ckflf" path="res://game/theme.tres" id="1_20rwd"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="4_8buom"]
 [ext_resource type="PackedScene" uid="uid://d0sk7730ilig6" path="res://game/scenes/parameter/parameter_number.tscn" id="5_ejk4j"]
 [ext_resource type="PackedScene" uid="uid://b10hspyn3i6l8" path="res://game/scenes/parameter/parameter_option.tscn" id="5_uk16q"]
-[ext_resource type="Script" uid="uid://c5sj1vas0pq26" path="res://game/scenes/task_queue.gd" id="6_l3qal"]
-[ext_resource type="Texture2D" uid="uid://bfadqo20te315" path="res://game/icons/Save.svg" id="7_rmvmd"]
+[ext_resource type="PackedScene" uid="uid://bl48gnvqb67u0" path="res://game/scenes/task_queue.tscn" id="6_l3qal"]
 [ext_resource type="PackedScene" uid="uid://ndp7267wdyw1" path="res://game/scenes/program_window_button.tscn" id="8_7j1va"]
-[ext_resource type="Texture2D" uid="uid://bpy2jo0tc8kww" path="res://game/icons/Load.svg" id="8_shkmv"]
-[ext_resource type="Texture2D" uid="uid://c30c6b2b3hwjc" path="res://game/icons/Play.svg" id="9_j51q3"]
 
 [node name="main" type="Control"]
 layout_mode = 3
@@ -116,49 +113,5 @@ layout_mode = 2
 text = "Fatlas Sprite Packer"
 scene_path = "uid://bnsd7innb8evy"
 
-[node name="job_queue" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_box_container"]
+[node name="task_queue" parent="panel_container/margin_container/v_box_container/h_box_container" instance=ExtResource("6_l3qal")]
 layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="margin_container" type="MarginContainer" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue"]
-layout_mode = 2
-
-[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container"]
-layout_mode = 2
-
-[node name="task_queue" type="Tree" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-focus_mode = 0
-columns = 6
-allow_rmb_select = true
-allow_search = false
-hide_folding = true
-hide_root = true
-select_mode = 1
-scroll_horizontal_enabled = false
-script = ExtResource("6_l3qal")
-
-[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container"]
-layout_mode = 2
-
-[node name="queue_save" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container/h_box_container"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Save"
-icon = ExtResource("7_rmvmd")
-
-[node name="queue_load" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container/h_box_container"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Load"
-icon = ExtResource("8_shkmv")
-
-[node name="queue_run" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container/h_box_container"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Run"
-icon = ExtResource("9_j51q3")
-
-[connection signal="button_clicked" from="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container/task_queue" to="panel_container/margin_container/v_box_container/h_box_container/job_queue/margin_container/v_box_container/task_queue" method="_on_button_clicked"]

@@ -18,9 +18,10 @@ const WINDOW_SCENE : PackedScene = preload("res://game/scenes/program_window.tsc
 
 
 var identifier : StringName
-var data : Dictionary
-var program : Program
+var parameters : Dictionary
 var target : String
+
+var program : Program
 var status : int
 
 
@@ -34,12 +35,23 @@ var progress : float :
 	get: return program.get_progress()
 
 
+func get_json_data() -> Dictionary:
+	return {
+		&"identifier":		identifier,
+		&"parameters":		parameters,
+	}
+
+
+func populate_from_json(json: Dictionary) -> void:
+	identifier = json[&"identifier"]
+	parameters = json[&"parameters"]
+	target = parameters.get(&"target", "")
 
 
 func populate_from_program(_program: Program) -> void:
 	program = _program
 	identifier = program.identifier
-	data = program.save_parameters()
+	parameters = program.save_parameters()
 	target = program.target_parameter.value if program.target_parameter else ""
 
 
@@ -66,6 +78,6 @@ func create_window(tree: SceneTree, show: bool = true) -> ProgramWindow:
 	tree.root.add_child.call_deferred(result)
 
 	program = result.program
-	program.load_parameters(data)
+	program.load_parameters(parameters)
 
 	return result

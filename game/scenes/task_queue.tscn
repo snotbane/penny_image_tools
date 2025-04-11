@@ -1,0 +1,88 @@
+[gd_scene load_steps=5 format=3 uid="uid://bl48gnvqb67u0"]
+
+[ext_resource type="Script" uid="uid://c5sj1vas0pq26" path="res://game/scenes/task_queue.gd" id="1_wfa3j"]
+[ext_resource type="Texture2D" uid="uid://bfadqo20te315" path="res://game/icons/Save.svg" id="2_omm64"]
+[ext_resource type="Texture2D" uid="uid://bpy2jo0tc8kww" path="res://game/icons/Load.svg" id="3_5vg48"]
+[ext_resource type="Texture2D" uid="uid://c30c6b2b3hwjc" path="res://game/icons/Play.svg" id="4_tlldc"]
+
+[node name="task_queue" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="panel_container" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="margin_container" type="MarginContainer" parent="panel_container"]
+layout_mode = 2
+
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container"]
+layout_mode = 2
+
+[node name="task_tree" type="Tree" parent="panel_container/margin_container/v_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 0
+columns = 6
+allow_rmb_select = true
+allow_search = false
+hide_folding = true
+hide_root = true
+select_mode = 1
+scroll_horizontal_enabled = false
+script = ExtResource("1_wfa3j")
+
+[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/v_box_container"]
+layout_mode = 2
+
+[node name="queue_save" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save"
+icon = ExtResource("2_omm64")
+
+[node name="queue_load" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Load"
+icon = ExtResource("3_5vg48")
+
+[node name="queue_run" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Run"
+icon = ExtResource("4_tlldc")
+
+[node name="save_dialog" type="FileDialog" parent="."]
+title = "Save Queue"
+initial_position = 4
+access = 2
+use_native_dialog = true
+
+[node name="load_dialog" type="FileDialog" parent="."]
+auto_translate_mode = 1
+title = "Load Queue"
+initial_position = 4
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.json")
+use_native_dialog = true
+
+[connection signal="button_clicked" from="panel_container/margin_container/v_box_container/task_tree" to="panel_container/margin_container/v_box_container/task_tree" method="_on_button_clicked"]
+[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/queue_save" to="save_dialog" method="show"]
+[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/queue_load" to="load_dialog" method="show"]
+[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/queue_run" to="panel_container/margin_container/v_box_container/task_tree" method="start_queue"]
+[connection signal="file_selected" from="save_dialog" to="panel_container/margin_container/v_box_container/task_tree" method="save"]
+[connection signal="file_selected" from="load_dialog" to="panel_container/margin_container/v_box_container/task_tree" method="load"]

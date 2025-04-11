@@ -3,10 +3,29 @@ import configparser
 import sys
 import time
 
+
+def str2bool(value: str) -> bool:
+    if isinstance(value, bool):
+        return value
+    val = value.lower()
+    if val in ('yes', 'true', 't', '1'):
+        return True
+    elif val in ('no', 'false', 'f', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
+
 def bus_get(section: str, key: str):
 	bus.read(bus_path)
 	if not (bus.has_section(section) and bus.has_option(section, key)): return None
-	return bus.get(section, key)
+
+	result = bus.get(section, key)
+	try:
+		b = str2bool(result)
+		return b
+	except:	pass
+	return result
 
 
 def bus_set(section: str, key: str, value):

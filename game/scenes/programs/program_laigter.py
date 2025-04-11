@@ -9,7 +9,8 @@ from PIL import Image
 
 progress_display = 0
 
-def str2bool(value):
+
+def str2bool(value: str) -> bool:
     if isinstance(value, bool):
         return value
     val = value.lower()
@@ -74,7 +75,7 @@ class TargetImage:
 			process = subprocess.Popen(executable=args.laigter_path, args=sub_args, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
 
 			while process.poll() is None:
-				if bus_get("input", "stop") == "true":
+				if bus_get("input", "stop"):
 					sys.exit(2)
 				time.sleep(0.25)
 

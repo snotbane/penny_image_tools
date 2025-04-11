@@ -67,11 +67,34 @@ func _process(delta: float) -> void:
 			refresh_task_progress(task)
 
 
+func save(json_path: String) -> void:
+	var json_file := FileAccess.open(json_path, FileAccess.WRITE)
+	var task_data : Array = []
+	for task in tasks:
+		task_data.push_back(task.get_json_data())
+	json_file.store_string(JSON.stringify(task_data))
+
+
+func load(json_path: String) -> void:
+	tasks.clear()
+	var json_file := FileAccess.open(json_path, FileAccess.READ)
+	var json_data : Array = JSON.parse_string(json_file.get_as_text())
+	for i in json_data:
+		var task := Task.new()
+		task.populate_from_json(i)
+		tasks.push_back(task)
+	refresh_items()
+
+
 func start_queue() -> void:
+	if is_running: return
+	is_running = true
 	started.emit()
 	for task in tasks:
 		await task.run_in_queue(self.get_tree())
+	is_running = false
 	stopped.emit()
+
 
 
 func refresh_items() -> void:
