@@ -20,6 +20,7 @@ const WINDOW_SCENE : PackedScene = preload("res://game/scenes/program_window.tsc
 var identifier : StringName
 var data : Dictionary
 var program : Program
+var target : String
 var status : int
 
 
@@ -32,18 +33,18 @@ var program_task_name : String :
 var progress : float :
 	get: return program.get_progress()
 
-var target : String :
-	get: return program.target_parameter.value if program and program.target_parameter else ""
+
 
 
 func populate_from_program(_program: Program) -> void:
 	program = _program
 	identifier = program.identifier
 	data = program.save_parameters()
+	target = program.target_parameter.value if program.target_parameter else ""
 
 
 func run_manually(tree: SceneTree) -> void:
-	create_window(tree)
+	create_window(tree, Parameter.get_persistent_parameter(&"queue_privacy", 0) > 0)
 	program.start.call_deferred()
 
 

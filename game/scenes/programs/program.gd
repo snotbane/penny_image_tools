@@ -77,6 +77,7 @@ func load_parameters(data: Dictionary) -> void:
 func save_parameters() -> Dictionary:
 	var result : Dictionary = {}
 	for i in parameters_container.get_children():
+		if i is not Parameter: continue
 		result[i.name] = i.value
 	return result
 
