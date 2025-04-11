@@ -10,21 +10,17 @@ enum {
 }
 
 enum {
-	MOVE_UP_BUTTON,
-	MOVE_DOWN_BUTTON,
-	OPEN_BUTTON,
-	EXECUTE_BUTTON,
+	MOVE_UP,
+	MOVE_DOWN,
+	OPEN,
+	EXECUTE,
 }
 
 const MOVE_UP_ICON : Texture2D = preload("res://game/icons/MoveUp.svg")
 const MOVE_DOWN_ICON : Texture2D = preload("res://game/icons/MoveDown.svg")
 const OPEN_ICON : Texture2D = preload("res://game/icons/ExternalLink.svg")
 const REMOVE_ICON : Texture2D = preload("res://game/icons/Remove.svg")
-const START_ICON : Texture2D = preload("res://game/icons/Play.svg")
-const STOP_ICON : Texture2D = preload("res://game/icons/Stop.svg")
-const RESET_ICON : Texture2D = preload("res://game/icons/Reload.svg")
 const STATUS_TEXTS : PackedStringArray = [ "Queued", "Running", "Completed" ]
-
 
 static var inst
 
@@ -34,8 +30,19 @@ signal stop_requested
 signal stopped
 
 
-var is_running : bool
-var running_tasks : Array[Task]
+@export var run_button : Button
+
+
+var _is_running : bool
+var is_running : bool :
+	get: return _is_running
+	set(value):
+		if _is_running == value: return
+		_is_running = value
+
+		run_button.text = "Stop" if _is_running else "Run"
+		run_button.icon = Program.STOP_ICON if _is_running else Program.PLAY_ICON
+
 var root : TreeItem
 var tasks : Array[Task]
 var task_items : Dictionary
@@ -57,14 +64,13 @@ func _ready() -> void:
 	self.set_column_title(PROGRESS, "Progress")
 	self.set_column_title(TARGET, "Target")
 
-
 	refresh_items()
 
 
 func _process(delta: float) -> void:
-	if is_running:
-		for task in running_tasks:
-			refresh_task_progress(task)
+	for task in tasks:
+		if not (task.program and task.program.is_running): continue
+		refresh_task_progress(task)
 
 
 func save(json_path: String) -> void:
@@ -82,8 +88,19 @@ func load(json_path: String) -> void:
 	for i in json_data:
 		var task := Task.new()
 		task.populate_from_json(i)
-		tasks.push_back(task)
+		self.add(task)
 	refresh_items()
+
+
+func clear_all_tasks() -> void:
+	tasks.clear()
+	refresh_items()
+
+
+func reset_completed_tasks() -> void:
+	for task in tasks:
+		if task.status != Task.Status.COMPLETE: continue
+		task.reset()
 
 
 func start_queue() -> void:
@@ -91,10 +108,19 @@ func start_queue() -> void:
 	is_running = true
 	started.emit()
 	for task in tasks:
-		await task.run_in_queue(self.get_tree())
+		if not is_running: break
+		await task.run(self.get_tree(), true)
 	is_running = false
 	stopped.emit()
 
+
+func stop_queue():
+	if not is_running: return
+	is_running = false
+	for task in tasks:
+		if not (task.program and task.program.is_running): continue
+		task.stop(true)
+	stopped.emit()
 
 
 func refresh_items() -> void:
@@ -108,17 +134,43 @@ func refresh_items() -> void:
 func refresh_task_status(task: Task) -> void:
 	var item : TreeItem = task_items[task]
 	item.set_text(STATUS, STATUS_TEXTS[task.status])
-	item.set_button(BUTTONS, EXECUTE_BUTTON, STOP_ICON if task.status == 1 else START_ICON)
+
+	var icon : Texture2D
+	match task.status:
+		1: icon = Program.STOP_ICON
+		2: icon = Program.RESET_ICON
+		_: icon = Program.PLAY_ICON
+	item.set_button(BUTTONS, EXECUTE, icon)
+
+	for i in self.columns:
+		match i:
+			BUTTONS, REMOVE: continue
+		match task.status:
+			2:
+				item.set_custom_color(i, Color.DIM_GRAY)
+				item.clear_custom_bg_color(i)
+			1:
+				item.set_custom_color(i, Color.WHITE)
+				item.set_custom_bg_color(i, Color.SEA_GREEN)
+			_:
+				item.clear_custom_color(i)
+				item.clear_custom_bg_color(i)
+
+	refresh_task_progress(task)
 
 
 func refresh_task_progress(task: Task) -> void:
 	var item : TreeItem = task_items[task]
-	var progress_100 : int
-	match task.status:
-		1: progress_100 = floori(task.progress * 100)
-		2: progress_100 = 100
-		_: progress_100 = 0
-	item.set_text(PROGRESS, "%s%%" % progress_100)
+	if task.status == 0:
+		item.set_text(PROGRESS, "")
+	else:
+		var progress := floori(task.progress * 100.0)
+		item.set_text(PROGRESS, "%s%%" % progress)
+
+
+func refresh_task_target(task: Task) -> void:
+	var item : TreeItem = task_items[task]
+	item.set_text(TARGET, task.target)
 
 
 func find_task(item: TreeItem) -> Task:
@@ -129,27 +181,33 @@ func find_task(item: TreeItem) -> Task:
 func add(task: Task) -> TreeItem:
 	tasks.push_back(task)
 	task.status_changed.connect(refresh_task_status.bind(task))
+	task.parameters_changed.connect(refresh_task_target.bind(task))
 	return add_task_item(task)
 
 func add_task_item(task: Task) -> TreeItem:
 	var result := self.create_item(root)
 	task_items[task] = result
 
-	result.add_button(BUTTONS, MOVE_UP_ICON, MOVE_UP_BUTTON)
-	result.add_button(BUTTONS, MOVE_DOWN_ICON, MOVE_DOWN_BUTTON)
-	result.add_button(BUTTONS, OPEN_ICON, OPEN_BUTTON)
-	result.add_button(BUTTONS, START_ICON, EXECUTE_BUTTON)
+	for i in self.columns:
+		result.set_selectable(i, false)
+
+	result.add_button(BUTTONS, MOVE_UP_ICON, MOVE_UP)
+	result.add_button(BUTTONS, MOVE_DOWN_ICON, MOVE_DOWN)
+	result.add_button(BUTTONS, OPEN_ICON, OPEN)
+	result.add_button(BUTTONS, Program.PLAY_ICON, EXECUTE)
 	result.add_button(REMOVE, REMOVE_ICON)
 
 	result.set_text(PROGRAM, task.program_task_name)
-	result.set_text(TARGET, task.target)
+	refresh_task_target(task)
 	refresh_task_status(task)
-	refresh_task_progress(task)
 
 	return result
 
 
 func remove_task(task: Task) -> void:
+	if task.program:
+		if task.program.is_running: return
+		task.program.on_close_requested()
 	tasks.erase(task)
 	refresh_items()
 func remove_item(item: TreeItem) -> void:
@@ -168,17 +226,36 @@ func reorder_item(item: TreeItem, amount: int) -> void:
 
 
 func open_task(task: Task) -> void:
-	task.create_window(self.get_tree())
+	task.open(self.get_tree())
 func open_item(item: TreeItem) -> void:
 	open_task(find_task(item))
+
+
+func execute_task(task: Task) -> void:
+	match task.status:
+		0:
+			await task.run(self.get_tree())
+			task.program.on_close_requested()
+		1:
+			await task.stop(true)
+			task.program.on_close_requested()
+		2:
+			task.reset()
+func execute_item(item: TreeItem) -> void:
+	execute_task(find_task(item))
 
 
 func _on_button_clicked(item:TreeItem, column:int, id:int, mouse_button_index:int) -> void:
 	match column:
 		BUTTONS:
 			match id:
-				MOVE_UP_BUTTON: reorder_item(item, -1)
-				MOVE_DOWN_BUTTON: reorder_item(item, +1)
-				OPEN_BUTTON: open_item(item)
-				EXECUTE_BUTTON: find_task(item).run_manually(self.get_tree())
+				MOVE_UP: reorder_item(item, -1)
+				MOVE_DOWN: reorder_item(item, +1)
+				OPEN: open_item(item)
+				EXECUTE: execute_item(item)
 		REMOVE: remove_item(item)
+
+
+func _on_queue_run_pressed() -> void:
+	if is_running: stop_queue()
+	else: start_queue()

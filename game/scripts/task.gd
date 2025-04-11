@@ -1,6 +1,14 @@
 class_name Task extends Resource
 
+enum Status {
+	QUEUED,
+	RUNNING,
+	COMPLETE,
+	PAUSED,
+}
+
 signal status_changed
+signal parameters_changed
 
 const PROGRAMS_BY_IDENTIFIER : Dictionary = {
 	&"dummy":		preload("res://game/scenes/programs/program_dummy.tscn"),
@@ -21,8 +29,16 @@ var identifier : StringName
 var parameters : Dictionary
 var target : String
 
+
 var program : Program
-var status : int
+
+var _status : int
+var status : int :
+	get: return _status
+	set(value):
+		if _status == value: return
+		_status = value
+		status_changed.emit()
 
 
 var program_scene : PackedScene :
@@ -31,15 +47,20 @@ var program_scene : PackedScene :
 var program_task_name : String :
 	get: return PROGRAM_TASK_NAMES[identifier]
 
+
 var progress : float :
-	get: return program.get_progress()
+	get: return program.progress_display.progress_percent if program and program.progress_display else -1.0
 
 
 func get_json_data() -> Dictionary:
 	return {
-		&"identifier":		identifier,
-		&"parameters":		parameters,
+		&"identifier":	identifier,
+		&"parameters":	parameters,
 	}
+
+
+func _init(_identifier: StringName = &"program") -> void:
+	identifier = _identifier
 
 
 func populate_from_json(json: Dictionary) -> void:
@@ -51,33 +72,50 @@ func populate_from_json(json: Dictionary) -> void:
 func populate_from_program(_program: Program) -> void:
 	program = _program
 	identifier = program.identifier
+	refresh_parameters()
+
+
+func refresh_parameters() -> void:
 	parameters = program.save_parameters()
 	target = program.target_parameter.value if program.target_parameter else ""
+	parameters_changed.emit()
 
 
-func run_manually(tree: SceneTree) -> void:
-	create_window(tree, Parameter.get_persistent_parameter(&"queue_privacy", 0) > 0)
-	program.start.call_deferred()
+func open(tree: SceneTree, show: bool = true) -> ProgramWindow:
+	if program:
+		if show:
+			program.window.show()
+			program.window.grab_focus()
+		return program.window
+	else:
+		var result : ProgramWindow = WINDOW_SCENE.instantiate()
+		result.hide()
+		result.populate(program_scene, show)
+		result.force_native = true
+		tree.root.add_child.call_deferred(result)
+
+		result.hidden.connect(refresh_parameters)
+
+		program = result.program
+		program.started.connect(set.bind(&"status", Status.RUNNING))
+		program.stopped.connect(set.bind(&"status", Status.COMPLETE))
+		if parameters: program.load_parameters(parameters)
+
+		return result
 
 
-func run_in_queue(tree: SceneTree):
-	create_window(tree, Parameter.get_persistent_parameter(&"queue_privacy", 0) > 0)
+func run(tree: SceneTree, close_after_stopped: bool = false):
+	self.open(tree, Parameter.get_persistent_parameter(&"queue_privacy", 0) > 0)
 	program.start.call_deferred()
 	await program.stopped
+	if close_after_stopped: program.on_close_requested()
 
 
-func stop() -> void:
+func stop(_reset: bool = false):
 	program.stop()
+	await program.stopped
+	if _reset: reset()
 
 
-func create_window(tree: SceneTree, show: bool = true) -> ProgramWindow:
-	var result : ProgramWindow = WINDOW_SCENE.instantiate()
-	result.hide()
-	result.populate(program_scene, show)
-	result.force_native = true
-	tree.root.add_child.call_deferred(result)
-
-	program = result.program
-	program.load_parameters(parameters)
-
-	return result
+func reset() -> void:
+	status = Status.QUEUED

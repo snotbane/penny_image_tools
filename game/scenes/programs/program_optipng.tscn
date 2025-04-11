@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://d37ink161ont1"]
+[gd_scene load_steps=9 format=3 uid="uid://d37ink161ont1"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_qdlne"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_og4v3"]
+[ext_resource type="Texture2D" uid="uid://bp4prpsdyivfw" path="res://game/icons/CompressedTexture2DBig.svg" id="2_yx480"]
 [ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="3_oxj4r"]
 [ext_resource type="PackedScene" uid="uid://dmim1yoep7vyk" path="res://game/scenes/elements/bytes_display.tscn" id="4_06mrk"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="4_ik2mn"]
@@ -20,7 +21,7 @@ func get_progress() -> float:
 		float($panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display.max_value)
 "
 
-[node name="program_optipng" node_paths=PackedStringArray("target_parameter", "elements") instance=ExtResource("1_qdlne")]
+[node name="program_optipng" node_paths=PackedStringArray("target_parameter", "progress_display", "elements") instance=ExtResource("1_qdlne")]
 script = SubResource("GDScript_06mrk")
 print_output = true
 identifier = &"optipng"
@@ -28,7 +29,11 @@ program_name = "OptiPNG Image Compression"
 program_nickname = "OptiPNG"
 python_script_path = "res://game/scenes/programs/program_optipng.py"
 target_parameter = NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/target")
+progress_display = NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")
 elements = [NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/preview_container/image_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/bytes_display"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")]
+
+[node name="background_icon" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/background" index="0"]
+texture = ExtResource("2_yx480")
 
 [node name="optipng_path" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("2_og4v3")]
 layout_mode = 2

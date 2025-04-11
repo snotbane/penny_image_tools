@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://wfssq6mqkmrt"]
+[gd_scene load_steps=5 format=3 uid="uid://wfssq6mqkmrt"]
 
 [ext_resource type="Script" uid="uid://cryk7g02kikmi" path="res://game/scenes/programs/program.gd" id="1_57qps"]
 [ext_resource type="Theme" uid="uid://cjww2dp7ckflf" path="res://game/theme.tres" id="1_evvk3"]
 [ext_resource type="PackedScene" uid="uid://b3l4crsncffoh" path="res://game/scenes/elements/panel_locker.tscn" id="3_b4wpg"]
+[ext_resource type="Texture2D" uid="uid://c30c6b2b3hwjc" path="res://game/icons/Play.svg" id="4_dt6vs"]
 
 [node name="program" type="Control" node_paths=PackedStringArray("parameters_container", "execute_button")]
 layout_mode = 3
@@ -39,6 +40,25 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="background" type="Control" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel"]
+layout_mode = 2
+
+[node name="background_icon" type="TextureRect" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/background"]
+modulate = Color(0, 0, 0, 0.25098)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 5
+
 [node name="scroll_container" type="ScrollContainer" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel"]
 layout_mode = 2
 
@@ -60,9 +80,11 @@ layout_mode = 2
 [node name="start_button" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/h_box_container"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Start"
+text = "Run"
+icon = ExtResource("4_dt6vs")
 
 [node name="queue_button" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/h_box_container"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Queue"

@@ -1,9 +1,35 @@
-[gd_scene load_steps=5 format=3 uid="uid://bl48gnvqb67u0"]
+[gd_scene load_steps=13 format=3 uid="uid://bl48gnvqb67u0"]
 
 [ext_resource type="Script" uid="uid://c5sj1vas0pq26" path="res://game/scenes/task_queue.gd" id="1_wfa3j"]
 [ext_resource type="Texture2D" uid="uid://bfadqo20te315" path="res://game/icons/Save.svg" id="2_omm64"]
 [ext_resource type="Texture2D" uid="uid://bpy2jo0tc8kww" path="res://game/icons/Load.svg" id="3_5vg48"]
 [ext_resource type="Texture2D" uid="uid://c30c6b2b3hwjc" path="res://game/icons/Play.svg" id="4_tlldc"]
+[ext_resource type="Texture2D" uid="uid://clnl6kqjmjjlb" path="res://game/icons/Reload.svg" id="5_5vg48"]
+[ext_resource type="Texture2D" uid="uid://bkws2f7s6bw5x" path="res://game/icons/Remove.svg" id="6_tlldc"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_wfa3j"]
+device = -1
+command_or_control_autoremap = true
+keycode = 83
+
+[sub_resource type="Shortcut" id="Shortcut_omm64"]
+events = [SubResource("InputEventKey_wfa3j")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_5vg48"]
+device = -1
+command_or_control_autoremap = true
+keycode = 79
+
+[sub_resource type="Shortcut" id="Shortcut_tlldc"]
+events = [SubResource("InputEventKey_5vg48")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_omm64"]
+device = -1
+command_or_control_autoremap = true
+keycode = 82
+
+[sub_resource type="Shortcut" id="Shortcut_5vg48"]
+events = [SubResource("InputEventKey_omm64")]
 
 [node name="task_queue" type="Control"]
 layout_mode = 3
@@ -49,30 +75,48 @@ layout_mode = 2
 [node name="queue_save" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container"]
 layout_mode = 2
 size_flags_horizontal = 3
+shortcut = SubResource("Shortcut_omm64")
 text = "Save"
 icon = ExtResource("2_omm64")
 
 [node name="queue_load" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container"]
 layout_mode = 2
 size_flags_horizontal = 3
+shortcut = SubResource("Shortcut_tlldc")
 text = "Load"
 icon = ExtResource("3_5vg48")
 
 [node name="queue_run" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container"]
 layout_mode = 2
 size_flags_horizontal = 3
+shortcut = SubResource("Shortcut_5vg48")
 text = "Run"
 icon = ExtResource("4_tlldc")
+
+[node name="queue_reset_all" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+shortcut = SubResource("Shortcut_5vg48")
+text = "Reload"
+icon = ExtResource("5_5vg48")
+
+[node name="queue_clear_all" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+shortcut = SubResource("Shortcut_5vg48")
+text = "Clear"
+icon = ExtResource("6_tlldc")
 
 [node name="save_dialog" type="FileDialog" parent="."]
 title = "Save Queue"
 initial_position = 4
 access = 2
+filters = PackedStringArray("*.json")
 use_native_dialog = true
 
 [node name="load_dialog" type="FileDialog" parent="."]
 auto_translate_mode = 1
-title = "Load Queue"
+title = "Open a File"
 initial_position = 4
 ok_button_text = "Open"
 file_mode = 0
@@ -80,9 +124,18 @@ access = 2
 filters = PackedStringArray("*.json")
 use_native_dialog = true
 
+[node name="clear_all_confirmation" type="ConfirmationDialog" parent="."]
+initial_position = 1
+size = Vector2i(314, 106)
+dialog_text = "This will delete ALL tasks in the queue.
+You wanna?"
+
 [connection signal="button_clicked" from="panel_container/margin_container/v_box_container/task_tree" to="panel_container/margin_container/v_box_container/task_tree" method="_on_button_clicked"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/queue_save" to="save_dialog" method="show"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/queue_load" to="load_dialog" method="show"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/queue_run" to="panel_container/margin_container/v_box_container/task_tree" method="start_queue"]
+[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/queue_reset_all" to="panel_container/margin_container/v_box_container/task_tree" method="reset_completed_tasks"]
+[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/queue_clear_all" to="clear_all_confirmation" method="show"]
 [connection signal="file_selected" from="save_dialog" to="panel_container/margin_container/v_box_container/task_tree" method="save"]
 [connection signal="file_selected" from="load_dialog" to="panel_container/margin_container/v_box_container/task_tree" method="load"]
+[connection signal="confirmed" from="clear_all_confirmation" to="panel_container/margin_container/v_box_container/task_tree" method="clear_all_tasks"]

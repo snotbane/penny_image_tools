@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://bnsd7innb8evy"]
+[gd_scene load_steps=12 format=3 uid="uid://bnsd7innb8evy"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_vuhxw"]
 [ext_resource type="PackedScene" uid="uid://bsbif7qroffug" path="res://game/scenes/parameter/parameter_string.tscn" id="2_hi4ns"]
+[ext_resource type="Texture2D" uid="uid://cfupnfea6aii8" path="res://game/icons/AtlasTextureBig.svg" id="2_irdv1"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="3_d0uvx"]
 [ext_resource type="PackedScene" uid="uid://1vhcrt3tadog" path="res://game/scenes/parameter/parameter_bool.tscn" id="4_tqatl"]
 [ext_resource type="PackedScene" uid="uid://d0sk7730ilig6" path="res://game/scenes/parameter/parameter_number.tscn" id="5_6t3gx"]
@@ -50,14 +51,18 @@ func thread_stopped() -> void:
 		.update_image(path)
 "
 
-[node name="program_fatlas" node_paths=PackedStringArray("target_parameter", "elements") instance=ExtResource("1_vuhxw")]
+[node name="program_fatlas" node_paths=PackedStringArray("target_parameter", "progress_display", "elements") instance=ExtResource("1_vuhxw")]
 script = SubResource("GDScript_20joi")
 identifier = &"fatlas"
 program_name = "Fatlas Conglomeration Tool"
 program_nickname = "Fatlas"
 python_script_path = "res://game/scenes/programs/program_fatlas.py"
 target_parameter = NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/target")
+progress_display = NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")
 elements = [NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container/source_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")]
+
+[node name="background_icon" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/background" index="0"]
+texture = ExtResource("2_irdv1")
 
 [node name="project_name" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("2_hi4ns")]
 layout_mode = 2

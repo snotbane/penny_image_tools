@@ -1,4 +1,4 @@
-@tool extends Control
+@tool class_name ProgressDisplay extends Control
 
 @export var label_text : String = "Completed" :
 	get: return $progress_bar/margin_container/h_box_container/label.text if self.find_child("label") else ""
@@ -23,6 +23,10 @@ func set_value(val: int) -> void:
 		if not self.is_inside_tree(): return
 		$progress_bar.max_value = value
 		refresh_value_label()
+
+
+var progress_percent : float :
+	get: return float(value) / float(max_value)
 
 
 func refresh_value_label() -> void:

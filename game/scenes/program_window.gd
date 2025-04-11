@@ -1,5 +1,7 @@
 class_name ProgramWindow extends Window
 
+signal hidden
+
 var program : Program
 var show_on_ready : bool
 

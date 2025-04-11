@@ -1,5 +1,9 @@
 class_name Program extends Control
 
+const PLAY_ICON : Texture2D = preload("res://game/icons/Play.svg")
+const STOP_ICON : Texture2D = preload("res://game/icons/Stop.svg")
+const RESET_ICON : Texture2D = preload("res://game/icons/Reload.svg")
+
 static var BUS_DIR : DirAccess
 
 static func _static_init() -> void:
@@ -17,6 +21,7 @@ signal stopped
 @export_file("*.py") var python_script_path : String
 @export var parameters_container : Control
 @export var target_parameter : ParameterString
+@export var progress_display : ProgressDisplay
 @export var elements : Array[Control]
 @export var execute_button : Button
 
@@ -34,7 +39,8 @@ var is_running : bool :
 		if _is_running == value: return
 		_is_running = value
 
-		execute_button.text = "Cancel" if _is_running else "Start"
+		execute_button.text = "Stop" if _is_running else "Run"
+		execute_button.icon = STOP_ICON if _is_running else PLAY_ICON
 
 
 func _ready() -> void:
@@ -94,10 +100,6 @@ func get_python_arguments() -> PackedStringArray:
 	return result
 
 
-func get_progress() -> float:
-	return 0.0
-
-
 func start() -> void:
 	if is_running: return
 	is_running = true
@@ -136,12 +138,17 @@ func python(python_path: String, args: PackedStringArray) -> int:
 
 
 func on_close_requested() -> void:
-	if is_running: $close_confirmation.show()
-	else: self.force_close_window()
+	if window.visible:
+		window.hide()
+		window.hidden.emit()
+	if not is_running:
+		window.queue_free()
+
 
 func force_close_window() -> void:
 	self.stop()
 	window.hide()
+	window.hidden.emit()
 	window.queue_free()
 
 
@@ -173,10 +180,8 @@ static func get_duration_string(msec: int) -> String:
 
 
 func _on_start_button_pressed() -> void:
-	if is_running:
-		stop()
-	else:
-		start()
+	if is_running:	stop()
+	else:			start()
 
 
 static func get_python_path(path: String) -> String:
