@@ -14,6 +14,11 @@ static func get_persistent_parameter(key: StringName, default: Variant = null) -
 	return CONFIG.get_value(SECTION_NAME, key, default)
 
 
+static func set_persistent_parameter(key: StringName, val: Variant) -> void:
+	CONFIG.set_value(SECTION_NAME, key, val)
+	CONFIG.save(CONFIG_PATH)
+
+
 @export var label_text : String :
 	get: return $hbox/label.text if self.find_child("label") else ""
 	set(value):
@@ -53,8 +58,6 @@ var value_as_config_data : Variant :
 
 var value_as_python_argument : String :
 	get:
-		# if argument is bool:
-		# 	return "True" if argument else "False"
 		if value is float and fmod(value, 1.0) == 0.0:
 			return str(int(value))
 		return str(value)
@@ -68,7 +71,6 @@ func _ready() -> void:
 func load_persistent() -> void:
 	if not CONFIG.has_section_key(SECTION_NAME, self.name): save_persistent()
 	var persistent_value = CONFIG.get_value(SECTION_NAME, self.name)
-	prints(self.name, persistent_value)
 	if persistent_value == null: return
 	value = persistent_value
 
@@ -76,7 +78,6 @@ func load_persistent() -> void:
 func save_persistent() -> void:
 	CONFIG.set_value(SECTION_NAME, self.name, self.value_as_config_data)
 	CONFIG.save(CONFIG_PATH)
-	prints(self.name, CONFIG.get_value(SECTION_NAME, self.name))
 
 
 func clear_persistent() -> void:

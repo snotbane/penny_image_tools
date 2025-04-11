@@ -12,12 +12,14 @@ enum {
 enum {
 	MOVE_UP,
 	MOVE_DOWN,
+	COPY,
 	OPEN,
 	EXECUTE,
 }
 
 const MOVE_UP_ICON : Texture2D = preload("res://game/icons/MoveUp.svg")
 const MOVE_DOWN_ICON : Texture2D = preload("res://game/icons/MoveDown.svg")
+const COPY_ICON : Texture2D = preload("res://game/icons/ActionCopy.svg")
 const OPEN_ICON : Texture2D = preload("res://game/icons/ExternalLink.svg")
 const REMOVE_ICON : Texture2D = preload("res://game/icons/Remove.svg")
 const STATUS_TEXTS : PackedStringArray = [ "Queued", "Running", "Completed" ]
@@ -193,6 +195,7 @@ func add_task_item(task: Task) -> TreeItem:
 
 	result.add_button(BUTTONS, MOVE_UP_ICON, MOVE_UP)
 	result.add_button(BUTTONS, MOVE_DOWN_ICON, MOVE_DOWN)
+	result.add_button(BUTTONS, COPY_ICON, COPY)
 	result.add_button(BUTTONS, OPEN_ICON, OPEN)
 	result.add_button(BUTTONS, Program.PLAY_ICON, EXECUTE)
 	result.add_button(REMOVE, REMOVE_ICON)
@@ -225,6 +228,13 @@ func reorder_item(item: TreeItem, amount: int) -> void:
 	reorder_task(find_task(item), amount)
 
 
+func copy_task(task: Task) -> void:
+	var copy := task.duplicate()
+	self.add(copy)
+func copy_item(item: TreeItem) -> void:
+	copy_task(find_task(item))
+
+
 func open_task(task: Task) -> void:
 	task.open(self.get_tree())
 func open_item(item: TreeItem) -> void:
@@ -251,6 +261,7 @@ func _on_button_clicked(item:TreeItem, column:int, id:int, mouse_button_index:in
 			match id:
 				MOVE_UP: reorder_item(item, -1)
 				MOVE_DOWN: reorder_item(item, +1)
+				COPY: copy_item(item)
 				OPEN: open_item(item)
 				EXECUTE: execute_item(item)
 		REMOVE: remove_item(item)

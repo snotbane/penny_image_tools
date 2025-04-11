@@ -98,6 +98,7 @@ label_text = "Python Path"
 persistent = true
 
 [node name="max_concurrent_programs" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("5_ejk4j")]
+visible = false
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 tooltip_text = "How many programs in the queue can be run concurrently.
@@ -115,6 +116,14 @@ Show All: Show everything, including new windows."
 options = PackedStringArray("Run in Background", "Hide Results", "Show All")
 _value = 0
 label_text = "Queue Visibility"
+persistent = true
+
+[node name="ui_scale" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("5_ejk4j")]
+visible = false
+layout_mode = 2
+max_value = 8.0
+_value = 3.0
+label_text = "UI Scale"
 persistent = true
 
 [node name="programs_list" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container"]
@@ -140,57 +149,25 @@ alignment = 1
 visible = false
 layout_mode = 2
 text = "Dummy"
+icon_alignment = 0
 
 [node name="optipng" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
 layout_mode = 2
 text = "OptiPNG Image Compression"
-
-[node name="texture_rect" type="TextureRect" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container/optipng"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 8.0
-offset_top = -8.0
-offset_right = 24.0
-offset_bottom = 8.0
-grow_vertical = 2
-texture = ExtResource("6_3v7cf")
-stretch_mode = 4
+icon = ExtResource("6_3v7cf")
+icon_alignment = 0
 
 [node name="laigter" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
 layout_mode = 2
 text = "Laigter Normal Generation"
-
-[node name="texture_rect" type="TextureRect" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container/laigter"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 8.0
-offset_top = -8.0
-offset_right = 24.0
-offset_bottom = 8.0
-grow_vertical = 2
-texture = ExtResource("7_r75lq")
-stretch_mode = 4
+icon = ExtResource("7_r75lq")
+icon_alignment = 0
 
 [node name="fatlas" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
 layout_mode = 2
 text = "Fatlas Sprite Packer"
-
-[node name="texture_rect" type="TextureRect" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container/fatlas"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 8.0
-offset_top = -8.0
-offset_right = 24.0
-offset_bottom = 8.0
-grow_vertical = 2
-texture = ExtResource("8_cxktm")
-stretch_mode = 4
+icon = ExtResource("8_cxktm")
+icon_alignment = 0
 
 [node name="queue_controls" type="GridContainer" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container"]
 layout_mode = 2
@@ -203,7 +180,6 @@ tooltip_text = "Loads a queue from a file."
 shortcut = SubResource("Shortcut_tlldc")
 text = "Load"
 icon = ExtResource("8_shkmv")
-icon_alignment = 2
 
 [node name="queue_reset_all" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
 layout_mode = 2
@@ -212,7 +188,6 @@ tooltip_text = "Reload all completed tasks so they can be run again."
 shortcut = SubResource("Shortcut_5vg48")
 text = "Reload"
 icon = ExtResource("10_j51q3")
-icon_alignment = 2
 
 [node name="queue_run" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
 layout_mode = 2
@@ -221,7 +196,6 @@ tooltip_text = "Run all tasks in the queue."
 shortcut = SubResource("Shortcut_5vg48")
 text = "Run"
 icon = ExtResource("9_j51q3")
-icon_alignment = 2
 
 [node name="queue_clear_all" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
 layout_mode = 2
@@ -230,7 +204,6 @@ tooltip_text = "Clear all tasks in the queue."
 shortcut = SubResource("Shortcut_5vg48")
 text = "Clear"
 icon = ExtResource("11_6mtf4")
-icon_alignment = 2
 
 [node name="queue_save" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
 layout_mode = 2
@@ -239,7 +212,6 @@ tooltip_text = "Saves the current queue to a JSON file."
 shortcut = SubResource("Shortcut_omm64")
 text = "Save"
 icon = ExtResource("7_rmvmd")
-icon_alignment = 2
 
 [node name="space" type="Control" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
 layout_mode = 2
@@ -248,13 +220,16 @@ layout_mode = 2
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_3v7cf")
 
-[node name="rich_text_label" type="RichTextLabel" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel"]
+[node name="margin_container" type="MarginContainer" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 0
+
+[node name="rich_text_label" type="RichTextLabel" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel/margin_container"]
 layout_mode = 2
 bbcode_enabled = true
 text = "[center][b]PENNYTHON TASK RUNNER[/b] v25.04.11
-
-Created by [url=https://snotbane.carrd.co]@snotbane[/url]
-View this [url=https://github.com/snotbane/penny_image_tools]GitHub repository[/url] 
+Created by [url=https://snotbane.carrd.co][hint=https://snotbane.carrd.co]@snotbane[/hint][/url]
+View this [url=https://github.com/snotbane/penny_image_tools][hint=https://github.com/snotbane/penny_image_tools]GitHub repository[/hint][/url] 
 "
 fit_content = true
 script = SubResource("GDScript_3v7cf")
@@ -318,7 +293,7 @@ You wanna?"
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_run" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="_on_queue_run_pressed"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_clear_all" to="clear_all_confirmation" method="show"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_save" to="save_dialog" method="show"]
-[connection signal="meta_clicked" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel/rich_text_label" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel/rich_text_label" method="_on_meta_clicked"]
+[connection signal="meta_clicked" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel/margin_container/rich_text_label" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel/margin_container/rich_text_label" method="_on_meta_clicked"]
 [connection signal="button_clicked" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="_on_button_clicked"]
 [connection signal="started" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_load" method="set_disabled" binds= [true]]
 [connection signal="started" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_clear_all" method="set_disabled" binds= [true]]

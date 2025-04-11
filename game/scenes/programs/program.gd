@@ -92,11 +92,9 @@ func get_python_arguments() -> PackedStringArray:
 	var result : PackedStringArray
 	result.push_back(get_python_path(python_script_path))
 	result.push_back(ProjectSettings.globalize_path(bus_path))
-	print("Arguments:")
 	for i in parameters_container.get_children():
 		if i is not Parameter: continue
 		result.push_back(i.value_as_python_argument)
-		print("%s : '%s'" % [i.name, i.value_as_python_argument])
 	return result
 
 
@@ -163,7 +161,7 @@ func _refresh_elements() -> void:
 
 
 func refresh_window_title() -> void:
-	window.title = "PIT — %s" % self.program_name
+	window.title = "PTR — %s" % self.program_name
 	if thread and thread.is_alive():
 		window.title += " — %s" % get_duration_string(Time.get_ticks_msec() - time_started)
 

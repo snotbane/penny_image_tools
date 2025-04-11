@@ -1,14 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://ce3bly82xcqc2"]
+[gd_scene load_steps=4 format=3 uid="uid://ce3bly82xcqc2"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_hcuvc"]
+[ext_resource type="PackedScene" uid="uid://d0sk7730ilig6" path="res://game/scenes/parameter/parameter_number.tscn" id="2_mbje0"]
+[ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="3_diyjn"]
 
-[node name="program_dummy" instance=ExtResource("1_hcuvc")]
+[node name="program_dummy" node_paths=PackedStringArray("progress_display") instance=ExtResource("1_hcuvc")]
 identifier = &"dummy"
 program_name = "Dummy Program"
 program_nickname = "Dummy"
+python_script_path = "res://game/scenes/programs/program_dummy.py"
+progress_display = NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/progress_display")
 
-[node name="label" type="Label" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0"]
+[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("2_mbje0")]
 layout_mode = 2
-text = "This is a dummy program. It will not stop running until it is canceled."
-horizontal_alignment = 1
-autowrap_mode = 3
+min_value = 1.0
+max_value = 1000.0
+_value = 5.0
+label_text = "Target Time"
+
+[node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0" instance=ExtResource("3_diyjn")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 8

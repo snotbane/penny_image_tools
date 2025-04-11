@@ -60,6 +60,8 @@ layout_mode = 1
 [node name="bytes_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" node_paths=PackedStringArray("program") instance=ExtResource("4_06mrk")]
 layout_mode = 2
 program = NodePath("../../../../../../..")
+label_text = "Bytes reduced"
 
 [node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="2" instance=ExtResource("4_ik2mn")]
 layout_mode = 2
+label_text = "Files completed"

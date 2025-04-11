@@ -25,10 +25,9 @@ const PROGRAM_TASK_NAMES : Dictionary = {
 const WINDOW_SCENE : PackedScene = preload("res://game/scenes/program_window.tscn")
 
 
-var identifier : StringName
-var parameters : Dictionary
-var target : String
-
+@export var identifier : StringName
+@export var parameters : Dictionary
+@export var target : String
 
 var program : Program
 

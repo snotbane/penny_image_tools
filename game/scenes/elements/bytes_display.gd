@@ -3,10 +3,11 @@
 @export var program : Program
 
 @export var label_text : String = "Bytes" :
-	get: return $label.text if $label else ""
+	get: return $label.text if find_child("label") else ""
 	set(value):
-		if not self.is_inside_tree(): return
+		if not find_child("label"): return
 		$label.text = value
+
 
 var _value : int
 @export var value : int :
