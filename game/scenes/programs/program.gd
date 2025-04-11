@@ -62,7 +62,10 @@ func _exit_tree() -> void:
 
 
 func add_to_queue() -> void:
-	pass
+	var task := Task.new()
+	task.populate_from_program(self)
+	TaskQueue.inst.add(task)
+	on_close_requested()
 
 
 func load_parameters(data: Dictionary) -> void:

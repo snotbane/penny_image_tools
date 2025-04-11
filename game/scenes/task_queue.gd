@@ -1,12 +1,7 @@
 @tool class_name TaskQueue extends Tree
 
 enum {
-	# MOVE_UP,
-	# MOVE_DOWN,
-	# OPEN,
-	# EXECUTE,
 	BUTTONS,
-	# ID,
 	PROGRAM,
 	STATUS,
 	PROGRESS,
@@ -31,6 +26,9 @@ const RESET_ICON : Texture2D = preload("res://game/icons/Reload.svg")
 const STATUS_TEXTS : PackedStringArray = [ "Queued", "Running", "Completed" ]
 
 
+static var inst
+
+
 signal started
 signal stop_requested
 signal stopped
@@ -45,17 +43,14 @@ var buttons : Dictionary
 
 
 func _ready() -> void:
+	inst = self
+
 	for i in self.columns:
 		self.set_column_title_alignment(i, HORIZONTAL_ALIGNMENT_LEFT)
 
-	# self.set_column_expand(MOVE_UP, false)
-	# self.set_column_expand(MOVE_DOWN, false)
-	# self.set_column_expand(OPEN, false)
-	# self.set_column_expand(EXECUTE, false)
 	self.set_column_expand(BUTTONS, false)
 	self.set_column_expand(REMOVE, false)
 	self.set_column_expand_ratio(TARGET, 6)
-	# self.set_column_expand_ratio(PROGRESS, 3)
 
 	self.set_column_title(PROGRAM, "Program")
 	self.set_column_title(STATUS, "Status")
@@ -64,10 +59,6 @@ func _ready() -> void:
 
 
 	refresh_items()
-
-	add(Task.new(&"optipng"))
-	add(Task.new(&"laigter"))
-	add(Task.new(&"fatlas"))
 
 
 func _process(delta: float) -> void:

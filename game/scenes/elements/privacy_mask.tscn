@@ -7,7 +7,7 @@
 script/source = "extends Button
 
 func _ready() -> void:
-	self.button_pressed = Parameter.get_persistent_parameter(&\"queue_privacy\") <= 1
+	self.button_pressed = Parameter.get_persistent_parameter(&\"queue_privacy\") == 1
 "
 
 [node name="privacy_mask" type="Control"]

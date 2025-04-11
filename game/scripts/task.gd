@@ -36,9 +36,10 @@ var target : String :
 	get: return program.target_parameter.value if program and program.target_parameter else ""
 
 
-func _init(_identifier: StringName, _data: Dictionary = {}) -> void:
-	identifier = _identifier
-	data = _data
+func populate_from_program(_program: Program) -> void:
+	program = _program
+	identifier = program.identifier
+	data = program.save_parameters()
 
 
 func run_manually(tree: SceneTree) -> void:
@@ -64,5 +65,6 @@ func create_window(tree: SceneTree, show: bool = true) -> ProgramWindow:
 	tree.root.add_child.call_deferred(result)
 
 	program = result.program
+	program.load_parameters(data)
 
 	return result

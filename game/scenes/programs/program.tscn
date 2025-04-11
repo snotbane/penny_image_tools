@@ -82,6 +82,9 @@ dialog_text = "This program is still running. Exiting now will terminate it.
 You wanna?"
 
 [connection signal="started" from="." to="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker" method="set_visible" binds= [true]]
+[connection signal="started" from="." to="panel_container/margin_container/h_split_container/v_box_container/h_box_container/queue_button" method="set_disabled" binds= [true]]
 [connection signal="stopped" from="." to="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker" method="set_visible" binds= [false]]
+[connection signal="stopped" from="." to="panel_container/margin_container/h_split_container/v_box_container/h_box_container/queue_button" method="set_disabled" binds= [false]]
 [connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/h_box_container/start_button" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/h_box_container/queue_button" to="." method="add_to_queue"]
 [connection signal="confirmed" from="close_confirmation" to="." method="force_close_window"]
