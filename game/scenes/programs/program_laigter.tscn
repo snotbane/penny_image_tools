@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_01eyl"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_xvs5m"]
 [ext_resource type="Texture2D" uid="uid://dhuqncbf6v2ui" path="res://game/icons/ImageTexture3DBig.svg" id="2_yqikp"]
-[ext_resource type="PackedScene" uid="uid://bsbif7qroffug" path="res://game/scenes/parameter/parameter_string.tscn" id="3_vi1c7"]
 [ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="4_0j3eq"]
+[ext_resource type="PackedScene" uid="uid://b0agby5b750h6" path="res://game/scenes/parameter/parameter_regex.tscn" id="4_yqikp"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="5_ijscp"]
 [ext_resource type="PackedScene" uid="uid://xx07uwu4xf5i" path="res://game/scenes/elements/privacy_mask.tscn" id="5_yqikp"]
 
@@ -34,33 +34,45 @@ elements = [NodePath("panel_container/margin_container/h_split_container/right_p
 [node name="background_icon" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/background" index="0"]
 texture = ExtResource("2_yqikp")
 
-[node name="laigter_path" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("2_xvs5m")]
+[node name="laigter_path" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" node_paths=PackedStringArray("program") instance=ExtResource("2_xvs5m")]
 layout_mode = 2
 file_mode = 0
+allow_empty = false
 label_text = "Laigter Path"
+program = NodePath("../../../../../../../../..")
 persistent = true
 
-[node name="laigter_preset" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" instance=ExtResource("2_xvs5m")]
+[node name="laigter_preset" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" node_paths=PackedStringArray("program") instance=ExtResource("2_xvs5m")]
 layout_mode = 2
+allow_empty = false
 label_text = "Preset Path"
+program = NodePath("../../../../../../../../..")
 persistent = true
 
-[node name="laigter_filter" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2" instance=ExtResource("3_vi1c7")]
+[node name="laigter_filter" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2" node_paths=PackedStringArray("program") instance=ExtResource("4_yqikp")]
 layout_mode = 2
+tooltip_text = "Files with names that match this regex filter will be processed."
 _value = ".+(?<!_n)\\.png$"
+allow_empty = false
 label_text = "Inclusion Filter"
+normal_tooltip = "Files with names that match this regex filter will be processed."
+program = NodePath("../../../../../../../../..")
 persistent = true
 
 [node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3"]
 layout_mode = 2
 
-[node name="source" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" instance=ExtResource("2_xvs5m")]
+[node name="source" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" node_paths=PackedStringArray("program") instance=ExtResource("2_xvs5m")]
 layout_mode = 2
+allow_empty = false
 label_text = "Source Path"
+program = NodePath("../../../../../../../../..")
 
-[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" instance=ExtResource("2_xvs5m")]
+[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" node_paths=PackedStringArray("program") instance=ExtResource("2_xvs5m")]
 layout_mode = 2
+allow_empty = false
 label_text = "Target Path"
+program = NodePath("../../../../../../../../..")
 
 [node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0"]
 layout_mode = 2

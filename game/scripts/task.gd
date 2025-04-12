@@ -89,8 +89,8 @@ func open(tree: SceneTree, show: bool = true) -> ProgramWindow:
 	else:
 		var result : ProgramWindow = WINDOW_SCENE.instantiate()
 		result.hide()
+		# result.force_native = true
 		result.populate(program_scene, show)
-		result.force_native = true
 		tree.root.add_child.call_deferred(result)
 
 		result.hidden.connect(refresh_parameters)
@@ -104,7 +104,7 @@ func open(tree: SceneTree, show: bool = true) -> ProgramWindow:
 
 
 func run(tree: SceneTree, close_after_stopped: bool = false):
-	self.open(tree, Parameter.get_persistent_parameter(&"queue_privacy", 0) > 0)
+	self.open(tree, Parameter.get_persistent_parameter(&"all", &"queue_privacy", 0) > 0)
 	program.start.call_deferred()
 	await program.stopped
 	if close_after_stopped: program.on_close_requested()

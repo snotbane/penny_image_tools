@@ -1,28 +1,61 @@
-[gd_scene load_steps=4 format=3 uid="uid://dc1jeh7ogl2x8"]
+[gd_scene load_steps=7 format=3 uid="uid://dc1jeh7ogl2x8"]
 
 [ext_resource type="Script" uid="uid://j3koq36e68tg" path="res://game/scenes/parameter/parameter.gd" id="1_wa0kh"]
 [ext_resource type="FontFile" uid="uid://847p2h26v2lb" path="res://game/fonts/Inter_18pt-Medium.ttf" id="2_0wmf6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0wmf6"]
+content_margin_left = 4.0
+content_margin_right = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wmf6"]
+content_margin_left = 4.0
+content_margin_right = 4.0
+bg_color = Color(1, 0, 0.166667, 0.501961)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pk3pc"]
+bg_color = Color(0.34, 0.505, 1, 1)
+corner_radius_top_left = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="LabelSettings" id="LabelSettings_wa0kh"]
 font = ExtResource("2_0wmf6")
 font_size = 20
 
-[node name="parameter" type="Control"]
+[node name="parameter" type="PanelContainer"]
 custom_minimum_size = Vector2(0, 32)
-layout_mode = 3
 anchors_preset = 10
 anchor_right = 1.0
+offset_bottom = 32.0
 grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0wmf6")
 script = ExtResource("1_wa0kh")
 label_text = "Parameter"
+ok_style_box = SubResource("StyleBoxEmpty_0wmf6")
+error_style_box = SubResource("StyleBoxFlat_0wmf6")
+
+[node name="persistent_nub" type="Control" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="panel" type="Panel" parent="persistent_nub"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+offset_left = -12.0
+offset_right = -8.0
+offset_bottom = 32.0
+size_flags_horizontal = 0
+tooltip_text = "This parameter is persistent.
+It will remain the same between windows, sessions.
+However, tasks will each store this value."
+theme_override_styles/panel = SubResource("StyleBoxFlat_pk3pc")
 
 [node name="hbox" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 
 [node name="label" type="Label" parent="hbox"]
 custom_minimum_size = Vector2(180, 0)

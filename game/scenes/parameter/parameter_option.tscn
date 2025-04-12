@@ -6,9 +6,8 @@
 [node name="parameter_option" instance=ExtResource("1_co3il")]
 script = ExtResource("2_p0nls")
 options = PackedStringArray()
-value = -1
+_value = -1
 label_text = "Option Parameter"
-persistent = false
 
 [node name="label" parent="hbox" index="0"]
 text = "Option Parameter"

@@ -5,16 +5,14 @@
 [ext_resource type="Texture2D" uid="uid://d223be0pkxgy2" path="res://game/icons/FileBrowse.svg" id="3_e22mt"]
 
 [node name="parameter_filepath" instance=ExtResource("1_6hdmo")]
+offset_bottom = 0.0
 script = ExtResource("2_kh3ra")
 file_mode = 3
 access = 2
-label_text = "Filepath Parameter"
+label_text = "Filepath"
 
 [node name="label" parent="hbox" index="0"]
-text = "Filepath Parameter"
-
-[node name="line_edit" parent="hbox" index="1"]
-clear_button_enabled = false
+text = "Filepath"
 
 [node name="button" type="Button" parent="hbox" index="2"]
 custom_minimum_size = Vector2(30, 30)
@@ -29,8 +27,6 @@ file_mode = 3
 access = 2
 use_native_dialog = true
 
-[connection signal="pressed" from="hbox/button" to="file_dialog" method="popup_centered_ratio" binds= [0.8]]
+[connection signal="pressed" from="hbox/button" to="file_dialog" method="show"]
 [connection signal="dir_selected" from="file_dialog" to="." method="set_value"]
-[connection signal="dir_selected" from="file_dialog" to="hbox/line_edit" method="set_text"]
 [connection signal="file_selected" from="file_dialog" to="." method="set_value"]
-[connection signal="file_selected" from="file_dialog" to="hbox/line_edit" method="set_text"]

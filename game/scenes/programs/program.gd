@@ -108,7 +108,7 @@ func start() -> void:
 	bus.save(bus_path)
 
 	started.emit()
-	thread.start(python.bind(Parameter.get_persistent_parameter(&"python_path"), get_python_arguments()))
+	thread.start(python.bind(Parameter.get_persistent_parameter(&"all", &"python_path"), get_python_arguments()))
 
 
 func stop() -> void:
@@ -141,6 +141,7 @@ func on_close_requested() -> void:
 		window.hidden.emit()
 	if not is_running:
 		window.queue_free()
+	self.get_tree().root.grab_focus()
 
 
 func force_close_window() -> void:
@@ -148,6 +149,7 @@ func force_close_window() -> void:
 	window.hide()
 	window.hidden.emit()
 	window.queue_free()
+	self.get_tree().root.grab_focus()
 
 
 func refresh_elements() -> void:

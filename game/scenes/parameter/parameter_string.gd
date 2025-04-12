@@ -5,3 +5,10 @@
 	set(val):
 		if not self.find_child("line_edit"): return
 		$hbox/line_edit.text = val
+
+@export var allow_empty : bool = false
+
+
+func _get_validation() -> String:
+	if allow_empty or value != "": return ""
+	return "String cannot be empty."

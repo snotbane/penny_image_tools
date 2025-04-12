@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0agby5b750h6"]
+
+[ext_resource type="PackedScene" uid="uid://bsbif7qroffug" path="res://game/scenes/parameter/parameter_string.tscn" id="1_eyni0"]
+[ext_resource type="Script" uid="uid://4jm016ktaxni" path="res://game/scenes/parameter/parameter_regex.gd" id="2_2sndg"]
+
+[node name="parameter_regex" instance=ExtResource("1_eyni0")]
+script = ExtResource("2_2sndg")
+_value = ".*"
+allow_empty = null
+label_text = "RegEx"
+
+[node name="label" parent="hbox" index="0"]
+custom_minimum_size = Vector2(180, 0)
+size_flags_horizontal = 1
+tooltip_text = ""
+text = "RegEx"
+
+[node name="line_edit" parent="hbox" index="1"]
+text = ".*"

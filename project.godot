@@ -12,8 +12,10 @@ config_version=5
 
 config/name="Pennython Task Runner"
 run/main_scene="uid://coxdxohawk630"
+config/auto_accept_quit=false
+config/quit_on_go_back=false
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="uid://dyaix4dk4jnjg"
 
 [autoload]
 

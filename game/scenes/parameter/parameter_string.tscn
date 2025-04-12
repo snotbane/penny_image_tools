@@ -6,11 +6,10 @@
 [node name="parameter_string" instance=ExtResource("1_ihlqs")]
 script = ExtResource("2_b31fq")
 _value = ""
-label_text = "String Parameter"
+label_text = "String"
 
 [node name="label" parent="hbox" index="0"]
-custom_minimum_size = Vector2(160, 0)
-text = "String Parameter"
+text = "String"
 
 [node name="line_edit" type="LineEdit" parent="hbox" index="1"]
 layout_mode = 2
@@ -18,4 +17,4 @@ size_flags_horizontal = 3
 alignment = 1
 clear_button_enabled = true
 
-[connection signal="text_changed" from="hbox/line_edit" to="." method="set_value"]
+[connection signal="text_changed" from="hbox/line_edit" to="." method="validate" unbinds=1]

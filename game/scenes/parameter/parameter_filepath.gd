@@ -13,5 +13,7 @@
 		$file_dialog.access = value
 
 
-func get_is_valid() -> bool:
-	return DirAccess.dir_exists_absolute(value)
+func _get_validation() -> String:
+	var super_result := super._get_validation()
+	if super_result != "": return super_result
+	return "" if FileAccess.file_exists(value) else "Filepath does not exist."
