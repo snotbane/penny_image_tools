@@ -38,19 +38,22 @@ texture = ExtResource("2_yx480")
 [node name="optipng_path" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" node_paths=PackedStringArray("program") instance=ExtResource("2_og4v3")]
 layout_mode = 2
 tooltip_text = "Path to OptiPNG. Make sure it's installed!"
-allow_empty = false
 label_text = "OptiPNG Path"
 normal_tooltip = "Path to OptiPNG. Make sure it's installed!"
 program = NodePath("../../../../../../../../..")
-persistent = true
+persist = true
+persist_disabled = true
 
-[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" node_paths=PackedStringArray("program") instance=ExtResource("2_og4v3")]
+[node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1"]
+layout_mode = 2
+
+[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2" node_paths=PackedStringArray("program") instance=ExtResource("2_og4v3")]
 layout_mode = 2
 tooltip_text = "The target file or folder to be optimized. All files will be overwritten, but no data will be lost."
-allow_empty = false
 label_text = "Target"
 normal_tooltip = "The target file or folder to be optimized. All files will be overwritten, but no data will be lost."
 program = NodePath("../../../../../../../../..")
+persist_disabled = true
 
 [node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0"]
 layout_mode = 2

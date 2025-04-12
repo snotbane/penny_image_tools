@@ -5,17 +5,17 @@
 
 [node name="parameter_bool" instance=ExtResource("1_5x1vy")]
 script = ExtResource("2_wqpyk")
-value = false
+_value = false
 label_text = "Boolean Parameter"
 
-[node name="label" parent="hbox" index="0"]
+[node name="label" parent="hbox" index="1"]
 text = "Boolean Parameter"
 
-[node name="space" type="Control" parent="hbox" index="1"]
+[node name="space" type="Control" parent="hbox" index="2"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="check_box" type="CheckBox" parent="hbox" index="2"]
+[node name="check_box" type="CheckBox" parent="hbox" index="3"]
 layout_mode = 2
 
 [connection signal="toggled" from="hbox/check_box" to="." method="set_value"]

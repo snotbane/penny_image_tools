@@ -76,6 +76,7 @@ func add_to_queue() -> void:
 
 func load_parameters(data: Dictionary) -> void:
 	for i in parameters_container.get_children():
+		if i is not Parameter: continue
 		if not data.has(i.name): continue
 		i.value = data[i.name]
 
@@ -84,6 +85,7 @@ func save_parameters() -> Dictionary:
 	var result : Dictionary = {}
 	for i in parameters_container.get_children():
 		if i is not Parameter: continue
+		# if i.persist: continue
 		result[i.name] = i.value
 	return result
 

@@ -46,6 +46,11 @@ def main():
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("bus_path", type=str, help="Path to the data bus associated with this program instance.")
+	parser.add_argument("source", type=str, help="All files in this folder will have normal created.")
+	parser.add_argument("target", type=str, help="Destination for normal images.")
+	args = parser.parse_args()
+	parser.add_argument("island_size", type=int, help="Islands with an area smaller than this will be discarded.")
+	parser.add_argument("island_opacity", type=int, help="Pixels with an opacity above this threshold will be considered part of a contiguous island.")
 	args = parser.parse_args()
 
 	bus_path = args.bus_path

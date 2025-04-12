@@ -101,7 +101,11 @@ func open(tree: SceneTree, show: bool = true) -> ProgramWindow:
 		program.started.connect(set.bind(&"status", Status.RUNNING))
 		program.succeeded.connect(set.bind(&"status", Status.COMPLETE))
 		program.failed.connect(set.bind(&"status", Status.FAILED))
-		if parameters: program.load_parameters(parameters)
+		if parameters:
+			if Parameter.get_persistent_parameter(&"all", &"persist_overrides_task", true):
+				program.load_parameters(parameters)
+			else:
+				program.load_parameters.call_deferred(parameters)
 
 		return result
 

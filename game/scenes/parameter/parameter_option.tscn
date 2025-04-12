@@ -8,15 +8,16 @@ script = ExtResource("2_p0nls")
 options = PackedStringArray()
 _value = -1
 label_text = "Option Parameter"
+persistent_locked = false
 
-[node name="label" parent="hbox" index="0"]
+[node name="label" parent="hbox" index="1"]
 text = "Option Parameter"
 
-[node name="control" type="Control" parent="hbox" index="1"]
+[node name="space" type="Control" parent="hbox" index="2"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="option_button" type="OptionButton" parent="hbox" index="2"]
+[node name="option_button" type="OptionButton" parent="hbox" index="3"]
 layout_mode = 2
 
 [connection signal="item_selected" from="hbox/option_button" to="." method="set_value"]

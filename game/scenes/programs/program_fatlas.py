@@ -490,15 +490,12 @@ if __name__ == "__main__":
 	parser.add_argument("project_name", type=str, help="Target template path for each atlas.")
 	parser.add_argument("source", type=str, help="Source folder to compile images from.")
 	parser.add_argument("target", type=str, help="Target folder to export atlases to.")
-	parser.add_argument("image_size_limit", type=int, help="The max pixel dimensions a target image can be. If an island cannot be placed within one image, a new one will be created. Use to limit the size of target images.")
-	parser.add_argument("image_format", type=str, help="Image format.")
 	parser.add_argument("filter_include", type=str, help="Only file paths that match this regex will be included (considers extensions)." )
 	parser.add_argument("filter_separate", type=str, help="File names (not including extension) that match this regex will be separated into different images.")
 	parser.add_argument("filter_composite", type=str)
-	parser.add_argument("island_crop", type=str2bool)
+	parser.add_argument("image_format", type=str, help="Image format.")
+	parser.add_argument("image_size_limit", type=int, help="The max pixel dimensions a target image can be. If an island cannot be placed within one image, a new one will be created. Use to limit the size of target images.")
 	parser.add_argument("island_margin", type=int, help="Islands above this threshold will have their regions expanded by this margin to include any surrounding pixels.")
-	parser.add_argument("island_size", type=int, help="Islands with an area smaller than this will be discarded.")
-	parser.add_argument("island_opacity", type=int, help="Pixels with an opacity above this threshold will be considered part of a contiguous island.")
 	args = parser.parse_args()
 
 	bus_path = args.bus_path
