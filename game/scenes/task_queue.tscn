@@ -136,6 +136,6 @@ You wanna?"
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/queue_run" to="panel_container/margin_container/v_box_container/task_tree" method="start_queue"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/queue_reset_all" to="panel_container/margin_container/v_box_container/task_tree" method="reset_completed_tasks"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/queue_clear_all" to="clear_all_confirmation" method="show"]
-[connection signal="file_selected" from="save_dialog" to="panel_container/margin_container/v_box_container/task_tree" method="save"]
-[connection signal="file_selected" from="load_dialog" to="panel_container/margin_container/v_box_container/task_tree" method="load"]
+[connection signal="file_selected" from="save_dialog" to="panel_container/margin_container/v_box_container/task_tree" method="save_json"]
+[connection signal="file_selected" from="load_dialog" to="panel_container/margin_container/v_box_container/task_tree" method="load_json"]
 [connection signal="confirmed" from="clear_all_confirmation" to="panel_container/margin_container/v_box_container/task_tree" method="clear_all_tasks"]

@@ -4,7 +4,7 @@ enum Status {
 	QUEUED,
 	RUNNING,
 	COMPLETE,
-	PAUSED,
+	FAILED,
 }
 
 signal status_changed
@@ -97,7 +97,8 @@ func open(tree: SceneTree, show: bool = true) -> ProgramWindow:
 
 		program = result.program
 		program.started.connect(set.bind(&"status", Status.RUNNING))
-		program.stopped.connect(set.bind(&"status", Status.COMPLETE))
+		program.succeeded.connect(set.bind(&"status", Status.COMPLETE))
+		program.failed.connect(set.bind(&"status", Status.FAILED))
 		if parameters: program.load_parameters(parameters)
 
 		return result

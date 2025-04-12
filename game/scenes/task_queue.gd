@@ -17,12 +17,13 @@ enum {
 	EXECUTE,
 }
 
+const TEMP_JSON_PATH : String = "user://temp_queue.json"
 const MOVE_UP_ICON : Texture2D = preload("res://game/icons/MoveUp.svg")
 const MOVE_DOWN_ICON : Texture2D = preload("res://game/icons/MoveDown.svg")
 const COPY_ICON : Texture2D = preload("res://game/icons/ActionCopy.svg")
 const OPEN_ICON : Texture2D = preload("res://game/icons/ExternalLink.svg")
 const REMOVE_ICON : Texture2D = preload("res://game/icons/Remove.svg")
-const STATUS_TEXTS : PackedStringArray = [ "Queued", "Running", "Completed" ]
+const STATUS_TEXTS : PackedStringArray = [ "Queued", "Running", "Completed", "Failed" ]
 
 static var inst
 
@@ -75,17 +76,25 @@ func _process(delta: float) -> void:
 		refresh_task_progress(task)
 
 
-func save(json_path: String) -> void:
-	var json_file := FileAccess.open(json_path, FileAccess.WRITE)
+func _enter_tree() -> void:
+	load_json()
+
+func _exit_tree() -> void:
+	save_json()
+
+
+func save_json(path: String = TEMP_JSON_PATH) -> void:
+	var json_file := FileAccess.open(path, FileAccess.WRITE)
 	var task_data : Array = []
 	for task in tasks:
 		task_data.push_back(task.get_json_data())
 	json_file.store_string(JSON.stringify(task_data))
 
 
-func load(json_path: String) -> void:
+func load_json(path: String = TEMP_JSON_PATH) -> void:
+	if not FileAccess.file_exists(path): return
 	tasks.clear()
-	var json_file := FileAccess.open(json_path, FileAccess.READ)
+	var json_file := FileAccess.open(path, FileAccess.READ)
 	var json_data : Array = JSON.parse_string(json_file.get_as_text())
 	for i in json_data:
 		var task := Task.new()
@@ -101,7 +110,8 @@ func clear_all_tasks() -> void:
 
 func reset_completed_tasks() -> void:
 	for task in tasks:
-		if task.status != Task.Status.COMPLETE: continue
+		match task.status:
+			Task.Status.QUEUED, Task.Status.RUNNING: continue
 		task.reset()
 
 
@@ -137,37 +147,41 @@ func refresh_task_status(task: Task) -> void:
 	var item : TreeItem = task_items[task]
 	item.set_text(STATUS, STATUS_TEXTS[task.status])
 
-	var icon : Texture2D
+	var icon : Texture2D = null
 	match task.status:
-		1: icon = Program.STOP_ICON
-		2: icon = Program.RESET_ICON
-		_: icon = Program.PLAY_ICON
+		Task.Status.QUEUED: icon = Program.PLAY_ICON
+		Task.Status.RUNNING: icon = Program.STOP_ICON
+		Task.Status.COMPLETE, Task.Status.FAILED: icon = Program.RESET_ICON
 	item.set_button(BUTTONS, EXECUTE, icon)
 
 	for i in self.columns:
 		match i:
 			BUTTONS, REMOVE: continue
 		match task.status:
-			2:
-				item.set_custom_color(i, Color.DIM_GRAY)
-				item.clear_custom_bg_color(i)
-			1:
-				item.set_custom_color(i, Color.WHITE)
-				item.set_custom_bg_color(i, Color.SEA_GREEN)
-			_:
+			Task.Status.QUEUED:
 				item.clear_custom_color(i)
 				item.clear_custom_bg_color(i)
+			Task.Status.RUNNING:
+				item.set_custom_color(i, Color.WHITE)
+				item.set_custom_bg_color(i, Color.SEA_GREEN)
+			Task.Status.COMPLETE:
+				item.set_custom_color(i, Color.DIM_GRAY)
+				item.clear_custom_bg_color(i)
+			Task.Status.FAILED:
+				item.set_custom_color(i, Color.WHITE)
+				item.set_custom_bg_color(i, Color.html("a82238"))
 
 	refresh_task_progress(task)
 
 
 func refresh_task_progress(task: Task) -> void:
 	var item : TreeItem = task_items[task]
-	if task.status == 0:
-		item.set_text(PROGRESS, "")
-	else:
-		var progress := floori(task.progress * 100.0)
-		item.set_text(PROGRESS, "%s%%" % progress)
+	match task.status:
+		Task.Status.QUEUED:
+			item.set_text(PROGRESS, "")
+		_:
+			var progress := floori(task.progress * 100.0)
+			item.set_text(PROGRESS, "%s%%" % progress)
 
 
 func refresh_task_target(task: Task) -> void:
@@ -243,13 +257,13 @@ func open_item(item: TreeItem) -> void:
 
 func execute_task(task: Task) -> void:
 	match task.status:
-		0:
+		Task.Status.QUEUED:
 			await task.run(self.get_tree())
 			task.program.on_close_requested()
-		1:
+		Task.Status.RUNNING:
 			await task.stop(true)
 			task.program.on_close_requested()
-		2:
+		Task.Status.COMPLETE, Task.Status.FAILED:
 			task.reset()
 func execute_item(item: TreeItem) -> void:
 	execute_task(find_task(item))

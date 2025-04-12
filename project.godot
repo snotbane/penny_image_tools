@@ -10,7 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Pennython Task Runner"
+config/name="Pennython"
+config/version="v25.04.11"
 run/main_scene="uid://coxdxohawk630"
 config/auto_accept_quit=false
 config/quit_on_go_back=false

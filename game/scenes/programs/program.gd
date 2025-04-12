@@ -12,7 +12,8 @@ static func _static_init() -> void:
 signal started
 signal stop_requested
 signal stopped
-
+signal succeeded
+signal failed
 
 @export var print_output : bool
 @export var identifier : StringName = &"program"
@@ -59,7 +60,6 @@ func _process(delta: float) -> void:
 			self.refresh_window_title()
 			self.refresh_elements()
 		else:
-			thread.wait_to_finish()
 			thread_stopped()
 
 
@@ -120,12 +120,15 @@ func stop() -> void:
 
 
 func thread_stopped() -> void:
+	var code : int = thread.wait_to_finish()
 	refresh_elements()
 	is_running = false
-	if not OS.is_debug_build():
-		BUS_DIR.remove(bus_path)
-		bus = null
+# if not OS.is_debug_build():
+	BUS_DIR.remove(bus_path)
+	bus = null
 	stopped.emit()
+	if code == OK: succeeded.emit()
+	else: failed.emit()
 
 
 func python(python_path: String, args: PackedStringArray) -> int:
