@@ -75,7 +75,6 @@ func refresh_persist() -> void:
 	if self.persist:
 		if persist_load_attempted:
 			save_persistent()
-			pass
 	else:
 		clear_persistent()
 

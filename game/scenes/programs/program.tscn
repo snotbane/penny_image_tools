@@ -85,12 +85,6 @@ size_flags_horizontal = 3
 text = "Run"
 icon = ExtResource("4_dt6vs")
 
-[node name="queue_button" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/h_box_container"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Queue"
-
 [node name="right_panel" type="PanelContainer" parent="panel_container/margin_container/h_split_container"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
@@ -99,8 +93,5 @@ layout_mode = 2
 layout_mode = 2
 
 [connection signal="started" from="." to="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker" method="set_visible" binds= [true]]
-[connection signal="started" from="." to="panel_container/margin_container/h_split_container/v_box_container/h_box_container/queue_button" method="set_disabled" binds= [true]]
 [connection signal="stopped" from="." to="panel_container/margin_container/h_split_container/v_box_container/left_panel/panel_locker" method="set_visible" binds= [false]]
-[connection signal="stopped" from="." to="panel_container/margin_container/h_split_container/v_box_container/h_box_container/queue_button" method="set_disabled" binds= [false]]
 [connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/h_box_container/start_button" to="." method="_on_start_button_pressed"]
-[connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/h_box_container/queue_button" to="." method="add_to_queue"]

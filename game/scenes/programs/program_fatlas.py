@@ -106,6 +106,11 @@ class Rect:
 		self.b = value[1]
 
 
+	@property
+	def area(self) -> int:
+		return self.w * self.h
+
+
 	## Returns true if the other Rect is completely inside self
 	def contains(self, other) -> bool:
 		if not isinstance(other, Rect):
@@ -232,28 +237,25 @@ class SourceImage(PathedImage):
 			return island_pixels
 
 		def crop_islands_accumulate():
-			rects = None
+			full_rect = None
 			bitms = set()
 			for x in range(w):
 				for y in range(h):
-					if (x, y) not in visited and pixels[x, y] == 1:
-						island_pixels = flood_fill(x, y)
-						if island_pixels:
-							min_x = min(p[0] for p in island_pixels)
-							max_x = max(p[0] for p in island_pixels)
-							min_y = min(p[1] for p in island_pixels)
-							max_y = max(p[1] for p in island_pixels)
-							island_rect = Rect(min_x, min_y, max_x - min_x + 1, max_y - min_y + 1)
+					if (x, y) in visited or pixels[x, y] != 1: continue
 
-							if island_rect.w * island_rect.h < args.island_size: continue
+					island_pixels = flood_fill(x, y)
+					if not island_pixels: continue
 
-							if rects == None:
-								rects = island_rect
-							else:
-								rects = rects.union(island_rect)
-							bitms = bitms.union(island_pixels)
+					min_x = min(p[0] for p in island_pixels)
+					max_x = max(p[0] for p in island_pixels)
+					min_y = min(p[1] for p in island_pixels)
+					max_y = max(p[1] for p in island_pixels)
+					island_rect = Rect(min_x, min_y, max_x - min_x + 1, max_y - min_y + 1)
+					if island_rect.area < args.island_size: continue
 
-			full_rect = rects
+					full_rect = island_rect if full_rect == None else full_rect.union(island_rect)
+					bitms = bitms.union(island_pixels)
+
 			full_bitmap = Image.new("1", full_rect.size, color=0)
 			full_bitmap_pixels = full_bitmap.load()
 

@@ -1,30 +1,69 @@
-[gd_scene load_steps=7 format=3 uid="uid://txuhnf4h6s6y"]
+[gd_scene load_steps=13 format=3 uid="uid://txuhnf4h6s6y"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_vweaw"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_43psw"]
+[ext_resource type="Texture2D" uid="uid://b48hr7y3nqe5w" path="res://game/icons/TerrainMatchSidesBig.svg" id="2_nct5c"]
 [ext_resource type="PackedScene" uid="uid://d0sk7730ilig6" path="res://game/scenes/parameter/parameter_number.tscn" id="2_wnvnf"]
+[ext_resource type="PackedScene" uid="uid://b0agby5b750h6" path="res://game/scenes/parameter/parameter_regex.tscn" id="3_1rhoa"]
+[ext_resource type="PackedScene" uid="uid://1vhcrt3tadog" path="res://game/scenes/parameter/parameter_bool.tscn" id="4_1rhoa"]
 [ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="4_aq3to"]
 [ext_resource type="PackedScene" uid="uid://xx07uwu4xf5i" path="res://game/scenes/elements/privacy_mask.tscn" id="5_8n7lk"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="6_1rhoa"]
+[ext_resource type="PackedScene" uid="uid://cpvheqjy1ypmk" path="res://game/scenes/elements/review_panel.tscn" id="6_wm3m8"]
+[ext_resource type="Texture2D" uid="uid://db4d1lplh4coe" path="res://game/icons/ImportCheck.svg" id="8_85vxu"]
+[ext_resource type="Texture2D" uid="uid://c8mxyivravqh7" path="res://game/icons/ImportFail.svg" id="9_3d53m"]
 
-[node name="program_cleanup" instance=ExtResource("1_vweaw")]
+[node name="program_cleanup" node_paths=PackedStringArray("target_parameter", "progress_display", "elements") instance=ExtResource("1_vweaw")]
+print_output = true
+identifier = &"cleanup"
+program_name = "Cleanup"
+program_nickname = "Cleanup"
+python_script_path = "res://game/scenes/programs/program_cleanup.py"
+target_parameter = NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/target")
+progress_display = NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")
+elements = [NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container/source_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container/target_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")]
 
-[node name="source" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" node_paths=PackedStringArray("program") instance=ExtResource("2_43psw")]
-layout_mode = 2
-label_text = "Source"
-program = NodePath("../../../../../../../../..")
-persist_disabled = true
+[node name="left_panel" parent="panel_container/margin_container/h_split_container/v_box_container" index="0"]
+size_flags_vertical = 1
 
-[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" node_paths=PackedStringArray("program") instance=ExtResource("2_43psw")]
+[node name="background_icon" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/background" index="0"]
+texture = ExtResource("2_nct5c")
+
+[node name="scroll_container" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel" index="1"]
+vertical_scroll_mode = 0
+
+[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" node_paths=PackedStringArray("program") instance=ExtResource("2_43psw")]
 layout_mode = 2
 label_text = "Target"
 program = NodePath("../../../../../../../../..")
 persist_disabled = true
 
-[node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2"]
+[node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1"]
 layout_mode = 2
 
-[node name="island_min_size" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3" node_paths=PackedStringArray("program") instance=ExtResource("2_wnvnf")]
+[node name="preserve_original" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2" node_paths=PackedStringArray("program") instance=ExtResource("4_1rhoa")]
+layout_mode = 2
+tooltip_text = "If enabled, the original file will be preserved.
+The suffix \"__\" will be appended to the end of the original file, and
+you may review the changes using the window below."
+_value = true
+label_text = "Preserve Original"
+normal_tooltip = "If enabled, the original file will be preserved.
+The suffix \"__\" will be appended to the end of the original file, and
+you may review the changes using the window below."
+program = NodePath("../../../../../../../../..")
+persist = true
+
+[node name="filter_include" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3" instance=ExtResource("3_1rhoa")]
+layout_mode = 2
+tooltip_text = "File names that match this pattern will be processed."
+_value = ".+(?<!__)\\.png$"
+allow_empty = false
+label_text = "Inclusion Filter"
+normal_tooltip = "File names that match this pattern will be processed."
+persist = true
+
+[node name="island_size" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" node_paths=PackedStringArray("program") instance=ExtResource("2_wnvnf")]
 layout_mode = 2
 tooltip_text = "Pixel islands with a larger rectangular area than this will be included in the final image.
 Pixel islands with a smaller rectangular area than this will be discarded. Use this value to clean up loose pixels.
@@ -38,7 +77,7 @@ Default: 128"
 program = NodePath("../../../../../../../../..")
 persist = true
 
-[node name="island_min_opacity" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" node_paths=PackedStringArray("program") instance=ExtResource("2_wnvnf")]
+[node name="island_opacity" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" node_paths=PackedStringArray("program") instance=ExtResource("2_wnvnf")]
 layout_mode = 2
 tooltip_text = "Pixels with an opacity (0–255) greater than this value will be considered part of a contiguous island.
 Default: 0.01"
@@ -50,8 +89,31 @@ Default: 0.01"
 program = NodePath("../../../../../../../../..")
 persist = true
 
+[node name="review_panel" parent="panel_container/margin_container/h_split_container/v_box_container" index="2" node_paths=PackedStringArray("target_parameter", "filter_parameter", "new_preview", "old_preview") instance=ExtResource("6_wm3m8")]
+layout_mode = 2
+target_parameter = NodePath("../left_panel/scroll_container/margin_container/parameters/target")
+filter_parameter = NodePath("../left_panel/scroll_container/margin_container/parameters/filter_include")
+new_preview = NodePath("../../right_panel/margin_container/v_box_container/previews/h_box_container/target_preview")
+old_preview = NodePath("../../right_panel/margin_container/v_box_container/previews/h_box_container/source_preview")
+
+[node name="h_box_container_2" type="HBoxContainer" parent="panel_container/margin_container/h_split_container/v_box_container" index="3"]
+layout_mode = 2
+
+[node name="revert_all_button" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/h_box_container_2" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Revert All"
+icon = ExtResource("9_3d53m")
+
+[node name="accept_all_button" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/h_box_container_2" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Accept All"
+icon = ExtResource("8_85vxu")
+
 [node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0"]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="previews" type="Control" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="0"]
 layout_mode = 2
@@ -78,3 +140,7 @@ layout_mode = 1
 [node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("6_1rhoa")]
 layout_mode = 2
 label_text = "Files completed"
+
+[connection signal="stopped" from="." to="panel_container/margin_container/h_split_container/v_box_container/review_panel" method="refresh_files"]
+[connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/h_box_container_2/revert_all_button" to="panel_container/margin_container/h_split_container/v_box_container/review_panel" method="reject_all"]
+[connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/h_box_container_2/accept_all_button" to="panel_container/margin_container/h_split_container/v_box_container/review_panel" method="accept_all"]

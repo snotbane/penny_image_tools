@@ -124,8 +124,8 @@ def main():
 		bus_set("output", "progress_display_max", len(targets))
 		for target in targets: target.generate()
 	elif os.path.isfile(args.source):
-		source = assign_image_sources(args)[0]
-		target = assign_image_targets(source, args)[0]
+		source = TargetImage(os.path.dirname(args.target), os.path.basename(args.target))
+		target = assign_image_targets([source])[0]
 		bus_set("output", "progress_display_max", 1)
 		target.generate()
 	else:
@@ -139,9 +139,9 @@ if __name__ == "__main__":
 	parser.add_argument("laigter_path", type=str, help="Path to Laigter.")
 	parser.add_argument("source", type=str, help="All files in this folder will have normal created.")
 	parser.add_argument("target", type=str, help="Destination for normal images.")
-	args = parser.parse_args()
 	parser.add_argument("laigter_preset", type=str, help="Path to laigter preset file")
 	parser.add_argument("laigter_filter", type=str, help="Only file paths that match this regex will be included (considers extensions).")
+	args = parser.parse_args()
 
 	bus_path = args.bus_path
 	bus = configparser.ConfigParser()
