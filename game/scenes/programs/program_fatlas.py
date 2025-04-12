@@ -379,7 +379,7 @@ def assign_comp_data(maps : dict) -> dict:
 	result = dict()
 	available = list()
 	components = set()
-	pattern = re.compile(r"((.+?)(?:_(\d+))?)_([lr])_(.)")
+	pattern = re.compile(args.filter_composite)
 	for k in maps.keys():
 		for entry in maps[k]:
 			available.append(entry["name"])
@@ -431,6 +431,13 @@ def assign_comp_data(maps : dict) -> dict:
 
 def main():
 	global progress_display
+
+	if not (
+		args.project_name != "" and
+		os.path.exists(args.source) and
+		os.path.exists(args.target)
+	):
+		sys.exit(1)
 
 	bus_set("output", "progress_display", 0)
 	bus_set("output", "progress_display_max", 0)
@@ -487,6 +494,7 @@ if __name__ == "__main__":
 	parser.add_argument("image_format", type=str, help="Image format.")
 	parser.add_argument("filter_include", type=str, help="Only file paths that match this regex will be included (considers extensions)." )
 	parser.add_argument("filter_separate", type=str, help="File names (not including extension) that match this regex will be separated into different images.")
+	parser.add_argument("filter_composite", type=str)
 	parser.add_argument("island_crop", type=str2bool)
 	parser.add_argument("island_margin", type=int, help="Islands above this threshold will have their regions expanded by this margin to include any surrounding pixels.")
 	parser.add_argument("island_size", type=int, help="Islands with an area smaller than this will be discarded.")

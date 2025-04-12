@@ -15,12 +15,14 @@ const PROGRAMS_BY_IDENTIFIER : Dictionary = {
 	&"optipng":		preload("res://game/scenes/programs/program_optipng.tscn"),
 	&"laigter":		preload("res://game/scenes/programs/program_laigter.tscn"),
 	&"fatlas":		preload("res://game/scenes/programs/program_fatlas.tscn"),
+	&"cleanup":		preload("res://game/scenes/programs/program_cleanup.tscn"),
 }
 const PROGRAM_TASK_NAMES : Dictionary = {
 	&"dummy":		"Dummy",
 	&"optipng":		"OptiPNG",
 	&"laigter":		"Laigter",
 	&"fatlas":		"Fatlas",
+	&"cleanup":		"Cleanup",
 }
 const WINDOW_SCENE : PackedScene = preload("res://game/scenes/program_window.tscn")
 

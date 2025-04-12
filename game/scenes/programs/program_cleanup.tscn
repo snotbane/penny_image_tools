@@ -1,0 +1,77 @@
+[gd_scene load_steps=7 format=3 uid="uid://txuhnf4h6s6y"]
+
+[ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_vweaw"]
+[ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_43psw"]
+[ext_resource type="PackedScene" uid="uid://d0sk7730ilig6" path="res://game/scenes/parameter/parameter_number.tscn" id="2_wnvnf"]
+[ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="4_aq3to"]
+[ext_resource type="PackedScene" uid="uid://xx07uwu4xf5i" path="res://game/scenes/elements/privacy_mask.tscn" id="5_8n7lk"]
+[ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="6_1rhoa"]
+
+[node name="program_cleanup" instance=ExtResource("1_vweaw")]
+
+[node name="source" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" node_paths=PackedStringArray("program") instance=ExtResource("2_43psw")]
+layout_mode = 2
+allow_empty = false
+label_text = "Source"
+program = NodePath("../../../../../../../../..")
+
+[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" node_paths=PackedStringArray("program") instance=ExtResource("2_43psw")]
+layout_mode = 2
+allow_empty = false
+label_text = "Target"
+program = NodePath("../../../../../../../../..")
+
+[node name="island_min_size" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2" node_paths=PackedStringArray("program") instance=ExtResource("2_wnvnf")]
+layout_mode = 2
+tooltip_text = "Pixel islands with a larger rectangular area than this will be included in the final image.
+Pixel islands with a smaller rectangular area than this will be discarded. Use this value to clean up loose pixels.
+Default: 128"
+max_value = 65536.0
+_value = 128.0
+label_text = "Island Minimum Size"
+normal_tooltip = "Pixel islands with a larger rectangular area than this will be included in the final image.
+Pixel islands with a smaller rectangular area than this will be discarded. Use this value to clean up loose pixels.
+Default: 128"
+program = NodePath("../../../../../../../../..")
+persistent = true
+
+[node name="island_min_opacity" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3" node_paths=PackedStringArray("program") instance=ExtResource("2_wnvnf")]
+layout_mode = 2
+tooltip_text = "Pixels with an opacity (0–255) greater than this value will be considered part of a contiguous island.
+Default: 0.01"
+max_value = 255.0
+_value = 1.0
+label_text = "Island Minimum Opacity"
+normal_tooltip = "Pixels with an opacity (0–255) greater than this value will be considered part of a contiguous island.
+Default: 0.01"
+program = NodePath("../../../../../../../../..")
+persistent = true
+
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container" index="0"]
+layout_mode = 2
+
+[node name="previews" type="Control" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="0"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="source_preview" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container" index="0" instance=ExtResource("4_aq3to")]
+layout_mode = 2
+
+[node name="target_preview" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container" index="1" instance=ExtResource("4_aq3to")]
+layout_mode = 2
+
+[node name="privacy_mask" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews" index="1" instance=ExtResource("5_8n7lk")]
+layout_mode = 1
+
+[node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("6_1rhoa")]
+layout_mode = 2
+label_text = "Files completed"

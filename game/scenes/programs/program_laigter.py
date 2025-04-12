@@ -130,6 +130,7 @@ def main():
 		target.generate()
 	else:
 		sys.stderr.write("Input path is not a valid file nor directory.")
+		sys.exit(1)
 
 
 if __name__ == "__main__":

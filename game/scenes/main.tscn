@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://coxdxohawk630"]
+[gd_scene load_steps=25 format=3 uid="uid://coxdxohawk630"]
 
 [ext_resource type="Theme" uid="uid://cjww2dp7ckflf" path="res://game/theme.tres" id="1_20rwd"]
 [ext_resource type="Script" uid="uid://bh5joyc3jgyq3" path="res://game/scenes/main.gd" id="2_r75lq"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dpnmfejtkrb1w" path="res://game/icons/ImageTexture3D.svg" id="7_r75lq"]
 [ext_resource type="Texture2D" uid="uid://bfadqo20te315" path="res://game/icons/Save.svg" id="7_rmvmd"]
 [ext_resource type="PackedScene" uid="uid://ndp7267wdyw1" path="res://game/scenes/program_window_button.tscn" id="8_7j1va"]
+[ext_resource type="Texture2D" uid="uid://b1vuosy42naos" path="res://game/icons/TerrainMatchSides.svg" id="8_aju45"]
 [ext_resource type="Texture2D" uid="uid://b5165yg63jan2" path="res://game/icons/AtlasTexture.svg" id="8_cxktm"]
 [ext_resource type="Texture2D" uid="uid://bpy2jo0tc8kww" path="res://game/icons/Load.svg" id="8_shkmv"]
 [ext_resource type="Texture2D" uid="uid://c30c6b2b3hwjc" path="res://game/icons/Play.svg" id="9_j51q3"]
@@ -152,10 +153,10 @@ layout_mode = 2
 text = "Dummy"
 icon_alignment = 0
 
-[node name="optipng" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
+[node name="cleanup" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
 layout_mode = 2
-text = "OptiPNG Image Compression"
-icon = ExtResource("6_3v7cf")
+text = "Island Cleanup"
+icon = ExtResource("8_aju45")
 icon_alignment = 0
 
 [node name="laigter" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
@@ -168,6 +169,12 @@ icon_alignment = 0
 layout_mode = 2
 text = "Fatlas Sprite Packer"
 icon = ExtResource("8_cxktm")
+icon_alignment = 0
+
+[node name="optipng" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
+layout_mode = 2
+text = "OptiPNG Image Compression"
+icon = ExtResource("6_3v7cf")
 icon_alignment = 0
 
 [node name="queue_controls" type="GridContainer" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container"]

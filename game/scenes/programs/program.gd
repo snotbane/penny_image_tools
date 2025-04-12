@@ -166,7 +166,7 @@ func _refresh_elements() -> void:
 
 
 func refresh_window_title() -> void:
-	window.title = "PTR — %s" % self.program_name
+	window.title = "%s — %s" % [ProjectSettings.get_setting("application/config/name"), self.program_nickname]
 	if thread and thread.is_alive():
 		window.title += " — %s" % get_duration_string(Time.get_ticks_msec() - time_started)
 

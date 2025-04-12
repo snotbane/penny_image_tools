@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bnsd7innb8evy"]
+[gd_scene load_steps=13 format=3 uid="uid://bnsd7innb8evy"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_vuhxw"]
 [ext_resource type="PackedScene" uid="uid://bsbif7qroffug" path="res://game/scenes/parameter/parameter_string.tscn" id="2_hi4ns"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="3_d0uvx"]
 [ext_resource type="PackedScene" uid="uid://1vhcrt3tadog" path="res://game/scenes/parameter/parameter_bool.tscn" id="4_tqatl"]
 [ext_resource type="PackedScene" uid="uid://d0sk7730ilig6" path="res://game/scenes/parameter/parameter_number.tscn" id="5_6t3gx"]
+[ext_resource type="PackedScene" uid="uid://b0agby5b750h6" path="res://game/scenes/parameter/parameter_regex.tscn" id="6_1jrm7"]
 [ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="6_4wcr6"]
 [ext_resource type="PackedScene" uid="uid://d0ihkarg2nvgg" path="res://game/scenes/elements/image_preview_grid.tscn" id="7_20joi"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="8_4l84p"]
@@ -88,6 +89,7 @@ program = NodePath("../../../../../../../../..")
 layout_mode = 2
 
 [node name="image_size_limit" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
+visible = false
 layout_mode = 2
 tooltip_text = "The max pixel dimensions (square) a target image can be. If an island cannot be placed without expanding the target image beyond this limit, a new target image will be created. "
 min_value = 1.0
@@ -99,6 +101,7 @@ program = NodePath("../../../../../../../../..")
 persistent = true
 
 [node name="image_format" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" node_paths=PackedStringArray("program") instance=ExtResource("2_hi4ns")]
+visible = false
 layout_mode = 2
 _value = "RGBA"
 allow_empty = false
@@ -106,7 +109,7 @@ label_text = "Image Format"
 program = NodePath("../../../../../../../../..")
 persistent = true
 
-[node name="filter_include" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="6" node_paths=PackedStringArray("program") instance=ExtResource("2_hi4ns")]
+[node name="filter_include" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="6" node_paths=PackedStringArray("program") instance=ExtResource("6_1jrm7")]
 layout_mode = 2
 tooltip_text = "Filenames (INCLUDING extension) matching this regex filter will be added to the final image(s)."
 _value = ".*?\\.(?:png)"
@@ -116,24 +119,38 @@ normal_tooltip = "Filenames (INCLUDING extension) matching this regex filter wil
 program = NodePath("../../../../../../../../..")
 persistent = true
 
-[node name="filter_separate" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="7" node_paths=PackedStringArray("program") instance=ExtResource("2_hi4ns")]
+[node name="filter_separate" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="7" node_paths=PackedStringArray("program") instance=ExtResource("6_1jrm7")]
 layout_mode = 2
-tooltip_text = "Filenames (EXCLUDING extension) matching this regex filter will be separated into different images. This is primarily used to keep different kinds of images together, such as albedo and normal maps. The match found will be placed at the end of the resulting target file.
+tooltip_text = "Filenames (EXCLUDING extension) matching this regex filter will be separated into different images.
+This is primarily used to keep different kinds of images together, such as albedo and normal maps.
+The match found will be placed at the end of the resulting target file.
 For example, use \"_[a-zA-Z]$\" to separate files ending with an alphabetic character, like \"_n\", \"_o\", \"_m\", etc. 
-Default: \"^\" (The default value will combine all images into a single image.)"
-_value = "^"
+Default: \".*\" (This default value will combine all images into a single image.)"
 allow_empty = false
 label_text = "Separation Filter"
-normal_tooltip = "Filenames (EXCLUDING extension) matching this regex filter will be separated into different images. This is primarily used to keep different kinds of images together, such as albedo and normal maps. The match found will be placed at the end of the resulting target file.
+normal_tooltip = "Filenames (EXCLUDING extension) matching this regex filter will be separated into different images.
+This is primarily used to keep different kinds of images together, such as albedo and normal maps.
+The match found will be placed at the end of the resulting target file.
 For example, use \"_[a-zA-Z]$\" to separate files ending with an alphabetic character, like \"_n\", \"_o\", \"_m\", etc. 
-Default: \"^\" (The default value will combine all images into a single image.)"
+Default: \".*\" (This default value will combine all images into a single image.)"
 program = NodePath("../../../../../../../../..")
 persistent = true
 
-[node name="h_separator_2" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="8"]
+[node name="filter_composite" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="8" node_paths=PackedStringArray("program") instance=ExtResource("6_1jrm7")]
+visible = false
+layout_mode = 2
+tooltip_text = "Assigns composition data based on the internal groups of this filter. FOR NOW this only works with this specific regex, so don't change this."
+_value = "((.+?)(?:_(\\d+))?)_([lr])_(.)"
+allow_empty = false
+label_text = "Composite Filter"
+normal_tooltip = "Assigns composition data based on the internal groups of this filter. FOR NOW this only works with this specific regex, so don't change this."
+program = NodePath("../../../../../../../../..")
+persistent = true
+
+[node name="h_separator_2" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="9"]
 layout_mode = 2
 
-[node name="island_crop" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="9" node_paths=PackedStringArray("program") instance=ExtResource("4_tqatl")]
+[node name="island_crop" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="10" node_paths=PackedStringArray("program") instance=ExtResource("4_tqatl")]
 layout_mode = 2
 tooltip_text = "If enabled, this method will clean up stray pixel islands under the specified size and crop each sprite to the minimum size. A slow process, but it's totally worth it."
 _value = true
@@ -142,7 +159,7 @@ normal_tooltip = "If enabled, this method will clean up stray pixel islands unde
 program = NodePath("../../../../../../../../..")
 persistent = true
 
-[node name="island_margin" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="10" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
+[node name="island_margin" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="11" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
 layout_mode = 2
 tooltip_text = "Sprites included in the final image will have this many pixels of margin from the edges and between each other.
 Default: 2"
@@ -154,7 +171,7 @@ Default: 2"
 program = NodePath("../../../../../../../../..")
 persistent = true
 
-[node name="island_min_size" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="11" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
+[node name="island_min_size" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="12" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
 layout_mode = 2
 tooltip_text = "Pixel islands with a larger rectangular area than this will be included in the final image.
 Pixel islands with a smaller rectangular area than this will be discarded. Use this value to clean up loose pixels.
@@ -168,7 +185,7 @@ Default: 128"
 program = NodePath("../../../../../../../../..")
 persistent = true
 
-[node name="island_min_opacity" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="12" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
+[node name="island_min_opacity" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="13" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
 layout_mode = 2
 tooltip_text = "Pixels with an opacity (0–255) greater than this value will be considered part of a contiguous island.
 Default: 0.01"
