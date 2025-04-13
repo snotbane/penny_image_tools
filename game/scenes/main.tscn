@@ -94,6 +94,7 @@ layout_mode = 2
 
 [node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="python_path" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("4_8buom")]
 layout_mode = 2

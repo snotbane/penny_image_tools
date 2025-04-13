@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bnsd7innb8evy"]
+[gd_scene load_steps=13 format=3 uid="uid://bnsd7innb8evy"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_vuhxw"]
 [ext_resource type="PackedScene" uid="uid://bsbif7qroffug" path="res://game/scenes/parameter/parameter_string.tscn" id="2_hi4ns"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d0sk7730ilig6" path="res://game/scenes/parameter/parameter_number.tscn" id="5_6t3gx"]
 [ext_resource type="PackedScene" uid="uid://b0agby5b750h6" path="res://game/scenes/parameter/parameter_regex.tscn" id="6_1jrm7"]
 [ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="6_4wcr6"]
+[ext_resource type="PackedScene" uid="uid://1vhcrt3tadog" path="res://game/scenes/parameter/parameter_bool.tscn" id="7_1jrm7"]
 [ext_resource type="PackedScene" uid="uid://d0ihkarg2nvgg" path="res://game/scenes/elements/image_preview_grid.tscn" id="7_20joi"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="8_4l84p"]
 [ext_resource type="PackedScene" uid="uid://xx07uwu4xf5i" path="res://game/scenes/elements/privacy_mask.tscn" id="8_irdv1"]
@@ -74,12 +75,14 @@ persist_disabled = true
 
 [node name="source" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" node_paths=PackedStringArray("program") instance=ExtResource("3_d0uvx")]
 layout_mode = 2
+file_mode = 2
 label_text = "Source Directory"
 program = NodePath("../../../../../../../../..")
 persist_disabled = true
 
 [node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2" node_paths=PackedStringArray("program") instance=ExtResource("3_d0uvx")]
 layout_mode = 2
+file_mode = 2
 label_text = "Target Directory"
 program = NodePath("../../../../../../../../..")
 persist_disabled = true
@@ -129,6 +132,7 @@ persist = true
 layout_mode = 2
 
 [node name="image_format" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="8" node_paths=PackedStringArray("program") instance=ExtResource("2_hi4ns")]
+visible = false
 layout_mode = 2
 _value = "RGBA"
 label_text = "Image Format"
@@ -136,6 +140,7 @@ program = NodePath("../../../../../../../../..")
 persist = true
 
 [node name="image_size_limit" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="9" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
+visible = false
 layout_mode = 2
 tooltip_text = "The max pixel dimensions (square) a target image can be. If an island cannot be placed without expanding the target image beyond this limit, a new target image will be created. "
 min_value = 1.0
@@ -146,14 +151,29 @@ normal_tooltip = "The max pixel dimensions (square) a target image can be. If an
 program = NodePath("../../../../../../../../..")
 persist = true
 
-[node name="island_margin" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="10" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
+[node name="h_separator_3" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="10"]
+visible = false
 layout_mode = 2
-tooltip_text = "Sprites included in the final image will have this many pixels of margin from the edges and between each other.
+
+[node name="island_crop" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="11" node_paths=PackedStringArray("program") instance=ExtResource("7_1jrm7")]
+layout_mode = 2
+tooltip_text = "If enabled, only the bounding box containing all visible pixels will be included.
+If disabled, include the entire image. (Not recommended.)"
+_value = true
+label_text = "Crop Islands"
+normal_tooltip = "If enabled, only the bounding box containing all visible pixels will be included.
+If disabled, include the entire image. (Not recommended.)"
+program = NodePath("../../../../../../../../..")
+persist = true
+
+[node name="island_margin" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="12" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
+layout_mode = 2
+tooltip_text = "The space between sprites and image bounds in the final image(s).
 Default: 2"
 max_value = 256.0
 _value = 2.0
 label_text = "Island Margin"
-normal_tooltip = "Sprites included in the final image will have this many pixels of margin from the edges and between each other.
+normal_tooltip = "The space between sprites and image bounds in the final image(s).
 Default: 2"
 program = NodePath("../../../../../../../../..")
 persist = true

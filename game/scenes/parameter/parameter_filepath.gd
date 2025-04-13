@@ -1,5 +1,10 @@
 @tool class_name ParameterFilepath extends ParameterString
 
+static func get_path_dir(path: String) -> String:
+	if DirAccess.dir_exists_absolute(path): return path
+	return path.substr(0, path.rfind("/"))
+
+
 @export var file_mode : FileDialog.FileMode :
 	get: return $file_dialog.file_mode if $file_dialog else FileDialog.FileMode.FILE_MODE_OPEN_ANY
 	set(value):
