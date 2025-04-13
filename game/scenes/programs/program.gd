@@ -44,6 +44,10 @@ var is_running : bool :
 		execute_button.icon = STOP_ICON if _is_running else PLAY_ICON
 
 
+var temp_folder_path : String :
+	get: return ProjectSettings.globalize_path("user://tmp/")
+
+
 func _ready() -> void:
 	window = get_parent()
 	window.close_requested.connect(on_close_requested)
@@ -61,7 +65,6 @@ func _process(delta: float) -> void:
 			self.refresh_elements()
 		else:
 			thread_stopped()
-
 
 func _exit_tree() -> void:
 	BUS_DIR.remove(bus_path)
@@ -97,6 +100,8 @@ func get_python_arguments() -> PackedStringArray:
 	for i in parameters_container.get_children():
 		if i is not Parameter: continue
 		result.push_back(i.value_as_python_argument)
+	if self.print_output:
+		print("%s args: %s" % [self.identifier, result])
 	return result
 
 

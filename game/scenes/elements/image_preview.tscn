@@ -6,7 +6,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_eyi8r"]
 font_size = 10
 
-[node name="image_preview" type="PanelContainer" node_paths=PackedStringArray("label")]
+[node name="image_preview" type="PanelContainer"]
 clip_contents = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,10 +16,10 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_eyi8r")
-label = NodePath("v_box_container/path_label")
 
 [node name="v_box_container" type="VBoxContainer" parent="."]
 layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="margin_container" type="MarginContainer" parent="v_box_container"]
 layout_mode = 2
@@ -27,6 +27,7 @@ size_flags_vertical = 3
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="background" type="TextureRect" parent="v_box_container/margin_container"]
 modulate = Color(0, 0, 0, 0.25098)

@@ -4,7 +4,7 @@ import os
 import re
 import sys
 import time
-from PIL import Image
+from PIL import Image, ImageChops
 
 progress_display = 0
 
@@ -134,100 +134,110 @@ class TargetImage:
 		self.file = file
 		self.full = os.path.join(root, file)
 		self.name, self.ext = os.path.splitext(file)
-		self.old = os.path.join(root, self.name + "__" + self.ext)
+
+		self.temp_path_new = os.path.join(args.temp_root, self.name + "__new" + self.ext)
+		self.temp_path_old_bitmap = os.path.join(args.temp_root, self.name + "__old_b" + self.ext)
+		self.temp_path_new_bitmap = os.path.join(args.temp_root, self.name + "__new_b" + self.ext)
 
 		self.image : Image = Image.open(self.full).convert("RGBA")
-
-
-	def cleanup(self) -> Image:
-		## Initialize bitmap
-
-		r, g, b, a = self.image.split()
-		w, h = self.image.size
-		bitmap = Image.new("1", self.image.size)
-		bitmap_pixels = bitmap.load()
-
-		## Cull pixels below opacity threshold in bitmap
-
-		if args.island_opacity > 0:
-			for x in range(w):
-				for y in range(h):
-					bitmap_pixels[x, y] = 0 if a.getpixel((x, y)) < args.island_opacity else 1
-
-		## Cull pixel islands below area threshold in bitmap
-
-		if args.island_size < w * h:
-			pixels_visited = set()
-			island_bitmaps = set()
-
-			def flood_fill(x, y):
-				stack = [(x, y)]
-				island_pixels = []
-
-				while stack:
-					px, py = stack.pop()
-					if (px, py) in pixels_visited or px < 0 or py < 0 or px >= w or py >= h:
-						continue
-					if bitmap_pixels[px, py] == 0:
-						continue
-
-					pixels_visited.add((px, py))
-					island_pixels.append((px, py))
-
-					stack.extend([(px + 1, py), (px - 1, py), (px, py + 1), (px, py - 1)])
-				return island_pixels
-
-			# for x, y in range(w, h):
-			for x in range(w):
-				for y in range(h):
-					if (x, y) in pixels_visited or bitmap_pixels[x, y] == 0: continue
-
-					island_pixels = flood_fill(x, y)
-					if not island_pixels: continue
-
-					min_x = min(p[0] for p in island_pixels)
-					max_x = max(p[0] for p in island_pixels)
-					min_y = min(p[1] for p in island_pixels)
-					max_y = max(p[1] for p in island_pixels)
-					island_rect = Rect(min_x, min_y, max_x - min_x + 1, max_y - min_y + 1)
-					if island_rect.area < args.island_size: continue
-
-					island_bitmaps = island_bitmaps.union(island_pixels)
-
-			for x in range(w):
-				for y in range(h):
-					bitmap_pixels[x, y] = 1 if (x, y) in island_bitmaps else 0
-
-		## Merge bitmap and original alpha
-
-		mask = bitmap.convert("L")
-		mask_pixels = mask.load()
-		alpha_pixels = a.load()
-		for x in range(w):
-			for y in range(h):
-				alpha_pixels[x, y] = min(mask_pixels[x, y], alpha_pixels[x, y])
-
-		## Commit final image
-
-		self.image = Image.merge("RGBA", (r, g, b, a))
 
 
 	def process(self):
 		global progress_display
 
 		try:
-			bus_set("output", "source_preview", f"\"{self.full}\"")
 			os.makedirs(os.path.dirname(self.full), exist_ok=True)
+			bus_set("output", "source_preview", f"\"{self.full}\"")
+
+			## Initialize bitmap
 
 			original : Image = self.image.copy()
+			r, g, b, a = self.image.split()
+			w, h = self.image.size
+			bitmap = Image.new("1", self.image.size)
+			bitmap_pixels = bitmap.load()
 
-			self.cleanup()
+			## Cull pixels below opacity threshold in bitmap
 
-			if args.preserve_original:
-				original.save(self.old)
-			self.image.save(self.full)
+			if args.island_opacity > 0:
+				for x in range(w):
+					for y in range(h):
+						bitmap_pixels[x, y] = 0 if a.getpixel((x, y)) < args.island_opacity else 1
+			bitmap_original = bitmap.copy()
 
-			bus_set("output", "target_preview", f"\"{self.full}\"")
+			## Cull pixel islands below area threshold in bitmap
+
+			if args.island_size < w * h:
+				pixels_visited = set()
+				island_bitmaps = set()
+
+				def flood_fill(x, y):
+					stack = [(x, y)]
+					island_pixels = []
+
+					while stack:
+						px, py = stack.pop()
+						if (px, py) in pixels_visited or px < 0 or py < 0 or px >= w or py >= h:
+							continue
+						if bitmap_pixels[px, py] == 0:
+							continue
+
+						pixels_visited.add((px, py))
+						island_pixels.append((px, py))
+
+						stack.extend([(px + 1, py), (px - 1, py), (px, py + 1), (px, py - 1)])
+					return island_pixels
+
+				# for x, y in range(w, h):
+				for x in range(w):
+					for y in range(h):
+						if (x, y) in pixels_visited or bitmap_pixels[x, y] == 0: continue
+
+						island_pixels = flood_fill(x, y)
+						if not island_pixels: continue
+
+						min_x = min(p[0] for p in island_pixels)
+						max_x = max(p[0] for p in island_pixels)
+						min_y = min(p[1] for p in island_pixels)
+						max_y = max(p[1] for p in island_pixels)
+						island_rect = Rect(min_x, min_y, max_x - min_x + 1, max_y - min_y + 1)
+						if island_rect.area < args.island_size: continue
+
+						island_bitmaps = island_bitmaps.union(island_pixels)
+
+				for x in range(w):
+					for y in range(h):
+						bitmap_pixels[x, y] = 1 if (x, y) in island_bitmaps else 0
+
+			## Merge bitmap and original alpha
+
+			mask = bitmap.convert("L")
+			mask_pixels = mask.load()
+			alpha_pixels = a.load()
+			for x in range(w):
+				for y in range(h):
+					alpha_pixels[x, y] = min(mask_pixels[x, y], alpha_pixels[x, y])
+			self.image = Image.merge("RGBA", (r, g, b, a))
+			self.image.save(self.temp_path_new)
+
+			## Commit final image
+
+			changes_exist : bool = False
+			if args.review_changes:
+				changes = ImageChops.difference(bitmap, bitmap_original)
+				changes_exist = changes.getbbox()
+				if changes_exist:
+					changes.save(self.temp_path_new_bitmap)
+			else:
+				self.image.save(self.full)
+
+			bus_set("output", "target_bitmap", f"\"{self.temp_path_new_bitmap}\"")
+			bus_set("output", "target_preview", f"\"{self.temp_path_new}\"")
+
+			if not changes_exist:
+				os.remove(self.temp_path_new)
+				os.remove(self.temp_path_new_bitmap)
+
 		except Exception as e:
 			sys.stderr.write(f"Error processing {self.full}: {e}")
 
@@ -264,11 +274,12 @@ def main():
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("bus_path", type=str, help="Path to the data bus associated with this program instance.")
+	parser.add_argument("temp_root", type=str, help="Path to temporary files.")
 	parser.add_argument("target", type=str, help="Destination for normal images.")
-	parser.add_argument("preserve_original", type=str2bool, help="Destination for normal images.")
+	parser.add_argument("review_changes", type=str2bool, help="Destination for normal images.")
 	parser.add_argument("filter_include", type=str, help="Only file paths that match this regex will be included (considers extensions).")
-	parser.add_argument("island_size", type=int, help="Islands with an area smaller than this will be discarded.")
 	parser.add_argument("island_opacity", type=int, help="Pixels with an opacity above this threshold will be considered part of a contiguous island.")
+	parser.add_argument("island_size", type=int, help="Islands with an area smaller than this will be discarded.")
 	args = parser.parse_args()
 
 	bus_path = args.bus_path

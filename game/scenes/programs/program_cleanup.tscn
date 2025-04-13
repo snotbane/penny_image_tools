@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://txuhnf4h6s6y"]
+[gd_scene load_steps=15 format=3 uid="uid://txuhnf4h6s6y"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_vweaw"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_43psw"]
@@ -12,16 +12,27 @@
 [ext_resource type="PackedScene" uid="uid://cpvheqjy1ypmk" path="res://game/scenes/elements/review_panel.tscn" id="6_wm3m8"]
 [ext_resource type="Texture2D" uid="uid://db4d1lplh4coe" path="res://game/icons/ImportCheck.svg" id="8_85vxu"]
 [ext_resource type="Texture2D" uid="uid://c8mxyivravqh7" path="res://game/icons/ImportFail.svg" id="9_3d53m"]
+[ext_resource type="Texture2D" uid="uid://jwi4xtrvwxh5" path="res://game/icons/ExternalLink.svg" id="9_8n8m4"]
+
+[sub_resource type="GDScript" id="GDScript_3d53m"]
+resource_name = "temp_root"
+script/source = "@tool extends ParameterFilepath
+
+func _ready() -> void:
+	super._ready()
+	DirAccess.make_dir_absolute(program.temp_folder_path)
+	self.value = program.temp_folder_path
+	
+"
 
 [node name="program_cleanup" node_paths=PackedStringArray("target_parameter", "progress_display", "elements") instance=ExtResource("1_vweaw")]
-print_output = true
 identifier = &"cleanup"
 program_name = "Cleanup"
 program_nickname = "Cleanup"
 python_script_path = "res://game/scenes/programs/program_cleanup.py"
 target_parameter = NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/target")
 progress_display = NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")
-elements = [NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container/source_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container/target_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")]
+elements = [NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container/source_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container/target_preview"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/grid_container/source_bitmap"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container/target_bitmap"), NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display")]
 
 [node name="left_panel" parent="panel_container/margin_container/h_split_container/v_box_container" index="0"]
 size_flags_vertical = 1
@@ -32,29 +43,35 @@ texture = ExtResource("2_nct5c")
 [node name="scroll_container" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel" index="1"]
 vertical_scroll_mode = 0
 
-[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" node_paths=PackedStringArray("program") instance=ExtResource("2_43psw")]
+[node name="temp_root" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" node_paths=PackedStringArray("program") instance=ExtResource("2_43psw")]
+visible = false
+layout_mode = 2
+script = SubResource("GDScript_3d53m")
+label_text = "Temporary Folder"
+program = NodePath("../../../../../../../../..")
+persist_disabled = true
+
+[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" node_paths=PackedStringArray("program") instance=ExtResource("2_43psw")]
 layout_mode = 2
 label_text = "Target"
 program = NodePath("../../../../../../../../..")
 persist_disabled = true
 
-[node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1"]
+[node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2"]
 layout_mode = 2
 
-[node name="preserve_original" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2" node_paths=PackedStringArray("program") instance=ExtResource("4_1rhoa")]
+[node name="review_changes" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3" node_paths=PackedStringArray("program") instance=ExtResource("4_1rhoa")]
 layout_mode = 2
-tooltip_text = "If enabled, the original file will be preserved.
-The suffix \"__\" will be appended to the end of the original file, and
-you may review the changes using the window below."
+tooltip_text = "If enabled, you will be able to compare files that were changed using this window. NOTE: Files will NOT be updated until you manually approve changes.
+If disabled, this will overwrite the original file(s). WARNING: You may lose data!"
 _value = true
-label_text = "Preserve Original"
-normal_tooltip = "If enabled, the original file will be preserved.
-The suffix \"__\" will be appended to the end of the original file, and
-you may review the changes using the window below."
+label_text = "Review Changes"
+normal_tooltip = "If enabled, you will be able to compare files that were changed using this window. NOTE: Files will NOT be updated until you manually approve changes.
+If disabled, this will overwrite the original file(s). WARNING: You may lose data!"
 program = NodePath("../../../../../../../../..")
 persist = true
 
-[node name="filter_include" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3" instance=ExtResource("3_1rhoa")]
+[node name="filter_include" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" instance=ExtResource("3_1rhoa")]
 layout_mode = 2
 tooltip_text = "File names that match this pattern will be processed."
 _value = ".+(?<!__)\\.png$"
@@ -63,7 +80,22 @@ label_text = "Inclusion Filter"
 normal_tooltip = "File names that match this pattern will be processed."
 persist = true
 
-[node name="island_size" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" node_paths=PackedStringArray("program") instance=ExtResource("2_wnvnf")]
+[node name="h_separator_2" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5"]
+layout_mode = 2
+
+[node name="island_opacity" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="6" node_paths=PackedStringArray("program") instance=ExtResource("2_wnvnf")]
+layout_mode = 2
+tooltip_text = "Pixels with an opacity (0–255) greater than this value will be considered part of a contiguous island.
+Default: 0.01"
+max_value = 255.0
+_value = 1.0
+label_text = "Island Minimum Opacity"
+normal_tooltip = "Pixels with an opacity (0–255) greater than this value will be considered part of a contiguous island.
+Default: 0.01"
+program = NodePath("../../../../../../../../..")
+persist = true
+
+[node name="island_size" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="7" node_paths=PackedStringArray("program") instance=ExtResource("2_wnvnf")]
 layout_mode = 2
 tooltip_text = "Pixel islands with a larger rectangular area than this will be included in the final image.
 Pixel islands with a smaller rectangular area than this will be discarded. Use this value to clean up loose pixels.
@@ -77,35 +109,37 @@ Default: 128"
 program = NodePath("../../../../../../../../..")
 persist = true
 
-[node name="island_opacity" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" node_paths=PackedStringArray("program") instance=ExtResource("2_wnvnf")]
+[node name="v_box_container" type="VBoxContainer" parent="panel_container/margin_container/h_split_container/v_box_container" index="2"]
 layout_mode = 2
-tooltip_text = "Pixels with an opacity (0–255) greater than this value will be considered part of a contiguous island.
-Default: 0.01"
-max_value = 255.0
-_value = 1.0
-label_text = "Island Minimum Opacity"
-normal_tooltip = "Pixels with an opacity (0–255) greater than this value will be considered part of a contiguous island.
-Default: 0.01"
-program = NodePath("../../../../../../../../..")
-persist = true
+size_flags_vertical = 3
 
-[node name="review_panel" parent="panel_container/margin_container/h_split_container/v_box_container" index="2" node_paths=PackedStringArray("target_parameter", "filter_parameter", "new_preview", "old_preview") instance=ExtResource("6_wm3m8")]
+[node name="review_tree" parent="panel_container/margin_container/h_split_container/v_box_container/v_box_container" index="0" node_paths=PackedStringArray("program", "target_parameter", "filter_parameter", "old_preview", "new_preview", "old_bitmap", "new_bitmap") instance=ExtResource("6_wm3m8")]
 layout_mode = 2
-target_parameter = NodePath("../left_panel/scroll_container/margin_container/parameters/target")
-filter_parameter = NodePath("../left_panel/scroll_container/margin_container/parameters/filter_include")
-new_preview = NodePath("../../right_panel/margin_container/v_box_container/previews/h_box_container/target_preview")
-old_preview = NodePath("../../right_panel/margin_container/v_box_container/previews/h_box_container/source_preview")
+program = NodePath("../../../../../..")
+target_parameter = NodePath("../../left_panel/scroll_container/margin_container/parameters/target")
+filter_parameter = NodePath("../../left_panel/scroll_container/margin_container/parameters/filter_include")
+old_preview = NodePath("../../../right_panel/margin_container/v_box_container/previews/h_box_container/source_preview")
+new_preview = NodePath("../../../right_panel/margin_container/v_box_container/previews/h_box_container/target_preview")
+old_bitmap = NodePath("../../../right_panel/margin_container/v_box_container/previews/grid_container/source_bitmap")
+new_bitmap = NodePath("../../../right_panel/margin_container/v_box_container/previews/h_box_container/target_bitmap")
 
-[node name="h_box_container_2" type="HBoxContainer" parent="panel_container/margin_container/h_split_container/v_box_container" index="3"]
+[node name="h_box_container_2" type="HBoxContainer" parent="panel_container/margin_container/h_split_container/v_box_container/v_box_container" index="1"]
 layout_mode = 2
 
-[node name="revert_all_button" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/h_box_container_2" index="0"]
+[node name="revert_all_button" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/v_box_container/h_box_container_2" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Revert All"
 icon = ExtResource("9_3d53m")
 
-[node name="accept_all_button" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/h_box_container_2" index="1"]
+[node name="open_directory" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/v_box_container/h_box_container_2" index="1"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Review All"
+icon = ExtResource("9_8n8m4")
+
+[node name="accept_all_button" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/v_box_container/h_box_container_2" index="2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Accept All"
@@ -126,21 +160,44 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_vertical = 3
 
 [node name="source_preview" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container" index="0" instance=ExtResource("4_aq3to")]
 layout_mode = 2
+show_path = false
 
-[node name="target_preview" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container" index="1" instance=ExtResource("4_aq3to")]
+[node name="target_bitmap" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container" index="1" instance=ExtResource("4_aq3to")]
 layout_mode = 2
+show_path = false
 
-[node name="privacy_mask" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews" index="1" instance=ExtResource("5_8n7lk")]
+[node name="target_preview" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container" index="2" instance=ExtResource("4_aq3to")]
+layout_mode = 2
+show_path = false
+
+[node name="grid_container" type="GridContainer" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews" index="1"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+columns = 2
+
+[node name="source_bitmap" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/grid_container" index="0" instance=ExtResource("4_aq3to")]
+layout_mode = 2
+show_path = false
+
+[node name="privacy_mask" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews" index="2" instance=ExtResource("5_8n7lk")]
 layout_mode = 1
 
 [node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("6_1rhoa")]
 layout_mode = 2
 label_text = "Files completed"
 
-[connection signal="stopped" from="." to="panel_container/margin_container/h_split_container/v_box_container/review_panel" method="refresh_files"]
-[connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/h_box_container_2/revert_all_button" to="panel_container/margin_container/h_split_container/v_box_container/review_panel" method="reject_all"]
-[connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/h_box_container_2/accept_all_button" to="panel_container/margin_container/h_split_container/v_box_container/review_panel" method="accept_all"]
+[connection signal="started" from="." to="panel_container/margin_container/h_split_container/v_box_container/v_box_container/review_tree" method="clear_items"]
+[connection signal="stopped" from="." to="panel_container/margin_container/h_split_container/v_box_container/v_box_container/review_tree" method="refresh_files"]
+[connection signal="value_changed" from="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/review_changes" to="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/h_box_container/target_bitmap" method="set_visible"]
+[connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/v_box_container/h_box_container_2/revert_all_button" to="panel_container/margin_container/h_split_container/v_box_container/v_box_container/review_tree" method="reject_all"]
+[connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/v_box_container/h_box_container_2/open_directory" to="panel_container/margin_container/h_split_container/v_box_container/v_box_container/review_tree" method="open_target_directory"]
+[connection signal="pressed" from="panel_container/margin_container/h_split_container/v_box_container/v_box_container/h_box_container_2/accept_all_button" to="panel_container/margin_container/h_split_container/v_box_container/v_box_container/review_tree" method="accept_all"]

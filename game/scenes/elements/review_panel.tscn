@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://cpvheqjy1ypmk"]
 
-[ext_resource type="Script" uid="uid://kjbsjh0jup7a" path="res://game/scenes/elements/review_panel.gd" id="1_tmiaa"]
+[ext_resource type="Script" uid="uid://kjbsjh0jup7a" path="res://game/scenes/elements/review_tree.gd" id="1_tmiaa"]
 
-[node name="review_panel" type="Tree"]
+[node name="review_tree" type="Tree"]
 custom_minimum_size = Vector2(300, 0)
 anchors_preset = 15
 anchor_right = 1.0

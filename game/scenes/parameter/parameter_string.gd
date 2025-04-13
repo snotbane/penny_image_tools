@@ -5,6 +5,7 @@
 	set(val):
 		if not self.find_child("line_edit"): return
 		$hbox/line_edit.text = val
+		$hbox/line_edit.tooltip_text = val
 
 @export var allow_empty : bool = false
 

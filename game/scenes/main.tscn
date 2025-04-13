@@ -134,6 +134,7 @@ persist = true
 persist_disabled = true
 
 [node name="persist_overrides_task" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("6_aju45")]
+visible = false
 layout_mode = 2
 tooltip_text = "If enabled, persistent values will override task values."
 _value = true
@@ -162,31 +163,39 @@ size_flags_vertical = 6
 alignment = 1
 
 [node name="dummy" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
+visible = false
 layout_mode = 2
 text = "Dummy"
 icon_alignment = 0
 
 [node name="cleanup" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
 layout_mode = 2
-text = "Island Cleanup"
+tooltip_text = "Cleans up stray and/or near-transparent pixels in sprites.
+Allows you to view the changes before committing them."
+text = "Sprite Cleanup"
 icon = ExtResource("8_aju45")
 icon_alignment = 0
 
 [node name="laigter" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
 layout_mode = 2
-text = "Laigter Normal Generation"
+tooltip_text = "Generate image normals in bulk.
+(Laigter must be installed on your machine.)"
+text = "Laigter Normals"
 icon = ExtResource("7_r75lq")
 icon_alignment = 0
 
 [node name="fatlas" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
 layout_mode = 2
+tooltip_text = "Coagulates many images into one or more images, and generates JSON data from which atlas textures may be created. (Also creates image composite data.)"
 text = "Fatlas Sprite Packer"
 icon = ExtResource("8_cxktm")
 icon_alignment = 0
 
 [node name="optipng" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
 layout_mode = 2
-text = "OptiPNG Image Compression"
+tooltip_text = "Losslessly compresses PNG images.
+(OptiPNG must be installed on your machine.)"
+text = "OptiPNG Compression"
 icon = ExtResource("6_3v7cf")
 icon_alignment = 0
 

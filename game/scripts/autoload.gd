@@ -14,6 +14,11 @@ const UI_SCALE_VALUES : PackedFloat64Array = [
 const UI_SCALE_SPEED : float = 20.0
 
 
+func _ready() -> void:
+	refresh_ui_scale()
+	self.get_viewport().get_window().content_scale_factor = ProjectSettings.get_setting("display/window/stretch/scale")
+
+
 func _process(delta: float) -> void:
 	self.get_viewport().get_window().content_scale_factor = lerpf(self.get_viewport().get_window().content_scale_factor, ProjectSettings.get_setting("display/window/stretch/scale"), min(UI_SCALE_SPEED * delta, 1.0))
 

@@ -16,4 +16,14 @@
 func _get_validation() -> String:
 	var super_result := super._get_validation()
 	if super_result != "": return super_result
-	return "" if FileAccess.file_exists(value) else "Filepath does not exist."
+	match file_mode:
+		FileDialog.FILE_MODE_OPEN_DIR:
+			if DirAccess.dir_exists_absolute(value): return ""
+			return "Path must be a valid FOLDER."
+		FileDialog.FILE_MODE_OPEN_FILE, FileDialog.FILE_MODE_SAVE_FILE:
+			if FileAccess.file_exists(value): return ""
+			return "Path must be a valid FILE."
+		FileDialog.FILE_MODE_OPEN_ANY, FileDialog.FILE_MODE_OPEN_FILES:
+			if FileAccess.file_exists(value): return ""
+			if DirAccess.dir_exists_absolute(value): return ""
+	return "File path is not a valid file or folder."
