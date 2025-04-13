@@ -135,12 +135,12 @@ def main():
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument("bus_path", type=str, help="Path to the data bus associated with this program instance.")
-	parser.add_argument("laigter_path", type=str, help="Path to Laigter.")
-	parser.add_argument("source", type=str, help="All files in this folder will have normal created.")
-	parser.add_argument("target", type=str, help="Destination for normal images.")
-	parser.add_argument("laigter_preset", type=str, help="Path to laigter preset file")
-	parser.add_argument("laigter_filter", type=str, help="Only file paths that match this regex will be included (considers extensions).")
+	parser.add_argument("bus_path", type=str)
+	parser.add_argument("laigter_path", type=str)
+	parser.add_argument("source", type=str)
+	parser.add_argument("target", type=str)
+	parser.add_argument("laigter_preset", type=str)
+	parser.add_argument("laigter_filter", type=str)
 	args = parser.parse_args()
 
 	bus_path = args.bus_path

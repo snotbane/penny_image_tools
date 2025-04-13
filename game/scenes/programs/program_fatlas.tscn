@@ -54,8 +54,9 @@ func thread_stopped() -> void:
 
 [node name="program_fatlas" node_paths=PackedStringArray("target_parameter", "progress_display", "elements") instance=ExtResource("1_vuhxw")]
 script = SubResource("GDScript_20joi")
+print_output = true
 identifier = &"fatlas"
-program_name = "Fatlas Conglomeration Tool"
+program_name = "Fatlas"
 program_nickname = "Fatlas"
 python_script_path = "res://game/scenes/programs/program_fatlas.py"
 target_parameter = NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters/target")

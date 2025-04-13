@@ -95,9 +95,9 @@ def main():
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument("bus_path", type=str, help="Path to the data bus associated with this program instance.")
-	parser.add_argument("optipng_path", type=str, help="Path to optipng executable.")
-	parser.add_argument("target", type=str, help="Target file or folder to compress. All PNG files in this directory will be overwritten with the new compressed version. No data will be lost.")
+	parser.add_argument("bus_path", type=str)
+	parser.add_argument("optipng_path", type=str)
+	parser.add_argument("target", type=str)
 	args = parser.parse_args()
 
 	bus_path = args.bus_path

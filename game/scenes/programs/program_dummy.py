@@ -48,7 +48,7 @@ def main():
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument("bus_path", type=str, help="Path to the data bus associated with this program instance.")
+	parser.add_argument("bus_path", type=str)
 	parser.add_argument("target", type=float)
 	args = parser.parse_args()
 

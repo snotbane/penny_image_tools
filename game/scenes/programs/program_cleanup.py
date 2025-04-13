@@ -273,13 +273,13 @@ def main():
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument("bus_path", type=str, help="Path to the data bus associated with this program instance.")
-	parser.add_argument("temp_root", type=str, help="Path to temporary files.")
-	parser.add_argument("target", type=str, help="Destination for normal images.")
-	parser.add_argument("review_changes", type=str2bool, help="Destination for normal images.")
-	parser.add_argument("filter_include", type=str, help="Only file paths that match this regex will be included (considers extensions).")
-	parser.add_argument("island_opacity", type=int, help="Pixels with an opacity above this threshold will be considered part of a contiguous island.")
-	parser.add_argument("island_size", type=int, help="Islands with an area smaller than this will be discarded.")
+	parser.add_argument("bus_path", type=str)
+	parser.add_argument("temp_root", type=str)
+	parser.add_argument("target", type=str)
+	parser.add_argument("review_changes", type=str2bool)
+	parser.add_argument("filter_include", type=str)
+	parser.add_argument("island_opacity", type=int)
+	parser.add_argument("island_size", type=int)
 	args = parser.parse_args()
 
 	bus_path = args.bus_path

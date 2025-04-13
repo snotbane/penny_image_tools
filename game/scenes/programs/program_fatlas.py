@@ -159,46 +159,21 @@ class SourceImage(PathedImage):
 		self.image : Image = Image.open(self.full).convert("RGBA")
 		self.bitmap : Image = bitmap
 
-		if region == None:
-			region = Rect(0, 0, self.image.width, self.image.height)
-
-		self.source_region = region
+		self.source_region = region if region != None else \
+			Rect(0, 0, self.image.width, self.image.height)
 		self.target_offset = (0, 0)
 		self.target_match = None
 
 	@property
 	def image_cropped(self) -> Image:
-		if self.bitmap == None: return self.image
-
-		result : Image = self.image.crop((self.source_region.x, self.source_region.y, self.source_region.r, self.source_region.b))
-		r, g, b, a = result.split()
-		mask = self.bitmap.convert("L")
-		mask_pixels = mask.load()
-		alpha_pixels = a.load()
-
-		for x in range(result.width):
-			for y in range(result.height):
-				alpha_pixels[x, y] = min(mask_pixels[x, y], alpha_pixels[x, y])
-
-		result = Image.merge("RGBA", (r, g, b, a))
-		# self.bitmap.show()
-		return result
-
+		return self.image.crop((self.source_region.x, self.source_region.y, self.source_region.r, self.source_region.b))
 
 	@property
 	def json_data(self) -> dict:
 		return {
 			"name": self.name,
-			"source_offset": {
-				"x": self.source_region.x,
-				"y": self.source_region.y,
-			},
-			"target_region": {
-				"x": int(self.target_offset[0]),
-				"y": int(self.target_offset[1]),
-				"w": self.source_region.w,
-				"h": self.source_region.h,
-			},
+			"source_region": [self.source_region.x, self.source_region.y, self.source_region.w, self.source_region.h],
+			"target_offset": self.target_offset,
 		}
 
 
@@ -212,72 +187,39 @@ class SourceImage(PathedImage):
 		self.target.add(self)
 
 
-	def crop_islands(self):
-		bitmap = self.get_opacity_bitmap(args.island_opacity)
-		pixels = bitmap.load()
+	def crop_visible(self):
+		_, _, _, a = self.image.split()
+		a_pixels = a.load()
 		w, h = self.image.size
-		visited = set()
-		news = []
 
-		def flood_fill(x, y):
-			stack = [(x, y)]
-			island_pixels = []
-
-			while stack:
-				px, py = stack.pop()
-				if (px, py) in visited or px < 0 or py < 0 or px >= w or py >= h:
-					continue
-				if pixels[px, py] == 0:
-					continue
-
-				visited.add((px, py))
-				island_pixels.append((px, py))
-
-				stack.extend([(px + 1, py), (px - 1, py), (px, py + 1), (px, py - 1)])
-			return island_pixels
-
-		def crop_islands_accumulate():
-			full_rect = None
-			bitms = set()
+		rx, ry, rw, rh = [-1, -1, -1, -1]
+		for x in range(w):
+			for y in range(h):
+				if a_pixels[x, y] == 0: continue
+				print((x, y))
+				rx = x
+				break
+			if rx != -1: break
+		for y in range(h):
 			for x in range(w):
-				for y in range(h):
-					if (x, y) in visited or pixels[x, y] != 1: continue
+				if a_pixels[x, y] == 0: continue
+				ry = y
+				break
+			if ry != -1: break
+		for x in range(w):
+			for y in range(h):
+				if a_pixels[w-x-1, h-y-1] == 0: continue
+				rw = w - rx - x
+				break
+			if rw != -1: break
+		for y in range(h):
+			for x in range(w):
+				if a_pixels[w-x-1, h-y-1] == 0: continue
+				rh = h - ry - y
+				break
+			if rh != -1: break
 
-					island_pixels = flood_fill(x, y)
-					if not island_pixels: continue
-
-					min_x = min(p[0] for p in island_pixels)
-					max_x = max(p[0] for p in island_pixels)
-					min_y = min(p[1] for p in island_pixels)
-					max_y = max(p[1] for p in island_pixels)
-					island_rect = Rect(min_x, min_y, max_x - min_x + 1, max_y - min_y + 1)
-					if island_rect.area < args.island_size: continue
-
-					full_rect = island_rect if full_rect == None else full_rect.union(island_rect)
-					bitms = bitms.union(island_pixels)
-
-			full_bitmap = Image.new("1", full_rect.size, color=0)
-			full_bitmap_pixels = full_bitmap.load()
-
-			for px, py in bitms:
-				full_bitmap_pixels[px - full_rect.x, py - full_rect.y] = 1
-			result = SourceImage(self.root, self.file, full_rect, full_bitmap)
-			result.target_match = self.target_match
-			return result
-
-		return crop_islands_accumulate()
-
-
-	def get_opacity_bitmap(self, threshold: int = 1):
-		bitmap = Image.new("1", self.image.size)
-		pixels = bitmap.load()
-
-		for x in range(bitmap.width):
-			for y in range(bitmap.height):
-				_, _, _, a = self.image.getpixel((x, y))
-				pixels[x, y] = 0 if a < threshold else 1
-
-		return bitmap
+		self.source_region = Rect(rx, ry, rw, rh)
 
 
 class TargetImage(PathedImage):
@@ -294,15 +236,13 @@ class TargetImage(PathedImage):
 
 	def expand(self, size):
 		new_size = (size[0] + self.margin, size[1] + self.margin)
-		delta = (0, 0, new_size[0] - self.full_rect.size[0], new_size[1] - self.full_rect.size[1])
+		delta = (0, 0, new_size[0] - self.full_rect.w, new_size[1] - self.full_rect.h)
 		self.full_rect.size = new_size
 		self.image = ImageOps.expand(self.image, delta)
 
 
 	def add(self, source: SourceImage):
-		size = source.source_region.size
-		snap = self.get_snap_for(size)
-		rect = Rect(snap[0], snap[1], size[0], size[1])
+		rect = Rect(self.get_snap_for(source.source_region.size), source.source_region.size)
 
 		if not self.full_rect.contains(rect):
 			self.expand(self.full_rect.union(rect).size)
@@ -458,7 +398,7 @@ def main():
 		bus_set("output", "source_preview", f"\"{source.full}\"")
 		if args.island_crop:
 			print(f"Cropping image '{source.name}' ({progress_display + 1}/{len(sources)}) ...")
-			source = source.crop_islands()
+			source.crop_visible()
 		target = targets[source.target_match]
 		print(f"Appending image '{source.name}' to '{target.file}'...")
 		target.add(source)
@@ -488,16 +428,17 @@ def main():
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument("bus_path", type=str, help="Path to the data bus associated with this program instance.")
-	parser.add_argument("project_name", type=str, help="Target template path for each atlas.")
-	parser.add_argument("source", type=str, help="Source folder to compile images from.")
-	parser.add_argument("target", type=str, help="Target folder to export atlases to.")
-	parser.add_argument("filter_include", type=str, help="Only file paths that match this regex will be included (considers extensions)." )
-	parser.add_argument("filter_separate", type=str, help="File names (not including extension) that match this regex will be separated into different images.")
+	parser.add_argument("bus_path", type=str)
+	parser.add_argument("project_name", type=str)
+	parser.add_argument("source", type=str)
+	parser.add_argument("target", type=str)
+	parser.add_argument("filter_include", type=str )
+	parser.add_argument("filter_separate", type=str)
 	parser.add_argument("filter_composite", type=str)
-	parser.add_argument("image_format", type=str, help="Image format.")
-	parser.add_argument("image_size_limit", type=int, help="The max pixel dimensions a target image can be. If an island cannot be placed within one image, a new one will be created. Use to limit the size of target images.")
-	parser.add_argument("island_margin", type=int, help="Islands above this threshold will have their regions expanded by this margin to include any surrounding pixels.")
+	parser.add_argument("image_format", type=str)
+	parser.add_argument("image_size_limit", type=int)
+	parser.add_argument("island_crop", type=str2bool)
+	parser.add_argument("island_margin", type=int)
 	args = parser.parse_args()
 
 	bus_path = args.bus_path
