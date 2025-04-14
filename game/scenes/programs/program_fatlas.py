@@ -298,12 +298,10 @@ def assign_image_sources():
 	result = []
 	include = re.compile(args.filter_include)
 	exclude = re.compile(args.filter_exclude)
-	for root, dirs, files, in os.walk(args.source):
+	for root, _, files, in os.walk(args.source):
 		for file in files:
 			if args.filter_include != "" and re.search(include, file) == None: continue
-			if args.filter_exclude != "" and re.search(exclude, file) != None:
-				print(file)
-				continue
+			if args.filter_exclude != "" and re.search(exclude, file) != None: continue
 			source = SourceImage(root, file)
 			result.append(source)
 	return result
@@ -325,7 +323,7 @@ def assign_comp_data(maps : dict) -> dict:
 	result = dict()
 	available = list()
 	components = set()
-	pattern = re.compile(args.filter_composite)
+	pattern = re.compile(r"((.+?)(?:_(\d+))?)_([lr])_(.)")
 	for k in maps.keys():
 		for entry in maps[k]:
 			available.append(entry["name"])
@@ -342,36 +340,36 @@ def assign_comp_data(maps : dict) -> dict:
 				if is_latter_index: result[match.group(1)] = f"{match.group(2)}_{"0".zfill(len(match.group(3)))}"
 				else: result[match.group(1)] = None
 
-	for k in result.keys():
-		comp = dict()
-		index_base_entry = result[k]
+	try:
+		for k in result.keys():
+			comp = dict()
+			index_base_entry = result[k]
 
-		for c in components:
-			r_suffix = f"_r_{c}"
-			r_name = k + r_suffix
-			l_suffix = f"_l_{c}"
-			l_name = k + l_suffix
+			for c in components:
+				r_suffix = f"_r_{c}"
+				r_name = k + r_suffix
+				l_suffix = f"_l_{c}"
+				l_name = k + l_suffix
 
-			i = 0
-			for m in maps.keys():
-				if i == 2: break
-				for entry in maps[m]:
+				i = 0
+				for m in maps.keys():
 					if i == 2: break
-					if entry["name"] == r_name:
-						comp[r_suffix] = r_name
-						i += 1
-					elif entry["name"] == l_name:
-						comp[l_suffix] = l_name
-						i += 1
+					for entry in maps[m]:
+						if i == 2: break
+						if entry["name"] == r_name:
+							comp[r_suffix] = r_name
+							i += 1
+						elif entry["name"] == l_name:
+							comp[l_suffix] = l_name
+							i += 1
 
-			if index_base_entry != None and comp.get(r_suffix) == None and result[index_base_entry].get(r_suffix) != None:
-				comp[r_suffix] = result[index_base_entry][r_suffix]
+				if index_base_entry != None and comp.get(r_suffix) == None and result[index_base_entry].get(r_suffix) != None:
+					comp[r_suffix] = result[index_base_entry][r_suffix]
 
-			if comp.get(l_suffix) == None and comp.get(r_suffix) != None:
-				comp[l_suffix] = comp[r_suffix]
-
-
-		result[k] = comp
+				if comp.get(l_suffix) == None and comp.get(r_suffix) != None:
+					comp[l_suffix] = comp[r_suffix]
+			result[k] = comp
+	except: pass
 	return result
 
 
@@ -409,7 +407,6 @@ def main():
 		target.save()
 		bus_set("output", "target_updated", f"\"{target.full}\"")
 
-
 		if maps_data.get(target.file) == None:
 			maps_data[target.file] = []
 		maps_data[target.file].append(source.json_data)
@@ -420,6 +417,7 @@ def main():
 	print(f"Conglomeration complete.")
 
 	comp_data = assign_comp_data(maps_data)
+	# comp_data = dict()
 
 	json_data = {"maps": maps_data, "composites": comp_data}
 

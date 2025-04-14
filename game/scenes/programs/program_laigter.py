@@ -76,6 +76,7 @@ class TargetImage:
 
 			while process.poll() is None:
 				if bus_get("input", "stop"):
+					process.kill()
 					sys.exit(2)
 				time.sleep(0.25)
 
@@ -97,26 +98,20 @@ class TargetImage:
 		# print(f"Saved image to {self.full}")
 
 
-def assign_image_sources():
+def assign_image_targets():
 	result = []
 	include = re.compile(args.filter_include)
 	exclude = re.compile(args.filter_exclude)
-	for _, _, files in os.walk(args.source):
+	for root, _, files in os.walk(args.source):
 		for file in files:
 			if args.filter_include != "" and re.search(include, file) == None: continue
 			if args.filter_exclude != "" and re.search(exclude, file) != None: continue
-			result.append(file)
-	return result
-
-
-def assign_image_targets(sources):
-	result = []
-	for source in sources:
-		name, ext = os.path.splitext(source)
-		path = f"{name}_n{ext}"
-		target = TargetImage(args.target, path, args.source, source)
-		if not args.overwrite and os.path.exists(target.full): continue
-		result.append(target)
+			name, ext = os.path.splitext(file)
+			target_file = f"{name}_n{ext}"
+			target = TargetImage(args.target, target_file, os.path.join(args.source, root), file)
+			if not args.overwrite and os.path.exists(target.full): continue
+			print(target.full)
+			result.append(target)
 	return result
 
 
@@ -125,14 +120,17 @@ def main():
 
 	bus_set("output", "progress_display", 0)
 	if os.path.isdir(args.source):
-		sources = assign_image_sources()
-		targets = assign_image_targets(sources)
+		targets = assign_image_targets()
 		bus_set("output", "progress_display_max", len(targets))
 		for target in targets: target.generate()
 	elif os.path.isfile(args.source):
-		source = TargetImage(os.path.dirname(args.target), os.path.basename(args.target))
-		target = assign_image_targets([source])[0]
 		bus_set("output", "progress_display_max", 1)
+		root = os.path.dirname(args.source)
+		file = os.path.basename(args.source)
+		name, ext = os.path.splitext(file)
+		target_file = f"{name}_n{ext}"
+		target = TargetImage(args.target, target_file, os.path.join(args.source, root), file)
+		if not args.overwrite and os.path.exists(target.full): return
 		target.generate()
 	else:
 		sys.stderr.write("Input path is not a valid file nor directory.")
@@ -143,9 +141,9 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("bus_path", type=str)
 	parser.add_argument("laigter_path", type=str)
+	parser.add_argument("laigter_preset", type=str)
 	parser.add_argument("source", type=str)
 	parser.add_argument("target", type=str)
-	parser.add_argument("laigter_preset", type=str)
 	parser.add_argument("filter_include", type=str)
 	parser.add_argument("filter_exclude", type=str)
 	parser.add_argument("overwrite", type=str2bool)

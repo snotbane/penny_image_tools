@@ -91,9 +91,9 @@ func save_json(path: String = TEMP_JSON_PATH) -> void:
 	json_file.store_string(JSON.stringify(task_data))
 
 
-func load_json(path: String = TEMP_JSON_PATH) -> void:
+func load_json(path: String = TEMP_JSON_PATH, append: bool = false) -> void:
 	if not FileAccess.file_exists(path): return
-	tasks.clear()
+	if not append: tasks.clear()
 	var json_file := FileAccess.open(path, FileAccess.READ)
 	var json_data : Array = JSON.parse_string(json_file.get_as_text())
 	for i in json_data:
@@ -131,7 +131,7 @@ func stop_queue():
 	is_running = false
 	for task in tasks:
 		if not (task.program and task.program.is_running): continue
-		task.stop(true)
+		await task.stop(true)
 	stopped.emit()
 
 
@@ -148,11 +148,19 @@ func refresh_task_status(task: Task) -> void:
 	item.set_text(STATUS, STATUS_TEXTS[task.status])
 
 	var icon : Texture2D = null
+	var tooltip : String
 	match task.status:
-		Task.Status.QUEUED: icon = Program.PLAY_ICON
-		Task.Status.RUNNING: icon = Program.STOP_ICON
-		Task.Status.COMPLETE, Task.Status.FAILED: icon = Program.RESET_ICON
+		Task.Status.QUEUED:
+			icon = Program.PLAY_ICON
+			tooltip = "Run (only this task)"
+		Task.Status.RUNNING:
+			icon = Program.STOP_ICON
+			tooltip = "Stop (entire queue)"
+		Task.Status.COMPLETE, Task.Status.FAILED:
+			icon = Program.RESET_ICON
+			tooltip = "Reset"
 	item.set_button(BUTTONS, EXECUTE, icon)
+	item.set_button_tooltip_text(BUTTONS, EXECUTE, tooltip)
 
 	for i in self.columns:
 		match i:
@@ -208,11 +216,16 @@ func add_task_item(task: Task) -> TreeItem:
 		result.set_selectable(i, false)
 
 	result.add_button(BUTTONS, MOVE_UP_ICON, MOVE_UP)
+	result.set_button_tooltip_text(BUTTONS, MOVE_UP, "Move Up")
 	result.add_button(BUTTONS, MOVE_DOWN_ICON, MOVE_DOWN)
+	result.set_button_tooltip_text(BUTTONS, MOVE_DOWN, "Move Down")
 	result.add_button(BUTTONS, COPY_ICON, COPY)
+	result.set_button_tooltip_text(BUTTONS, COPY, "Duplicate")
 	result.add_button(BUTTONS, OPEN_ICON, OPEN)
+	result.set_button_tooltip_text(BUTTONS, OPEN, "Open")
 	result.add_button(BUTTONS, Program.PLAY_ICON, EXECUTE)
 	result.add_button(REMOVE, REMOVE_ICON)
+	result.set_button_tooltip_text(REMOVE, 0, "Remove")
 
 	result.set_text(PROGRAM, task.program_task_name)
 	result.set_text_direction(TARGET, TextDirection.TEXT_DIRECTION_RTL)
@@ -262,8 +275,11 @@ func execute_task(task: Task) -> void:
 			await task.run(self.get_tree())
 			task.program.on_close_requested()
 		Task.Status.RUNNING:
-			await task.stop(true)
-			task.program.on_close_requested()
+			if self.is_running:
+				stop_queue()
+			else:
+				await task.stop(true)
+				task.program.on_close_requested()
 		Task.Status.COMPLETE, Task.Status.FAILED:
 			task.reset()
 func execute_item(item: TreeItem) -> void:

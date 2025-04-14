@@ -128,7 +128,6 @@ visible = false
 layout_mode = 2
 tooltip_text = "Assigns composition data based on the internal groups of the regex. FOR NOW this only works with this specific pattern, so don't change this."
 _value = "((.+?)(?:_(\\d+))?)_([lr])_(.)"
-allow_empty = false
 label_text = "Composite Filter"
 normal_tooltip = "Assigns composition data based on the internal groups of the regex. FOR NOW this only works with this specific pattern, so don't change this."
 program = NodePath("../../../../../../../../..")

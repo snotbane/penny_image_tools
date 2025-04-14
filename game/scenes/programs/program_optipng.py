@@ -64,6 +64,7 @@ def compress_png_file(target):
 
 		while process.poll() is None:
 			if bus_get("input", "stop"):
+				process.kill()
 				sys.exit(2)
 			time.sleep(0.25)
 

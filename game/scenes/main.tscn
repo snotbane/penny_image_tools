@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://coxdxohawk630"]
+[gd_scene load_steps=29 format=3 uid="uid://coxdxohawk630"]
 
 [ext_resource type="Theme" uid="uid://cjww2dp7ckflf" path="res://game/theme.tres" id="1_20rwd"]
 [ext_resource type="Script" uid="uid://bh5joyc3jgyq3" path="res://game/scenes/main.gd" id="2_r75lq"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://c30c6b2b3hwjc" path="res://game/icons/Play.svg" id="9_j51q3"]
 [ext_resource type="Texture2D" uid="uid://clnl6kqjmjjlb" path="res://game/icons/Reload.svg" id="10_j51q3"]
 [ext_resource type="Texture2D" uid="uid://bkws2f7s6bw5x" path="res://game/icons/Remove.svg" id="11_6mtf4"]
+[ext_resource type="Texture2D" uid="uid://fme535s2d2n4" path="res://game/icons/Add.svg" id="16_q1x0e"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_wfa3j"]
 device = -1
@@ -41,6 +42,15 @@ keycode = 79
 
 [sub_resource type="Shortcut" id="Shortcut_tlldc"]
 events = [SubResource("InputEventKey_5vg48")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_q1x0e"]
+device = -1
+command_or_control_autoremap = true
+shift_pressed = true
+keycode = 79
+
+[sub_resource type="Shortcut" id="Shortcut_8g3t5"]
+events = [SubResource("InputEventKey_q1x0e")]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3v7cf"]
 
@@ -230,13 +240,24 @@ shortcut = SubResource("Shortcut_5vg48")
 text = "Clear"
 icon = ExtResource("11_6mtf4")
 
-[node name="queue_load" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
+[node name="h_box_container" type="HBoxContainer" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
+layout_mode = 2
+
+[node name="queue_load" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/h_box_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Loads a queue from a file."
 shortcut = SubResource("Shortcut_tlldc")
 text = "Load"
 icon = ExtResource("8_shkmv")
+
+[node name="queue_load_add" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/h_box_container"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+tooltip_text = "Loads a queue from a file and adds it to the current queue."
+shortcut = SubResource("Shortcut_8g3t5")
+icon = ExtResource("16_q1x0e")
+icon_alignment = 1
 
 [node name="queue_reset_all" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
 layout_mode = 2
@@ -312,6 +333,16 @@ access = 2
 filters = PackedStringArray("*.json")
 use_native_dialog = true
 
+[node name="load_add_dialog" type="FileDialog" parent="."]
+auto_translate_mode = 1
+title = "Open a File"
+initial_position = 4
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.json")
+use_native_dialog = true
+
 [node name="clear_all_confirmation" type="ConfirmationDialog" parent="."]
 initial_position = 1
 size = Vector2i(314, 106)
@@ -328,15 +359,17 @@ Are you sure you want to quit?"
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_save" to="save_dialog" method="show"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_run" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="_on_queue_run_pressed"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_clear_all" to="clear_all_confirmation" method="show"]
-[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_load" to="load_dialog" method="show"]
+[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/h_box_container/queue_load" to="load_dialog" method="show"]
+[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/h_box_container/queue_load_add" to="load_add_dialog" method="show"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_reset_all" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="reset_completed_tasks"]
 [connection signal="meta_clicked" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel/margin_container/rich_text_label" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel/margin_container/rich_text_label" method="_on_meta_clicked"]
 [connection signal="button_clicked" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="_on_button_clicked"]
 [connection signal="started" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_clear_all" method="set_disabled" binds= [true]]
-[connection signal="started" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_load" method="set_disabled" binds= [true]]
+[connection signal="started" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/h_box_container/queue_load" method="set_disabled" binds= [true]]
 [connection signal="stopped" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_clear_all" method="set_disabled" binds= [false]]
-[connection signal="stopped" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_load" method="set_disabled" binds= [false]]
+[connection signal="stopped" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/h_box_container/queue_load" method="set_disabled" binds= [false]]
 [connection signal="file_selected" from="save_dialog" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="save_json"]
 [connection signal="file_selected" from="load_dialog" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="load_json"]
+[connection signal="file_selected" from="load_add_dialog" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="load_json" binds= [true]]
 [connection signal="confirmed" from="clear_all_confirmation" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="clear_all_tasks"]
 [connection signal="confirmed" from="close_confirmation" to="." method="quit"]
