@@ -278,7 +278,8 @@ theme_override_constants/margin_bottom = 0
 [node name="rich_text_label" type="RichTextLabel" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel/margin_container"]
 layout_mode = 2
 bbcode_enabled = true
-text = "[center][b]PENNYTHON TASK RUNNER[/b] v25.04.11
+text = "[center][b]PENNYTHON TASK RUNNER[/b] v25.04.14
+
 Created by [url=https://snotbane.carrd.co][hint=https://snotbane.carrd.co]@snotbane[/hint][/url]
 View this [url=https://github.com/snotbane/penny_image_tools][hint=https://github.com/snotbane/penny_image_tools]GitHub repository[/hint][/url] 
 "

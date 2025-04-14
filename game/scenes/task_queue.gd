@@ -77,9 +77,11 @@ func _process(delta: float) -> void:
 
 
 func _enter_tree() -> void:
+	if Engine.is_editor_hint(): return
 	load_json()
 
 func _exit_tree() -> void:
+	if Engine.is_editor_hint(): return
 	save_json()
 
 
