@@ -40,3 +40,7 @@ func refresh() -> void:
 
 func clear() -> void:
 	value = ""
+
+
+func _on_program_cleanup_started() -> void:
+	pass # Replace with function body.

@@ -9,11 +9,11 @@ static func _static_init() -> void:
 		CONFIG.save(CONFIG_PATH)
 
 
-static func get_persistent_parameter(section: StringName, key: StringName, default: Variant = null) -> Variant:
+static func get_global(section: StringName, key: StringName, default: Variant = null) -> Variant:
 	return CONFIG.get_value(section, key, default)
 
 
-static func set_persistent_parameter(section: StringName, key: StringName, val: Variant) -> void:
+static func set_global(section: StringName, key: StringName, val: Variant) -> void:
 	CONFIG.set_value(section, key, val)
 	CONFIG.save(CONFIG_PATH)
 
@@ -36,6 +36,7 @@ var _normal_tooltip : String
 		_normal_tooltip = value
 		refresh_tooltip()
 
+
 var _validation : String
 var validation : String :
 	get: return _validation
@@ -49,8 +50,8 @@ var is_valid : bool :
 
 func validate() -> void:
 	validation = _get_validation()
-	if self.persist and persist_load_attempted: save_persistent()
 	value_changed.emit(value)
+	if persist: save_persistent()
 func _get_validation() -> String : return ""
 
 func refresh_tooltip() -> void:
@@ -62,29 +63,28 @@ func refresh_tooltip() -> void:
 
 @export var program : Program
 
-## If enabled, this value will be saved to a configuration file and loaded whenever a parameter of the same node name appears.
+
 @export var persist : bool :
 	get: return $hbox/persist/check.button_pressed if find_child("check") else false
-	set(value):
+	set(val):
 		if not find_child("check"): return
-		$hbox/persist/check.button_pressed = value
-		$hbox/persist/check.visible = not value or persist
+		$hbox/persist/check.button_pressed = val
+		$hbox/persist/check.visible = val or not persist_disabled
 		refresh_persist()
 func refresh_persist() -> void:
 	if Engine.is_editor_hint(): return
 	if self.persist:
-		if persist_load_attempted:
-			save_persistent()
+		save_persistent()
 	else:
 		clear_persistent()
 
 
 @export var persist_disabled : bool :
 	get: return $hbox/persist/check.disabled if find_child("check") else false
-	set(value):
+	set(val):
 		if not find_child("check"): return
-		$hbox/persist/check.disabled = value
-		$hbox/persist/check.visible = not value or persist
+		$hbox/persist/check.disabled = val
+		$hbox/persist/check.visible = not val or persist
 
 
 var section_name : StringName :
@@ -104,8 +104,6 @@ var value : Variant :
 func set_value(val: Variant) -> void:
 	value = val
 
-var value_as_config_data : Variant :
-	get: return value
 
 var value_as_python_argument : String :
 	get:
@@ -120,17 +118,20 @@ func _ready() -> void:
 	validate()
 
 
-var persist_load_attempted = false
 func load_persistent() -> void:
-	var persist_data_exists := CONFIG.has_section_key(section_name, self.name)
-	persist = persist or persist_data_exists
-	if persist and persist_data_exists: value = CONFIG.get_value(section_name, self.name)
-	await get_tree().create_timer(0.1).timeout
-	persist_load_attempted = true
+	var already_persistent := persist
+	var will_be_persistent := CONFIG.has_section_key(section_name, self.name)
+	$hbox/persist/check.button_pressed = will_be_persistent or already_persistent
+	$hbox/persist/check.visible = $hbox/persist/check.button_pressed or not persist_disabled
+	if will_be_persistent:
+		set(&"_value", CONFIG.get_value(section_name, self.name, self.value))
+		validate()
+	elif already_persistent:
+		save_persistent()
 
 
 func save_persistent() -> void:
-	CONFIG.set_value(section_name, self.name, self.value_as_config_data)
+	CONFIG.set_value(section_name, self.name, self.value)
 	CONFIG.save(CONFIG_PATH)
 
 

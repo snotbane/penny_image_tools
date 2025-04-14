@@ -115,7 +115,7 @@ func start() -> void:
 	bus.save(bus_path)
 
 	started.emit()
-	thread.start(python.bind(Parameter.get_persistent_parameter(&"all", &"python_path"), get_python_arguments()))
+	thread.start(python.bind(Parameter.get_global(&"all", &"python_path"), get_python_arguments()))
 
 
 func stop() -> void:

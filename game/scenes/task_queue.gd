@@ -215,6 +215,7 @@ func add_task_item(task: Task) -> TreeItem:
 	result.add_button(REMOVE, REMOVE_ICON)
 
 	result.set_text(PROGRAM, task.program_task_name)
+	result.set_text_direction(TARGET, TextDirection.TEXT_DIRECTION_RTL)
 	refresh_task_target(task)
 	refresh_task_status(task)
 

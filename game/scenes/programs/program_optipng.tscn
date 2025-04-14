@@ -23,7 +23,6 @@ func get_progress() -> float:
 
 [node name="program_optipng" node_paths=PackedStringArray("target_parameter", "progress_display", "elements") instance=ExtResource("1_qdlne")]
 script = SubResource("GDScript_06mrk")
-print_output = true
 identifier = &"optipng"
 program_name = "OptiPNG Image Compression"
 program_nickname = "OptiPNG"

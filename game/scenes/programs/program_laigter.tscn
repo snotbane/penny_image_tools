@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://djx5tlrjuqe28"]
+[gd_scene load_steps=12 format=3 uid="uid://djx5tlrjuqe28"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_01eyl"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_xvs5m"]
 [ext_resource type="Texture2D" uid="uid://dhuqncbf6v2ui" path="res://game/icons/ImageTexture3DBig.svg" id="2_yqikp"]
 [ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="4_0j3eq"]
 [ext_resource type="PackedScene" uid="uid://b0agby5b750h6" path="res://game/scenes/parameter/parameter_regex.tscn" id="4_yqikp"]
+[ext_resource type="PackedScene" uid="uid://1vhcrt3tadog" path="res://game/scenes/parameter/parameter_bool.tscn" id="5_868w3"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="5_ijscp"]
 [ext_resource type="PackedScene" uid="uid://xx07uwu4xf5i" path="res://game/scenes/elements/privacy_mask.tscn" id="5_yqikp"]
 [ext_resource type="Texture2D" uid="uid://jwi4xtrvwxh5" path="res://game/icons/ExternalLink.svg" id="5_yqwu8"]
@@ -31,13 +32,13 @@ var path : String
 
 func _pressed() -> void:
 	OS.shell_open(path)
-	
+
 	# ## Doesn't work???
 	#OS.execute_with_pipe(path, [], false)
 
 
 func _on_laigter_path_value_changed() -> void:
-	path = Parameter.get_persistent_parameter(&\"laigter\", &\"laigter_path\", \"\")
+	path = Parameter.get_global(&\"laigter\", &\"laigter_path\", \"\")
 	self.disabled = not FileAccess.file_exists(path)
 "
 
@@ -62,47 +63,67 @@ program = NodePath("../../../../../../../../..")
 persist = true
 persist_disabled = true
 
-[node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1"]
+[node name="laigter_preset" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" node_paths=PackedStringArray("program") instance=ExtResource("2_xvs5m")]
+layout_mode = 2
+tooltip_text = "Path the the laigter preset. Use the Laigter GUI to create this preset file."
+file_mode = 0
+label_text = "Preset Path"
+normal_tooltip = "Path the the laigter preset. Use the Laigter GUI to create this preset file."
+program = NodePath("../../../../../../../../..")
+
+[node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2"]
 layout_mode = 2
 
-[node name="source" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2" node_paths=PackedStringArray("program") instance=ExtResource("2_xvs5m")]
+[node name="source" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3" node_paths=PackedStringArray("program") instance=ExtResource("2_xvs5m")]
 layout_mode = 2
 label_text = "Source Path"
 program = NodePath("../../../../../../../../..")
 persist_disabled = true
 
-[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3" node_paths=PackedStringArray("program") instance=ExtResource("2_xvs5m")]
+[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" node_paths=PackedStringArray("program") instance=ExtResource("2_xvs5m")]
 layout_mode = 2
+tooltip_text = "Target path to place normal files. Leave blank to keep source."
+allow_empty = true
 label_text = "Target Path"
+normal_tooltip = "Target path to place normal files. Leave blank to keep source."
 program = NodePath("../../../../../../../../..")
 persist_disabled = true
 
-[node name="h_separator_2" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4"]
+[node name="h_separator_2" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5"]
 layout_mode = 2
 
-[node name="laigter_preset" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" node_paths=PackedStringArray("program") instance=ExtResource("2_xvs5m")]
-layout_mode = 2
-tooltip_text = "Path the the laigter preset. Use the Laigter GUI to create this preset file."
-label_text = "Preset"
-normal_tooltip = "Path the the laigter preset. Use the Laigter GUI to create this preset file."
-program = NodePath("../../../../../../../../..")
-persist = true
-
-[node name="laigter_filter" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="6" node_paths=PackedStringArray("program") instance=ExtResource("4_yqikp")]
+[node name="filter_include" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="6" node_paths=PackedStringArray("program") instance=ExtResource("4_yqikp")]
 layout_mode = 2
 tooltip_text = "Files with names that match this regex filter will be processed."
-_value = ".+(?<!_n)\\.png$"
+_value = "\\.png$"
 allow_empty = false
 label_text = "Inclusion Filter"
 normal_tooltip = "Files with names that match this regex filter will be processed."
 program = NodePath("../../../../../../../../..")
-persist = true
 
-[node name="space" type="Control" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="7"]
+[node name="filter_exclude" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="7" node_paths=PackedStringArray("program") instance=ExtResource("4_yqikp")]
+layout_mode = 2
+tooltip_text = "File names that match this regex pattern will be excluded from being processed. Leave blank to exclude none."
+_value = "_[nN]\\.png$"
+allow_empty = false
+label_text = "Exclusion Filter"
+normal_tooltip = "File names that match this regex pattern will be excluded from being processed. Leave blank to exclude none."
+program = NodePath("../../../../../../../../..")
+
+[node name="overwrite" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="8" node_paths=PackedStringArray("program") instance=ExtResource("5_868w3")]
+layout_mode = 2
+tooltip_text = "If enabled, this will process all files.
+If disabled, this will only process files that do not have a normal texture in the target path."
+label_text = "Overwrite"
+normal_tooltip = "If enabled, this will process all files.
+If disabled, this will only process files that do not have a normal texture in the target path."
+program = NodePath("../../../../../../../../..")
+
+[node name="space" type="Control" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="9"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="open_laigter_gui" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="8"]
+[node name="open_laigter_gui" type="Button" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="10"]
 layout_mode = 2
 text = "Open Laigter GUI"
 icon = ExtResource("5_yqwu8")

@@ -99,10 +99,12 @@ class TargetImage:
 
 def assign_image_sources():
 	result = []
-	pattern = re.compile(args.laigter_filter)
+	include = re.compile(args.filter_include)
+	exclude = re.compile(args.filter_exclude)
 	for _, _, files in os.walk(args.source):
 		for file in files:
-			if re.search(pattern, file) == None: continue
+			if args.filter_include != "" and re.search(include, file) == None: continue
+			if args.filter_exclude != "" and re.search(exclude, file) != None: continue
 			result.append(file)
 	return result
 
@@ -112,11 +114,15 @@ def assign_image_targets(sources):
 	for source in sources:
 		name, ext = os.path.splitext(source)
 		path = f"{name}_n{ext}"
-		result.append(TargetImage(args.target, path, args.source, source))
+		target = TargetImage(args.target, path, args.source, source)
+		if not args.overwrite and os.path.exists(target.full): continue
+		result.append(target)
 	return result
 
 
 def main():
+	if args.target == "": args.target = args.source
+
 	bus_set("output", "progress_display", 0)
 	if os.path.isdir(args.source):
 		sources = assign_image_sources()
@@ -140,7 +146,9 @@ if __name__ == "__main__":
 	parser.add_argument("source", type=str)
 	parser.add_argument("target", type=str)
 	parser.add_argument("laigter_preset", type=str)
-	parser.add_argument("laigter_filter", type=str)
+	parser.add_argument("filter_include", type=str)
+	parser.add_argument("filter_exclude", type=str)
+	parser.add_argument("overwrite", type=str2bool)
 	args = parser.parse_args()
 
 	bus_path = args.bus_path

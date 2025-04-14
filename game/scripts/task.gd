@@ -102,7 +102,7 @@ func open(tree: SceneTree, show: bool = true) -> ProgramWindow:
 		program.succeeded.connect(set.bind(&"status", Status.COMPLETE))
 		program.failed.connect(set.bind(&"status", Status.FAILED))
 		if parameters:
-			if Parameter.get_persistent_parameter(&"all", &"persist_overrides_task", true):
+			if Parameter.get_global(&"all", &"persist_overrides_task", true):
 				program.load_parameters(parameters)
 			else:
 				program.load_parameters.call_deferred(parameters)
@@ -111,7 +111,7 @@ func open(tree: SceneTree, show: bool = true) -> ProgramWindow:
 
 
 func run(tree: SceneTree, close_after_stopped: bool = false):
-	self.open(tree, Parameter.get_persistent_parameter(&"all", &"queue_privacy", 0) > 0)
+	self.open(tree, Parameter.get_global(&"all", &"queue_privacy", 0) > 0)
 	program.start.call_deferred()
 	await program.stopped
 	if close_after_stopped: program.on_close_requested()

@@ -64,10 +64,7 @@ offset_right = 4.0
 offset_bottom = 14.0
 grow_horizontal = 2
 grow_vertical = 2
-tooltip_text = "When enabled, this value will persist between tasks and sessions.
-
-WARNING! This will overwrite task attributes, so only enable it
-if you're sure you want it to be the same for ALL tasks."
+tooltip_text = "When enabled, this value will persist between tasks and sessions."
 focus_mode = 0
 theme_override_icons/checked = ExtResource("2_pk3pc")
 theme_override_icons/unchecked = ExtResource("2_ltlnn")

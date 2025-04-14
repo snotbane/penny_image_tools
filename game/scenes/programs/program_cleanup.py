@@ -151,18 +151,17 @@ class TargetImage:
 
 			## Initialize bitmap
 
-			original : Image = self.image.copy()
 			r, g, b, a = self.image.split()
+			a_pixels = a.load()
 			w, h = self.image.size
 			bitmap = Image.new("1", self.image.size)
 			bitmap_pixels = bitmap.load()
 
 			## Cull pixels below opacity threshold in bitmap
 
-			if args.island_opacity > 0:
-				for x in range(w):
-					for y in range(h):
-						bitmap_pixels[x, y] = 0 if a.getpixel((x, y)) < args.island_opacity else 1
+			for x in range(w):
+				for y in range(h):
+					bitmap_pixels[x, y] = 0 if a_pixels[x, y] <= args.island_opacity else 1
 			bitmap_original = bitmap.copy()
 
 			## Cull pixel islands below area threshold in bitmap
@@ -213,10 +212,9 @@ class TargetImage:
 
 			mask = bitmap.convert("L")
 			mask_pixels = mask.load()
-			alpha_pixels = a.load()
 			for x in range(w):
 				for y in range(h):
-					alpha_pixels[x, y] = min(mask_pixels[x, y], alpha_pixels[x, y])
+					a_pixels[x, y] = min(mask_pixels[x, y], a_pixels[x, y])
 			self.image = Image.merge("RGBA", (r, g, b, a))
 			self.image.save(self.temp_path_new)
 
@@ -247,10 +245,13 @@ class TargetImage:
 
 def assign_targets():
 	result = []
-	for _, _, files in os.walk(args.target):
+	include = re.compile(args.filter_include)
+	exclude = re.compile(args.filter_exclude)
+	for root, _, files in os.walk(args.target):
 		for file in files:
-			if re.search(re.compile(args.filter_include), file) == None: continue
-			result.append(TargetImage(args.target, file))
+			if args.filter_include != "" and re.search(include, file) == None: continue
+			if args.filter_exclude != "" and re.search(exclude, file) != None: continue
+			result.append(TargetImage(os.path.join(args.target, root), file))
 	return result
 
 
@@ -278,6 +279,7 @@ if __name__ == "__main__":
 	parser.add_argument("target", type=str)
 	parser.add_argument("review_changes", type=str2bool)
 	parser.add_argument("filter_include", type=str)
+	parser.add_argument("filter_exclude", type=str)
 	parser.add_argument("island_opacity", type=int)
 	parser.add_argument("island_size", type=int)
 	args = parser.parse_args()

@@ -5,15 +5,8 @@
 
 [node name="parameter_regex" instance=ExtResource("1_eyni0")]
 script = ExtResource("2_2sndg")
-_value = ".*"
-allow_empty = null
+allow_empty = true
 label_text = "RegEx"
 
-[node name="label" parent="hbox" index="0"]
-custom_minimum_size = Vector2(180, 0)
-size_flags_horizontal = 1
-tooltip_text = ""
+[node name="label" parent="hbox" index="1"]
 text = "RegEx"
-
-[node name="line_edit" parent="hbox" index="1"]
-text = ".*"

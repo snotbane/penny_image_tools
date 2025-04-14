@@ -18,13 +18,13 @@
 [ext_resource type="Texture2D" uid="uid://clnl6kqjmjjlb" path="res://game/icons/Reload.svg" id="10_j51q3"]
 [ext_resource type="Texture2D" uid="uid://bkws2f7s6bw5x" path="res://game/icons/Remove.svg" id="11_6mtf4"]
 
-[sub_resource type="InputEventKey" id="InputEventKey_5vg48"]
+[sub_resource type="InputEventKey" id="InputEventKey_wfa3j"]
 device = -1
 command_or_control_autoremap = true
-keycode = 79
+keycode = 83
 
-[sub_resource type="Shortcut" id="Shortcut_tlldc"]
-events = [SubResource("InputEventKey_5vg48")]
+[sub_resource type="Shortcut" id="Shortcut_omm64"]
+events = [SubResource("InputEventKey_wfa3j")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_omm64"]
 device = -1
@@ -34,13 +34,13 @@ keycode = 82
 [sub_resource type="Shortcut" id="Shortcut_5vg48"]
 events = [SubResource("InputEventKey_omm64")]
 
-[sub_resource type="InputEventKey" id="InputEventKey_wfa3j"]
+[sub_resource type="InputEventKey" id="InputEventKey_5vg48"]
 device = -1
 command_or_control_autoremap = true
-keycode = 83
+keycode = 79
 
-[sub_resource type="Shortcut" id="Shortcut_omm64"]
-events = [SubResource("InputEventKey_wfa3j")]
+[sub_resource type="Shortcut" id="Shortcut_tlldc"]
+events = [SubResource("InputEventKey_5vg48")]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3v7cf"]
 
@@ -114,7 +114,7 @@ label_text = "Max Threads"
 persist = true
 persist_disabled = true
 
-[node name="queue_privacy" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("5_uk16q")]
+[node name="queue_visibility" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("5_uk16q")]
 layout_mode = 2
 tooltip_text = "Run in Background: The queue will run without opening any windows.
 Hide Results: Programs run in the queue will open a new window, but the results will be hidden.
@@ -138,7 +138,6 @@ persist_disabled = true
 visible = false
 layout_mode = 2
 tooltip_text = "If enabled, persistent values will override task values."
-_value = true
 label_text = "Persist Master"
 normal_tooltip = "If enabled, persistent values will override task values."
 persist = true
@@ -204,21 +203,16 @@ icon_alignment = 0
 layout_mode = 2
 columns = 3
 
-[node name="queue_load" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
+[node name="space" type="Control" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
 layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Loads a queue from a file."
-shortcut = SubResource("Shortcut_tlldc")
-text = "Load"
-icon = ExtResource("8_shkmv")
 
-[node name="queue_reset_all" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
+[node name="queue_save" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Reload all completed tasks so they can be run again."
-shortcut = SubResource("Shortcut_5vg48")
-text = "Reload"
-icon = ExtResource("10_j51q3")
+tooltip_text = "Saves the current queue to a JSON file."
+shortcut = SubResource("Shortcut_omm64")
+text = "Save"
+icon = ExtResource("7_rmvmd")
 
 [node name="queue_run" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
 layout_mode = 2
@@ -236,16 +230,21 @@ shortcut = SubResource("Shortcut_5vg48")
 text = "Clear"
 icon = ExtResource("11_6mtf4")
 
-[node name="queue_save" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
+[node name="queue_load" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Saves the current queue to a JSON file."
-shortcut = SubResource("Shortcut_omm64")
-text = "Save"
-icon = ExtResource("7_rmvmd")
+tooltip_text = "Loads a queue from a file."
+shortcut = SubResource("Shortcut_tlldc")
+text = "Load"
+icon = ExtResource("8_shkmv")
 
-[node name="space" type="Control" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
+[node name="queue_reset_all" type="Button" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls"]
 layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Reload all completed tasks so they can be run again."
+shortcut = SubResource("Shortcut_5vg48")
+text = "Reload"
+icon = ExtResource("10_j51q3")
 
 [node name="info_panel" type="PanelContainer" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container"]
 layout_mode = 2
@@ -326,18 +325,18 @@ ok_button_text = "Get outta here!"
 dialog_text = "Tasks are still running.
 Are you sure you want to quit?"
 
-[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_load" to="load_dialog" method="show"]
-[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_reset_all" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="reset_completed_tasks"]
+[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_save" to="save_dialog" method="show"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_run" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="_on_queue_run_pressed"]
 [connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_clear_all" to="clear_all_confirmation" method="show"]
-[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_save" to="save_dialog" method="show"]
+[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_load" to="load_dialog" method="show"]
+[connection signal="pressed" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_reset_all" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="reset_completed_tasks"]
 [connection signal="meta_clicked" from="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel/margin_container/rich_text_label" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/info_panel/margin_container/rich_text_label" method="_on_meta_clicked"]
 [connection signal="button_clicked" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="_on_button_clicked"]
-[connection signal="started" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_load" method="set_disabled" binds= [true]]
 [connection signal="started" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_clear_all" method="set_disabled" binds= [true]]
-[connection signal="stopped" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_load" method="set_disabled" binds= [false]]
+[connection signal="started" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_load" method="set_disabled" binds= [true]]
 [connection signal="stopped" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_clear_all" method="set_disabled" binds= [false]]
-[connection signal="file_selected" from="save_dialog" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="save"]
-[connection signal="file_selected" from="load_dialog" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="load"]
+[connection signal="stopped" from="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" to="panel_container/margin_container/v_box_container/h_box_container/v_box_container/queue_controls/queue_load" method="set_disabled" binds= [false]]
+[connection signal="file_selected" from="save_dialog" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="save_json"]
+[connection signal="file_selected" from="load_dialog" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="load_json"]
 [connection signal="confirmed" from="clear_all_confirmation" to="panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree" method="clear_all_tasks"]
 [connection signal="confirmed" from="close_confirmation" to="." method="quit"]

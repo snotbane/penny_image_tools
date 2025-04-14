@@ -296,10 +296,14 @@ class TargetImage(PathedImage):
 
 def assign_image_sources():
 	result = []
-	pattern = re.compile(args.filter_include)
+	include = re.compile(args.filter_include)
+	exclude = re.compile(args.filter_exclude)
 	for root, dirs, files, in os.walk(args.source):
 		for file in files:
-			if re.search(pattern, file) == None: continue
+			if args.filter_include != "" and re.search(include, file) == None: continue
+			if args.filter_exclude != "" and re.search(exclude, file) != None:
+				print(file)
+				continue
 			source = SourceImage(root, file)
 			result.append(source)
 	return result
@@ -328,7 +332,7 @@ def assign_comp_data(maps : dict) -> dict:
 			match = re.search(pattern, entry["name"])
 
 			if not match:
-				print("One or more matches were not found in the regex; double check your pattern!")
+				print(f"One or more matches were not found in the regex; double check your pattern! The pattern in question: {args.filter_composite}")
 				return dict()
 
 			components.add(match.group(5))
@@ -432,7 +436,8 @@ if __name__ == "__main__":
 	parser.add_argument("project_name", type=str)
 	parser.add_argument("source", type=str)
 	parser.add_argument("target", type=str)
-	parser.add_argument("filter_include", type=str )
+	parser.add_argument("filter_include", type=str)
+	parser.add_argument("filter_exclude", type=str)
 	parser.add_argument("filter_separate", type=str)
 	parser.add_argument("filter_composite", type=str)
 	parser.add_argument("image_format", type=str)
