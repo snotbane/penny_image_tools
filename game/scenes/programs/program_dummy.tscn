@@ -8,7 +8,7 @@
 identifier = &"dummy"
 program_name = "Dummy Program"
 program_nickname = "Dummy"
-python_script_path = "res://game/scenes/programs/program_dummy.py"
+python_script_path = "res://python/program_dummy.py"
 progress_display = NodePath("panel_container/margin_container/h_split_container/right_panel/margin_container/progress_display")
 
 [node name="wait_time" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" node_paths=PackedStringArray("program") instance=ExtResource("2_mbje0")]

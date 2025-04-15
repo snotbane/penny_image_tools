@@ -15,7 +15,7 @@ grow_vertical = 2
 theme = ExtResource("1_evvk3")
 script = ExtResource("1_57qps")
 print_output = true
-python_script_path = "res://game/scenes/programs/program.py"
+python_script_path = "res://python/program.py"
 parameters_container = NodePath("panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters")
 execute_button = NodePath("panel_container/margin_container/h_split_container/v_box_container/h_box_container/start_button")
 

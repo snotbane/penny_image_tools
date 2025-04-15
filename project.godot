@@ -60,6 +60,7 @@ folder_colors={
 "res://game/scripts/": "blue",
 "res://game/shaders/": "purple",
 "res://game/shaders_materials/": "pink",
+"res://python/": "purple",
 "res://venv/": "gray"
 }
 
