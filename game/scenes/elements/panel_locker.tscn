@@ -51,9 +51,11 @@ animations = [{
 
 [node name="panel_locker" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 400.0
-offset_bottom = 800.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_default_cursor_shape = 8
 
 [node name="color_rect" type="ColorRect" parent="."]
@@ -113,7 +115,7 @@ mouse_filter = 2
 
 [node name="progress" type="AnimatedSprite2D" parent="center_container/panel_container/margin_container/v_box_container/control"]
 sprite_frames = SubResource("SpriteFrames_do5hd")
-frame_progress = 0.705819
+frame_progress = 0.309242
 centered = false
 
 [node name="label" type="Label" parent="center_container/panel_container/margin_container/v_box_container"]

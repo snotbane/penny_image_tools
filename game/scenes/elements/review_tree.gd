@@ -21,7 +21,8 @@ enum {
 @export var program : Program
 
 @export var target_parameter : ParameterFilepath
-@export var filter_parameter : ParameterString
+@export var filter_include : ParameterString
+@export var filter_exclude : ParameterString
 
 @export var old_preview : ImagePreview
 @export var new_preview : ImagePreview
@@ -162,14 +163,14 @@ func _on_item_selected() -> void:
 
 func get_files(path: String) -> PackedStringArray:
 	if DirAccess.dir_exists_absolute(path):
-		return get_all_matching_files(path, RegEx.create_from_string(filter_parameter.value))
+		return get_all_matching_files(path, RegEx.create_from_string(filter_include.value), RegEx.create_from_string(filter_exclude.value))
 	elif FileAccess.file_exists(path):
-		if RegEx.create_from_string(filter_parameter.value).search(path) and FileAccess.file_exists(get_alt_path(path, NEW)):
+		if RegEx.create_from_string(filter_include.value).search(path) and FileAccess.file_exists(get_alt_path(path, NEW)):
 			return [ path ]
 	return []
 
 
-func get_all_matching_files(path: String, regex: RegEx) -> PackedStringArray:
+func get_all_matching_files(path: String, include: RegEx, exclude: RegEx) -> PackedStringArray:
 	var result : PackedStringArray = []
 	var dir := DirAccess.open(path)
 	if not dir.dir_exists(path): return result
@@ -179,10 +180,12 @@ func get_all_matching_files(path: String, regex: RegEx) -> PackedStringArray:
 	while file:
 		var full_path := path.path_join(file)
 		if dir.current_is_dir():
-			result.append_array(get_all_matching_files(full_path, regex))
+			result.append_array(get_all_matching_files(full_path, include, exclude))
 		else:
-			if regex.search(file) and FileAccess.file_exists(get_alt_path(full_path, NEW)):
-				result.push_back(full_path)
+			if	(include.get_pattern() == "" or include.search(file) != null) and \
+				(exclude.get_pattern() == "" or exclude.search(file) == null) and \
+				FileAccess.file_exists(get_alt_path(full_path, NEW)):
+					result.push_back(full_path)
 		file = dir.get_next()
 	dir.list_dir_end()
 	return result

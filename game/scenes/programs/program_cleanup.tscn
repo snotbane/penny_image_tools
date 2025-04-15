@@ -129,11 +129,12 @@ program = NodePath("../../../../../../../../..")
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="review_tree" parent="panel_container/margin_container/h_split_container/v_box_container/v_box_container" index="0" node_paths=PackedStringArray("program", "target_parameter", "filter_parameter", "old_preview", "new_preview", "old_bitmap", "new_bitmap") instance=ExtResource("6_wm3m8")]
+[node name="review_tree" parent="panel_container/margin_container/h_split_container/v_box_container/v_box_container" index="0" node_paths=PackedStringArray("program", "target_parameter", "filter_include", "filter_exclude", "old_preview", "new_preview", "old_bitmap", "new_bitmap") instance=ExtResource("6_wm3m8")]
 layout_mode = 2
 program = NodePath("../../../../../..")
 target_parameter = NodePath("../../left_panel/scroll_container/margin_container/parameters/target")
-filter_parameter = NodePath("../../left_panel/scroll_container/margin_container/parameters/filter_include")
+filter_include = NodePath("../../left_panel/scroll_container/margin_container/parameters/filter_include")
+filter_exclude = NodePath("../../left_panel/scroll_container/margin_container/parameters/filter_exclude")
 old_preview = NodePath("../../../right_panel/margin_container/v_box_container/previews/h_box_container/source_preview")
 new_preview = NodePath("../../../right_panel/margin_container/v_box_container/previews/h_box_container/target_preview")
 old_bitmap = NodePath("../../../right_panel/margin_container/v_box_container/previews/grid_container/source_bitmap")

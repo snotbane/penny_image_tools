@@ -319,57 +319,66 @@ def assign_image_targets(sources):
 	return (sources, targets_dict)
 
 
-def assign_comp_data(maps : dict) -> dict:
+class AtlasEntry:
+	def __init__(self, match):
+		self.full = match.group(0)
+		self.name = match.group(1)
+		self.mirror = match.group(2)
+		self.component = match.group(3)
+
+	@property
+	def is_valid(self) -> bool:
+		return self.name != None
+
+
+def assign_compo_data(atlas: dict) -> dict:
 	result = dict()
-	available = list()
-	components = set()
-	pattern = re.compile(r"((.+?)(?:_(\d+))?)_([lr])_(.)")
-	for k in maps.keys():
-		for entry in maps[k]:
-			available.append(entry["name"])
-			match = re.search(pattern, entry["name"])
 
-			if not match:
-				print(f"One or more matches were not found in the regex; double check your pattern! The pattern in question: {args.filter_composite}")
-				return dict()
+	## Initialize data
 
-			components.add(match.group(5))
-			if result.get(match.group(1)) == None:
-				is_latter_index = match.group(3) != None and int(match.group(3)) != 0
+	magics = dict()
+	name_pattern = re.compile(r"(.+?)(?:_(.))?(?:_(.))?$")
+	for k in atlas.keys():
+		for image in atlas[k]:
+			entry = AtlasEntry(re.search(name_pattern, image["name"]))
 
-				if is_latter_index: result[match.group(1)] = f"{match.group(2)}_{"0".zfill(len(match.group(3)))}"
-				else: result[match.group(1)] = None
+			if not entry.name in magics:
+				magics[entry.name] = dict()
+				magics[entry.name]["components"] = set()
+				magics[entry.name]["mirror"] = False
 
-	try:
-		for k in result.keys():
-			comp = dict()
-			index_base_entry = result[k]
+			if entry.component and not entry.component in magics[entry.name]["components"]:
+				magics[entry.name]["components"].add(entry.component)
 
-			for c in components:
-				r_suffix = f"_r_{c}"
-				r_name = k + r_suffix
-				l_suffix = f"_l_{c}"
-				l_name = k + l_suffix
+			if not magics[entry.name]["mirror"] and entry.mirror:
+				magics[entry.name]["mirror"] = True
 
-				i = 0
-				for m in maps.keys():
-					if i == 2: break
-					for entry in maps[m]:
-						if i == 2: break
-						if entry["name"] == r_name:
-							comp[r_suffix] = r_name
-							i += 1
-						elif entry["name"] == l_name:
-							comp[l_suffix] = l_name
-							i += 1
+	## Assign available sprites
 
-				if index_base_entry != None and comp.get(r_suffix) == None and result[index_base_entry].get(r_suffix) != None:
-					comp[r_suffix] = result[index_base_entry][r_suffix]
+	for name in magics.keys():
+		result[name] = dict()
+		for i_mirror in range(2 if magics[name]["mirror"] else 1):
+			mirror = "" if not magics[name]["mirror"] else f"_{"l" if i_mirror == 1 else "r"}"
+			for component in magics[name]["components"]:
+				suffix = mirror + f"_{component}"
+				prospect = name + suffix
 
-				if comp.get(l_suffix) == None and comp.get(r_suffix) != None:
-					comp[l_suffix] = comp[r_suffix]
-			result[k] = comp
-	except: pass
+				prospect_in_image = False
+				for k in atlas.keys():
+					for entry in atlas[k]:
+						if prospect != entry["name"]: continue
+						prospect_in_image = True
+						break
+				result[name][suffix] = prospect if prospect_in_image else None
+
+	## Substitute missing mirrors
+
+	for name in result.keys():
+		for suffix in result[name]:
+			if result[name][suffix] == None:
+				r_suffix = "_r" + suffix[2:4]
+				result[name][suffix] = result[name][r_suffix]
+
 	return result
 
 
@@ -392,34 +401,27 @@ def main():
 
 	project_json_path = os.path.join(args.target, args.project_name + ".json")
 
-	maps_data = dict()
+	atlas_data = dict()
 
 	for source in sources:
-		if bus_get("input", "stop"): break
+		if bus_get("input", "stop"):
+			sys.exit(1)
 
 		bus_set("output", "source_preview", f"\"{source.full}\"")
 		if args.island_crop:
-			print(f"Cropping image '{source.name}' ({progress_display + 1}/{len(sources)}) ...")
 			source.crop_visible()
 		target = targets[source.target_match]
-		print(f"Appending image '{source.name}' to '{target.file}'...")
 		target.add(source)
-		target.save()
 		bus_set("output", "target_updated", f"\"{target.full}\"")
 
-		if maps_data.get(target.file) == None:
-			maps_data[target.file] = []
-		maps_data[target.file].append(source.json_data)
+		if atlas_data.get(target.file) == None:
+			atlas_data[target.file] = []
+		atlas_data[target.file].append(source.json_data)
 
 		progress_display += 1
 		bus_set("output", "progress_display", progress_display)
 
-	print(f"Conglomeration complete.")
-
-	comp_data = assign_comp_data(maps_data)
-	# comp_data = dict()
-
-	json_data = {"maps": maps_data, "composites": comp_data}
+	json_data = {"atlas": atlas_data, "compo": assign_compo_data(atlas_data)}
 
 	os.makedirs(os.path.dirname(project_json_path), exist_ok=True)
 	with open(project_json_path, "w") as file:
