@@ -6,13 +6,13 @@ enum {
 	STATUS,
 	PROGRESS,
 	TARGET,
-	REMOVE
 }
 
 enum {
+	EXECUTE,
 	OPEN,
 	COPY,
-	EXECUTE,
+	REMOVE,
 }
 
 const TEMP_JSON_PATH : String = "user://temp_queue.json"
@@ -88,7 +88,6 @@ func _ready() -> void:
 		self.set_column_title_alignment(i, HORIZONTAL_ALIGNMENT_LEFT)
 
 	self.set_column_expand(BUTTONS, false)
-	self.set_column_expand(REMOVE, false)
 	self.set_column_expand_ratio(TARGET, 6)
 
 	self.set_column_title(PROGRAM, "Program")
@@ -207,7 +206,7 @@ func refresh_task_status(task: Task) -> void:
 
 	for i in self.columns:
 		match i:
-			BUTTONS, REMOVE: continue
+			BUTTONS: continue
 		match task.status:
 			Task.Status.QUEUED:
 				item.clear_custom_color(i)
@@ -221,6 +220,8 @@ func refresh_task_status(task: Task) -> void:
 			Task.Status.FAILED:
 				item.set_custom_color(i, Color.WHITE)
 				item.set_custom_bg_color(i, Color.html("a82238"))
+
+	item.set_button_disabled(BUTTONS, REMOVE, task.status == Task.Status.RUNNING)
 
 	refresh_task_progress(task)
 
@@ -258,16 +259,17 @@ func add_task_item(task: Task) -> TreeItem:
 	for i in self.columns:
 		result.set_selectable(i, false)
 
+	result.add_button(BUTTONS, Program.PLAY_ICON, EXECUTE)
 	result.add_button(BUTTONS, OPEN_ICON, OPEN)
 	result.set_button_tooltip_text(BUTTONS, OPEN, "Open")
 	result.add_button(BUTTONS, COPY_ICON, COPY)
 	result.set_button_tooltip_text(BUTTONS, COPY, "Duplicate")
-	result.add_button(BUTTONS, Program.PLAY_ICON, EXECUTE)
-	result.add_button(REMOVE, REMOVE_ICON)
-	result.set_button_tooltip_text(REMOVE, 0, "Remove")
+	result.add_button(BUTTONS, REMOVE_ICON, REMOVE)
+	result.set_button_tooltip_text(BUTTONS, REMOVE, "Remove")
 
 	result.set_text(PROGRAM, task.program_task_name)
 	result.set_text_direction(TARGET, TextDirection.TEXT_DIRECTION_RTL)
+
 	refresh_task_target(task)
 	refresh_task_status(task)
 
@@ -326,12 +328,10 @@ func execute_item(item: TreeItem) -> void:
 
 
 func _on_button_clicked(item:TreeItem, column:int, id:int, mouse_button_index:int) -> void:
-	match column:
-		BUTTONS:
-			match id:
-				OPEN: open_item(item)
-				COPY: copy_item(item)
-				EXECUTE: execute_item(item)
+	match id:
+		EXECUTE: execute_item(item)
+		OPEN: open_item(item)
+		COPY: copy_item(item)
 		REMOVE: remove_item(item)
 
 
