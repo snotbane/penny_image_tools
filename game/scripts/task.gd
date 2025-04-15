@@ -29,7 +29,7 @@ const WINDOW_SCENE : PackedScene = preload("res://game/scenes/program_window.tsc
 
 @export var identifier : StringName
 @export var parameters : Dictionary
-@export var target : String
+@export var comment : String
 
 var program : Program
 
@@ -57,6 +57,7 @@ func get_json_data() -> Dictionary:
 	return {
 		&"identifier":	identifier,
 		&"parameters":	parameters,
+		&"comment": comment,
 	}
 
 
@@ -67,7 +68,7 @@ func _init(_identifier: StringName = &"program") -> void:
 func populate_from_json(json: Dictionary) -> void:
 	identifier = json[&"identifier"]
 	parameters = json[&"parameters"]
-	target = parameters.get(&"target", "")
+	comment = json.get(&"comment", "")
 
 
 func populate_from_program(_program: Program) -> void:
@@ -78,7 +79,7 @@ func populate_from_program(_program: Program) -> void:
 
 func refresh_parameters() -> void:
 	parameters = program.save_parameters()
-	target = program.target_parameter.value if program.target_parameter else ""
+	comment = program.get_task_comment()
 	parameters_changed.emit()
 
 
@@ -101,11 +102,14 @@ func open(tree: SceneTree, show: bool = true) -> ProgramWindow:
 		program.started.connect(set.bind(&"status", Status.RUNNING))
 		program.succeeded.connect(set.bind(&"status", Status.COMPLETE))
 		program.failed.connect(set.bind(&"status", Status.FAILED))
+		program.parameters_changed.connect(refresh_parameters)
+
 		if parameters:
 			if Parameter.get_global(&"all", &"persist_overrides_task", true):
 				program.load_parameters(parameters)
 			else:
 				program.load_parameters.call_deferred(parameters)
+
 
 		return result
 

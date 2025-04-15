@@ -32,6 +32,11 @@ func get_progress() -> float:
 		float($panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display.max_value)
 
 
+func get_task_comment() -> String:
+	#return parameters_container.find_child(\"project_name\").value
+	return \"%s — %s\" % [parameters_container.find_child(\"project_name\").value, self.get_source_target_diff_path()]
+
+
 
 func start() -> void:
 	target_paths.clear()

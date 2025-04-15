@@ -19,6 +19,10 @@ func _refresh_elements() -> void:
 func get_progress() -> float:
 	return float($panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display.value) / \\
 		float($panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display.max_value)
+
+
+func get_task_comment() -> String:
+	return parameters_container.find_child(\"target\").value
 "
 
 [node name="program_optipng" node_paths=PackedStringArray("target_parameter", "progress_display", "elements") instance=ExtResource("1_qdlne")]

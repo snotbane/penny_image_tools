@@ -14,6 +14,7 @@ signal stop_requested
 signal stopped
 signal succeeded
 signal failed
+signal parameters_changed
 
 @export var print_output : bool
 @export var identifier : StringName = &"program"
@@ -53,6 +54,10 @@ func _ready() -> void:
 	window.close_requested.connect(on_close_requested)
 	self.refresh_window_title()
 
+	for i in parameters_container.get_children():
+		if i is not Parameter: continue
+		i.value_changed.connect(parameters_changed.emit.unbind(1))
+
 	bus_path = "%s%s_%s.cfg" % [BUS_DIR.get_current_dir(), self.name, self.get_instance_id()]
 
 	thread = Thread.new()
@@ -75,6 +80,10 @@ func add_to_queue() -> void:
 	task.populate_from_program(self)
 	TaskQueue.inst.add(task)
 	on_close_requested()
+
+
+func get_task_comment() -> String:
+	return self.program_nickname
 
 
 func load_parameters(data: Dictionary) -> void:
@@ -176,6 +185,27 @@ func refresh_window_title() -> void:
 	window.title = "%s — %s" % [ProjectSettings.get_setting("application/config/name"), self.program_nickname]
 	if thread and thread.is_alive():
 		window.title += " — %s" % Utils.get_duration_string(Time.get_ticks_msec() - time_started)
+
+
+func get_source_target_diff_path() -> String:
+	var source : String = parameters_container.find_child("source").value
+	var target : String = parameters_container.find_child("target").value
+
+	if source == "": return target
+
+	var result : String
+	while source != "":
+		var source_snip := source.substr(source.rfind("/"))
+		var target_snip := target.substr(target.rfind("/"))
+
+		result = target_snip.path_join(result) if result else target_snip
+
+		if source_snip == target_snip: break
+
+		source = source.substr(0, source.rfind("/"))
+		target = target.substr(0, target.rfind("/"))
+
+	return result
 
 
 func _on_start_button_pressed() -> void:

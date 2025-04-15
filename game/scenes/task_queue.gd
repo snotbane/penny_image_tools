@@ -5,7 +5,7 @@ enum {
 	PROGRAM,
 	STATUS,
 	PROGRESS,
-	TARGET,
+	COMMENT,
 }
 
 enum {
@@ -73,7 +73,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	self.drop_mode_flags = DROP_MODE_INBETWEEN
 
 	var drag_preview = Label.new()
-	drag_preview.text = dragged_item.get_text(TARGET)
+	drag_preview.text = dragged_item.get_text(COMMENT)
 	set_drag_preview(drag_preview)
 
 	return get_item_index(dragged_item)
@@ -88,12 +88,12 @@ func _ready() -> void:
 		self.set_column_title_alignment(i, HORIZONTAL_ALIGNMENT_LEFT)
 
 	self.set_column_expand(BUTTONS, false)
-	self.set_column_expand_ratio(TARGET, 6)
+	self.set_column_expand_ratio(COMMENT, 6)
 
 	self.set_column_title(PROGRAM, "Program")
 	self.set_column_title(STATUS, "Status")
 	self.set_column_title(PROGRESS, "Progress")
-	self.set_column_title(TARGET, "Target")
+	self.set_column_title(COMMENT, "Comment")
 
 	refresh_items()
 
@@ -236,9 +236,9 @@ func refresh_task_progress(task: Task) -> void:
 			item.set_text(PROGRESS, "%s%%" % progress)
 
 
-func refresh_task_target(task: Task) -> void:
+func refresh_task_comment(task: Task) -> void:
 	var item : TreeItem = task_items[task]
-	item.set_text(TARGET, task.target)
+	item.set_text(COMMENT, task.comment)
 
 
 func find_task(item: TreeItem) -> Task:
@@ -249,7 +249,7 @@ func find_task(item: TreeItem) -> Task:
 func add(task: Task) -> TreeItem:
 	tasks.push_back(task)
 	task.status_changed.connect(refresh_task_status.bind(task))
-	task.parameters_changed.connect(refresh_task_target.bind(task))
+	task.parameters_changed.connect(refresh_task_comment.bind(task))
 	return add_task_item(task)
 
 func add_task_item(task: Task) -> TreeItem:
@@ -268,9 +268,9 @@ func add_task_item(task: Task) -> TreeItem:
 	result.set_button_tooltip_text(BUTTONS, REMOVE, "Remove")
 
 	result.set_text(PROGRAM, task.program_task_name)
-	result.set_text_direction(TARGET, TextDirection.TEXT_DIRECTION_RTL)
+	# result.set_text_direction(COMMENT, TextDirection.TEXT_DIRECTION_RTL)
 
-	refresh_task_target(task)
+	refresh_task_comment(task)
 	refresh_task_status(task)
 
 	return result

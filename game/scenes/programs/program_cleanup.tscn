@@ -25,6 +25,16 @@ func _refresh_elements() -> void:
 func get_progress() -> float:
 	return float($panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display.value) / \\
 		float($panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/progress_display.max_value)
+
+
+func get_task_comment() -> String:
+	var target : String = parameters_container.find_child(\"target\").value
+	var path : String = \"\" 
+	path = target.substr(target.rfind(\"/\")) + path
+	target = target.substr(0, target.rfind(\"/\"))
+	path = target.substr(target.rfind(\"/\")) + path
+	
+	return \"%s — include: %s — exclude: %s — size: %s\" % [path, parameters_container.find_child(\"filter_include\").value, parameters_container.find_child(\"filter_exclude\").value, parameters_container.find_child(\"island_size\").value]
 "
 
 [sub_resource type="GDScript" id="GDScript_3d53m"]
