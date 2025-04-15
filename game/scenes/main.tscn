@@ -144,6 +144,24 @@ label_text = "UI Scale"
 persist = true
 persist_disabled = true
 
+[node name="window_size_x" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("5_ejk4j")]
+visible = false
+layout_mode = 2
+max_value = 65536.0
+_value = 1152.0
+label_text = "Window Size X"
+persist = true
+persist_disabled = true
+
+[node name="window_size_y" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("5_ejk4j")]
+visible = false
+layout_mode = 2
+max_value = 65536.0
+_value = 648.0
+label_text = "Window Size Y"
+persist = true
+persist_disabled = true
+
 [node name="persist_overrides_task" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("6_aju45")]
 visible = false
 layout_mode = 2
@@ -281,7 +299,7 @@ bbcode_enabled = true
 text = "[center][b]PENNYTHON TASK RUNNER[/b] v25.04.15
 
 Created by [url=https://snotbane.carrd.co][hint=https://snotbane.carrd.co]@snotbane[/hint][/url]
-View this [url=https://github.com/snotbane/penny_image_tools][hint=https://github.com/snotbane/penny_image_tools]GitHub repository[/hint][/url] 
+View this [url=https://github.com/snotbane/pennython][hint=https://github.com/snotbane/pennython]GitHub repository[/hint][/url] 
 "
 fit_content = true
 script = SubResource("GDScript_3v7cf")

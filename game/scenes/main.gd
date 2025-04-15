@@ -6,6 +6,9 @@ var time_started
 func _ready() -> void:
 	self.get_viewport().get_window().close_requested.connect(close_requested)
 
+	self.get_window().size = Vector2i(Parameter.get_global(&"all", &"window_size_x"), Parameter.get_global(&"all", &"window_size_y"))
+	self.get_window().move_to_center()
+
 
 func _process(delta: float) -> void:
 	if $panel_container/margin_container/v_box_container/h_box_container/task_queue/panel_container/margin_container/task_tree.is_running:
@@ -20,6 +23,8 @@ func close_requested() -> void:
 
 
 func quit() -> void:
+	Parameter.set_global(&"all", &"window_size_x", self.get_window().size.x)
+	Parameter.set_global(&"all", &"window_size_y", self.get_window().size.y)
 	self.get_tree().quit()
 
 

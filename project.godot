@@ -34,8 +34,6 @@ gdscript/warnings/integer_division=0
 
 [display]
 
-window/size/viewport_width=2304
-window/size/viewport_height=1296
 window/energy_saving/keep_screen_on=false
 window/subwindows/embed_subwindows=false
 window/stretch/aspect="expand"
