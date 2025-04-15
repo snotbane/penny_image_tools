@@ -48,6 +48,7 @@ var task_items : Dictionary
 var buttons : Dictionary
 var dragged_item : TreeItem
 
+
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 	return true
 
@@ -58,9 +59,11 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 	var target_index := self.get_item_index(target)
 	if target_index == -1: return
 
-	reorder_item(dragged_item, target_index - data)
-
-	if dragged_item: dragged_item.free()
+	var section := get_drop_section_at_position(at_position)
+	var delta : int = target_index - data
+	if delta != 0:
+		reorder_item(dragged_item, delta + (mini(section, 0) if signi(delta) > 0 else maxi(section, 0)))
+		if dragged_item: dragged_item.free()
 	self.drop_mode_flags = DROP_MODE_DISABLED
 
 func _get_drag_data(at_position: Vector2) -> Variant:
@@ -74,6 +77,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	set_drag_preview(drag_preview)
 
 	return get_item_index(dragged_item)
+
 
 func _ready() -> void:
 	inst = self
