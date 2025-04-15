@@ -10,18 +10,14 @@ enum {
 }
 
 enum {
-	MOVE_UP,
-	MOVE_DOWN,
-	COPY,
 	OPEN,
+	COPY,
 	EXECUTE,
 }
 
 const TEMP_JSON_PATH : String = "user://temp_queue.json"
-const MOVE_UP_ICON : Texture2D = preload("res://game/icons/MoveUp.svg")
-const MOVE_DOWN_ICON : Texture2D = preload("res://game/icons/MoveDown.svg")
+const OPEN_ICON : Texture2D = preload("res://game/icons/Edit.svg")
 const COPY_ICON : Texture2D = preload("res://game/icons/ActionCopy.svg")
-const OPEN_ICON : Texture2D = preload("res://game/icons/ExternalLink.svg")
 const REMOVE_ICON : Texture2D = preload("res://game/icons/Remove.svg")
 const STATUS_TEXTS : PackedStringArray = [ "Queued", "Running", "Completed", "Failed" ]
 
@@ -50,10 +46,39 @@ var root : TreeItem
 var tasks : Array[Task]
 var task_items : Dictionary
 var buttons : Dictionary
+var dragged_item : TreeItem
 
+func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
+	return true
+
+func _drop_data(at_position: Vector2, data: Variant) -> void:
+	var target := self.get_item_at_position(at_position)
+	if not target: return
+
+	var target_index := self.get_item_index(target)
+	if target_index == -1: return
+
+	reorder_item(dragged_item, target_index - data)
+
+	if dragged_item: dragged_item.free()
+	self.drop_mode_flags = DROP_MODE_DISABLED
+
+func _get_drag_data(at_position: Vector2) -> Variant:
+	dragged_item = self.get_item_at_position(at_position)
+	if not dragged_item: return null
+
+	self.drop_mode_flags = DROP_MODE_INBETWEEN
+
+	var drag_preview = Label.new()
+	drag_preview.text = dragged_item.get_text(TARGET)
+	set_drag_preview(drag_preview)
+
+	return get_item_index(dragged_item)
 
 func _ready() -> void:
 	inst = self
+
+	self.set_drag_forwarding(_get_drag_data, _can_drop_data, _drop_data)
 
 	for i in self.columns:
 		self.set_column_title_alignment(i, HORIZONTAL_ALIGNMENT_LEFT)
@@ -83,6 +108,18 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	if Engine.is_editor_hint(): return
 	save_json()
+
+
+func get_item_index(item: TreeItem) -> int:
+	var parent = item.get_parent()
+	var i = 0
+	var child = parent.get_first_child()
+	while child:
+		if child == item:
+			return i
+		i += 1
+		child = child.get_next()
+	return -1
 
 
 func save_json(path: String = TEMP_JSON_PATH) -> void:
@@ -217,14 +254,10 @@ func add_task_item(task: Task) -> TreeItem:
 	for i in self.columns:
 		result.set_selectable(i, false)
 
-	result.add_button(BUTTONS, MOVE_UP_ICON, MOVE_UP)
-	result.set_button_tooltip_text(BUTTONS, MOVE_UP, "Move Up")
-	result.add_button(BUTTONS, MOVE_DOWN_ICON, MOVE_DOWN)
-	result.set_button_tooltip_text(BUTTONS, MOVE_DOWN, "Move Down")
-	result.add_button(BUTTONS, COPY_ICON, COPY)
-	result.set_button_tooltip_text(BUTTONS, COPY, "Duplicate")
 	result.add_button(BUTTONS, OPEN_ICON, OPEN)
 	result.set_button_tooltip_text(BUTTONS, OPEN, "Open")
+	result.add_button(BUTTONS, COPY_ICON, COPY)
+	result.set_button_tooltip_text(BUTTONS, COPY, "Duplicate")
 	result.add_button(BUTTONS, Program.PLAY_ICON, EXECUTE)
 	result.add_button(REMOVE, REMOVE_ICON)
 	result.set_button_tooltip_text(REMOVE, 0, "Remove")
@@ -292,10 +325,8 @@ func _on_button_clicked(item:TreeItem, column:int, id:int, mouse_button_index:in
 	match column:
 		BUTTONS:
 			match id:
-				MOVE_UP: reorder_item(item, -1)
-				MOVE_DOWN: reorder_item(item, +1)
-				COPY: copy_item(item)
 				OPEN: open_item(item)
+				COPY: copy_item(item)
 				EXECUTE: execute_item(item)
 		REMOVE: remove_item(item)
 

@@ -183,7 +183,6 @@ class SourceImage(PathedImage):
 
 
 	def add_to_target(self):
-		print(f"Added {self.name} to '{self.target}'")
 		self.target.add(self)
 
 
@@ -196,7 +195,6 @@ class SourceImage(PathedImage):
 		for x in range(w):
 			for y in range(h):
 				if a_pixels[x, y] == 0: continue
-				print((x, y))
 				rx = x
 				break
 			if rx != -1: break
@@ -289,9 +287,7 @@ class TargetImage(PathedImage):
 
 	def save(self):
 		os.makedirs(os.path.dirname(self.full), exist_ok=True)
-		print(f"Saving image to {self.full} ...")
 		self.image.save(self.full)
-		print(f"Saved image!")
 
 
 def assign_image_sources():
@@ -302,7 +298,9 @@ def assign_image_sources():
 		for file in files:
 			if args.filter_include != "" and re.search(include, file) == None: continue
 			if args.filter_exclude != "" and re.search(exclude, file) != None: continue
-			source = SourceImage(root, file)
+			try:
+				source = SourceImage(root, file)
+			except: continue
 			result.append(source)
 	return result
 

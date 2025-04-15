@@ -95,7 +95,6 @@ class TargetImage:
 
 		progress_display += 1
 		bus_set("output", "progress_display", progress_display)
-		# print(f"Saved image to {self.full}")
 
 
 def assign_image_targets():
@@ -110,7 +109,6 @@ def assign_image_targets():
 			target_file = f"{name}_n{ext}"
 			target = TargetImage(args.target, target_file, os.path.join(args.source, root), file)
 			if not args.overwrite and os.path.exists(target.full): continue
-			print(target.full)
 			result.append(target)
 	return result
 

@@ -175,18 +175,7 @@ func _refresh_elements() -> void:
 func refresh_window_title() -> void:
 	window.title = "%s — %s" % [ProjectSettings.get_setting("application/config/name"), self.program_nickname]
 	if thread and thread.is_alive():
-		window.title += " — %s" % get_duration_string(Time.get_ticks_msec() - time_started)
-
-static func get_duration_string(msec: int) -> String:
-	var total_seconds : int = msec / 1000
-	var seconds : int = total_seconds % 60
-	var minutes : int = total_seconds / 60
-	var hours : int = total_seconds / 3600
-
-	if hours > 0:
-		return "%02d:%02d:%02d" % [hours, minutes, seconds]
-	else:
-		return "%02d:%02d" % [minutes, seconds]
+		window.title += " — %s" % Utils.get_duration_string(Time.get_ticks_msec() - time_started)
 
 
 func _on_start_button_pressed() -> void:

@@ -69,7 +69,6 @@ def compress_png_file(target):
 			time.sleep(0.25)
 
 		bytes_reduced += file_size_before - os.path.getsize(target)
-		print(bytes_reduced)
 		bus_set("output", "bytes_display", bytes_reduced)
 
 		files_completed += 1

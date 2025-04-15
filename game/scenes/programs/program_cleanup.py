@@ -251,7 +251,10 @@ def assign_targets():
 		for file in files:
 			if args.filter_include != "" and re.search(include, file) == None: continue
 			if args.filter_exclude != "" and re.search(exclude, file) != None: continue
-			result.append(TargetImage(os.path.join(args.target, root), file))
+			try:
+				target = TargetImage(os.path.join(args.target, root), file)
+			except: continue
+			result.append(target)
 	return result
 
 
