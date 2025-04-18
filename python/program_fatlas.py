@@ -332,9 +332,9 @@ def assign_compo_data(atlas: dict) -> dict:
 
 	magics = dict()
 	name_pattern = re.compile(r"(.+?)(?:_(.))?(?:_(.))?$")
-	for k in atlas.keys():
-		for image in atlas[k]:
-			entry = AtlasEntry(re.search(name_pattern, image["name"]))
+	for texture in atlas.keys():
+		for subimage_name in atlas[texture].keys():
+			entry = AtlasEntry(re.search(name_pattern, subimage_name))
 
 			if not entry.name in magics:
 				magics[entry.name] = dict()
@@ -358,9 +358,9 @@ def assign_compo_data(atlas: dict) -> dict:
 				prospect = name + suffix
 
 				prospect_in_image = False
-				for k in atlas.keys():
-					for entry in atlas[k]:
-						if prospect != entry["name"]: continue
+				for texture in atlas.keys():
+					for subimage_name in atlas[texture].keys():
+						if prospect != subimage_name: continue
 						prospect_in_image = True
 						break
 				result[name][suffix] = prospect if prospect_in_image else None
@@ -409,8 +409,8 @@ def main():
 		bus_set("output", "target_updated", f"\"{target.full}\"")
 
 		if atlas_data.get(target.file) == None:
-			atlas_data[target.file] = []
-		atlas_data[target.file].append(source.json_data)
+			atlas_data[target.file] = dict()
+		atlas_data[target.file][source.name] = source.json_data
 
 		progress_display += 1
 		bus_set("output", "progress_display", progress_display)
