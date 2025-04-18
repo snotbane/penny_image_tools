@@ -169,12 +169,8 @@ class SourceImage(PathedImage):
 		return self.image.crop((self.source_region.x, self.source_region.y, self.source_region.r, self.source_region.b))
 
 	@property
-	def json_data(self) -> dict:
-		return {
-			"name": self.name,
-			"source_region": [self.source_region.x, self.source_region.y, self.source_region.w, self.source_region.h],
-			"target_offset": self.target_offset,
-		}
+	def json_data(self) -> list:
+		return [self.target_offset[0], self.target_offset[1], self.source_region.x, self.source_region.y, self.source_region.w, self.source_region.h]
 
 
 	@property

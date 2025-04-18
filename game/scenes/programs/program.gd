@@ -158,17 +158,18 @@ func on_close_requested() -> void:
 	if window.visible:
 		window.hide()
 		window.hidden.emit()
+		self.get_tree().root.grab_focus()
 	if not is_running:
 		window.queue_free()
-	self.get_tree().root.grab_focus()
 
 
 func force_close_window() -> void:
 	self.stop()
-	window.hide()
-	window.hidden.emit()
+	if window.visible:
+		self.get_tree().root.grab_focus()
+		window.hide()
+		window.hidden.emit()
 	window.queue_free()
-	self.get_tree().root.grab_focus()
 
 
 func refresh_elements() -> void:

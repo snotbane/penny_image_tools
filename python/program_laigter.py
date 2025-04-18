@@ -86,8 +86,11 @@ class TargetImage:
 			source : Image = Image.open(self.src_full).convert("RGBA")
 			image.putalpha(source.getchannel("A"))
 			image.save(self.full)
-			os.remove(result_path)
-			bus_set("output", "target_preview", f"\"{self.full}\"")
+			if args.source_path != args.target_path:
+				os.remove(result_path)
+				bus_set("output", "target_preview", f"\"{self.full}\"")
+			else:
+				bus_set("output", "target_preview", f"\"{result_path}\"")
 		except Exception as e:
 			sys.stderr.write(f"Error processing {self.full}: {e}")
 
