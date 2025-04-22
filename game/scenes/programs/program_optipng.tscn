@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://d37ink161ont1"]
+[gd_scene load_steps=8 format=3 uid="uid://d37ink161ont1"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_qdlne"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_og4v3"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="3_oxj4r"]
 [ext_resource type="PackedScene" uid="uid://dmim1yoep7vyk" path="res://game/scenes/elements/bytes_display.tscn" id="4_06mrk"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="4_ik2mn"]
-[ext_resource type="PackedScene" uid="uid://xx07uwu4xf5i" path="res://game/scenes/elements/privacy_mask.tscn" id="4_la4aj"]
 
 [sub_resource type="GDScript" id="GDScript_06mrk"]
 script/source = "extends Program
@@ -66,9 +65,6 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="image_preview" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/preview_container" index="0" instance=ExtResource("3_oxj4r")]
-layout_mode = 1
-
-[node name="privacy_mask" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/preview_container" index="1" instance=ExtResource("4_la4aj")]
 layout_mode = 1
 
 [node name="bytes_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" node_paths=PackedStringArray("program") instance=ExtResource("4_06mrk")]

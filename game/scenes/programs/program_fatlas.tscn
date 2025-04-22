@@ -5,12 +5,12 @@
 [ext_resource type="Texture2D" uid="uid://cfupnfea6aii8" path="res://game/icons/AtlasTextureBig.svg" id="2_irdv1"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="3_d0uvx"]
 [ext_resource type="PackedScene" uid="uid://d0sk7730ilig6" path="res://game/scenes/parameter/parameter_number.tscn" id="5_6t3gx"]
+[ext_resource type="PackedScene" uid="uid://b10hspyn3i6l8" path="res://game/scenes/parameter/parameter_option.tscn" id="5_vcqte"]
 [ext_resource type="PackedScene" uid="uid://b0agby5b750h6" path="res://game/scenes/parameter/parameter_regex.tscn" id="6_1jrm7"]
 [ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="6_4wcr6"]
 [ext_resource type="PackedScene" uid="uid://1vhcrt3tadog" path="res://game/scenes/parameter/parameter_bool.tscn" id="7_1jrm7"]
 [ext_resource type="PackedScene" uid="uid://d0ihkarg2nvgg" path="res://game/scenes/elements/image_preview_grid.tscn" id="7_20joi"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="8_4l84p"]
-[ext_resource type="PackedScene" uid="uid://xx07uwu4xf5i" path="res://game/scenes/elements/privacy_mask.tscn" id="8_irdv1"]
 
 [sub_resource type="GDScript" id="GDScript_20joi"]
 script/source = "extends Program
@@ -95,7 +95,18 @@ persist_disabled = true
 [node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3"]
 layout_mode = 2
 
-[node name="filter_include" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" node_paths=PackedStringArray("program") instance=ExtResource("6_1jrm7")]
+[node name="data_format" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" node_paths=PackedStringArray("program") instance=ExtResource("5_vcqte")]
+layout_mode = 2
+tooltip_text = "File extension to write the data file to. This does not change the data itself; only the file extension. The result file can still be read as a .json file.
+Use .fat if you are unsure. This will allow for smooth importing when using for another Godot project."
+options = PackedStringArray(".json", ".fat")
+_value = 1
+label_text = "JSON Format"
+normal_tooltip = "File extension to write the data file to. This does not change the data itself; only the file extension. The result file can still be read as a .json file.
+Use .fat if you are unsure. This will allow for smooth importing when using for another Godot project."
+program = NodePath("../../../../../../../../..")
+
+[node name="filter_include" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" node_paths=PackedStringArray("program") instance=ExtResource("6_1jrm7")]
 layout_mode = 2
 tooltip_text = "Filenames (INCLUDING extension) matching this regex filter will be added to the final image(s)."
 _value = "\\.png$"
@@ -104,20 +115,21 @@ label_text = "Inclusion Filter"
 normal_tooltip = "Filenames (INCLUDING extension) matching this regex filter will be added to the final image(s)."
 program = NodePath("../../../../../../../../..")
 
-[node name="filter_exclude" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" node_paths=PackedStringArray("program") instance=ExtResource("6_1jrm7")]
+[node name="filter_exclude" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="6" node_paths=PackedStringArray("program") instance=ExtResource("6_1jrm7")]
 layout_mode = 2
 tooltip_text = "Filenames (INCLUDING extension) matching this regex filter will be NOT added to the final image(s). Leave blank to exclude none."
 label_text = "Exclusion Filter"
 normal_tooltip = "Filenames (INCLUDING extension) matching this regex filter will be NOT added to the final image(s). Leave blank to exclude none."
 program = NodePath("../../../../../../../../..")
 
-[node name="filter_separate" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="6" node_paths=PackedStringArray("program") instance=ExtResource("6_1jrm7")]
+[node name="filter_separate" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="7" node_paths=PackedStringArray("program") instance=ExtResource("6_1jrm7")]
 layout_mode = 2
 tooltip_text = "Filenames (EXCLUDING extension) matching this regex filter will be separated into different images.
 This is primarily used to keep different kinds of images together, such as albedo and normal maps.
 The match found will be placed at the end of the resulting target file.
 For example, use \"_[a-zA-Z]$\" to separate files ending with an alphabetic character, like \"_n\", \"_o\", \"_m\", etc. 
-Default: \".*\" (This default value will combine all images into a single image.)"
+Default: \"^\" (This will combine all images into a single superimage.)
+(\".*\" will separate all images individually, which is completely pointless.)"
 _value = "^"
 allow_empty = false
 label_text = "Separation Filter"
@@ -125,10 +137,11 @@ normal_tooltip = "Filenames (EXCLUDING extension) matching this regex filter wil
 This is primarily used to keep different kinds of images together, such as albedo and normal maps.
 The match found will be placed at the end of the resulting target file.
 For example, use \"_[a-zA-Z]$\" to separate files ending with an alphabetic character, like \"_n\", \"_o\", \"_m\", etc. 
-Default: \".*\" (This default value will combine all images into a single image.)"
+Default: \"^\" (This will combine all images into a single superimage.)
+(\".*\" will separate all images individually, which is completely pointless.)"
 program = NodePath("../../../../../../../../..")
 
-[node name="filter_composite" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="7" node_paths=PackedStringArray("program") instance=ExtResource("6_1jrm7")]
+[node name="filter_composite" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="8" node_paths=PackedStringArray("program") instance=ExtResource("6_1jrm7")]
 visible = false
 layout_mode = 2
 tooltip_text = "Assigns composition data based on the internal groups of the regex. FOR NOW this only works with this specific pattern, so don't change this."
@@ -137,17 +150,17 @@ label_text = "Composite Filter"
 normal_tooltip = "Assigns composition data based on the internal groups of the regex. FOR NOW this only works with this specific pattern, so don't change this."
 program = NodePath("../../../../../../../../..")
 
-[node name="h_separator_2" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="8"]
+[node name="h_separator_2" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="9"]
 layout_mode = 2
 
-[node name="image_format" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="9" node_paths=PackedStringArray("program") instance=ExtResource("2_hi4ns")]
+[node name="image_format" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="10" node_paths=PackedStringArray("program") instance=ExtResource("2_hi4ns")]
 visible = false
 layout_mode = 2
 _value = "RGBA"
 label_text = "Image Format"
 program = NodePath("../../../../../../../../..")
 
-[node name="image_size_limit" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="10" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
+[node name="image_size_limit" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="11" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
 visible = false
 layout_mode = 2
 tooltip_text = "The max pixel dimensions (square) a target image can be. If an island cannot be placed without expanding the target image beyond this limit, a new target image will be created. "
@@ -158,11 +171,11 @@ label_text = "Image Size Limit"
 normal_tooltip = "The max pixel dimensions (square) a target image can be. If an island cannot be placed without expanding the target image beyond this limit, a new target image will be created. "
 program = NodePath("../../../../../../../../..")
 
-[node name="h_separator_3" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="11"]
+[node name="h_separator_3" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="12"]
 visible = false
 layout_mode = 2
 
-[node name="island_crop" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="12" node_paths=PackedStringArray("program") instance=ExtResource("7_1jrm7")]
+[node name="island_crop" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="13" node_paths=PackedStringArray("program") instance=ExtResource("7_1jrm7")]
 layout_mode = 2
 tooltip_text = "If enabled, only the bounding box containing all visible pixels will be included.
 If disabled, include the entire image. (Not recommended.)"
@@ -172,7 +185,7 @@ normal_tooltip = "If enabled, only the bounding box containing all visible pixel
 If disabled, include the entire image. (Not recommended.)"
 program = NodePath("../../../../../../../../..")
 
-[node name="island_margin" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="13" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
+[node name="island_margin" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="14" node_paths=PackedStringArray("program") instance=ExtResource("5_6t3gx")]
 layout_mode = 2
 tooltip_text = "The space between sprites and image bounds in the final image(s).
 Default: 2"
@@ -202,9 +215,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
-
-[node name="privacy_mask" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/h_split_container" index="2" instance=ExtResource("8_irdv1")]
-layout_mode = 1
 
 [node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("8_4l84p")]
 layout_mode = 2

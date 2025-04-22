@@ -130,11 +130,12 @@ persist_disabled = true
 [node name="queue_visibility" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/global_params_list/margin_container/v_box_container" instance=ExtResource("5_uk16q")]
 layout_mode = 2
 tooltip_text = "Run in Background: The queue will run without opening any windows.
-Hide Results: Programs run in the queue will open a new window, but the results will be hidden.
 Show All: Show everything, including new windows."
-options = PackedStringArray("Run in Background", "Hide Results", "Show All")
+options = PackedStringArray("Run in Background", "<do not select>", "Show All")
 _value = 0
 label_text = "Queue Visibility"
+normal_tooltip = "Run in Background: The queue will run without opening any windows.
+Show All: Show everything, including new windows."
 persist = true
 persist_disabled = true
 

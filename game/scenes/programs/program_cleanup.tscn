@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://txuhnf4h6s6y"]
+[gd_scene load_steps=15 format=3 uid="uid://txuhnf4h6s6y"]
 
 [ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_vweaw"]
 [ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_43psw"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://b0agby5b750h6" path="res://game/scenes/parameter/parameter_regex.tscn" id="3_1rhoa"]
 [ext_resource type="PackedScene" uid="uid://1vhcrt3tadog" path="res://game/scenes/parameter/parameter_bool.tscn" id="4_1rhoa"]
 [ext_resource type="PackedScene" uid="uid://scqegb5pvl8d" path="res://game/scenes/elements/image_preview.tscn" id="4_aq3to"]
-[ext_resource type="PackedScene" uid="uid://xx07uwu4xf5i" path="res://game/scenes/elements/privacy_mask.tscn" id="5_8n7lk"]
 [ext_resource type="PackedScene" uid="uid://cu75ls07is6n0" path="res://game/scenes/elements/progress_display.tscn" id="6_1rhoa"]
 [ext_resource type="PackedScene" uid="uid://cpvheqjy1ypmk" path="res://game/scenes/elements/review_panel.tscn" id="6_wm3m8"]
 [ext_resource type="Texture2D" uid="uid://db4d1lplh4coe" path="res://game/icons/ImportCheck.svg" id="8_85vxu"]
@@ -214,9 +213,6 @@ columns = 2
 [node name="source_bitmap" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews/grid_container" index="0" instance=ExtResource("4_aq3to")]
 layout_mode = 2
 show_path = false
-
-[node name="privacy_mask" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container/previews" index="2" instance=ExtResource("5_8n7lk")]
-layout_mode = 1
 
 [node name="progress_display" parent="panel_container/margin_container/h_split_container/right_panel/margin_container/v_box_container" index="1" instance=ExtResource("6_1rhoa")]
 layout_mode = 2
