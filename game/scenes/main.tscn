@@ -210,9 +210,10 @@ icon = ExtResource("8_aju45")
 icon_alignment = 0
 
 [node name="remap" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
+visible = false
 layout_mode = 2
-tooltip_text = "Cleans up stray and/or near-transparent pixels in sprites.
-Allows you to view the changes before committing them."
+tooltip_text = "Remaps a list of colors onto a new list of colors.
+Works as an entire image or per-channel."
 text = "Color Remapper"
 icon = ExtResource("9_8g3t5")
 icon_alignment = 0
