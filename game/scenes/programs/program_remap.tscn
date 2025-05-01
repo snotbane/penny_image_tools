@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://cwq36eoujo862"]
+
+[ext_resource type="PackedScene" uid="uid://wfssq6mqkmrt" path="res://game/scenes/programs/program.tscn" id="1_asaqg"]
+[ext_resource type="Texture2D" uid="uid://cn3kpfp5l3v41" path="res://game/icons/CurveXYZTextureBig.svg" id="2_mtyrb"]
+[ext_resource type="PackedScene" uid="uid://dpgx3mb2c87sw" path="res://game/scenes/parameter/parameter_filepath.tscn" id="2_wupjg"]
+[ext_resource type="PackedScene" uid="uid://b0agby5b750h6" path="res://game/scenes/parameter/parameter_regex.tscn" id="3_x5r7d"]
+[ext_resource type="PackedScene" uid="uid://bueivej7wxilg" path="res://game/scenes/parameter/color_remap/parameter_remap_collection.tscn" id="5_mtyrb"]
+
+[sub_resource type="GDScript" id="GDScript_mtyrb"]
+script/source = "extends Program
+"
+
+[node name="program" instance=ExtResource("1_asaqg")]
+script = SubResource("GDScript_mtyrb")
+print_output = false
+python_script_path = ""
+
+[node name="background_icon" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/background" index="0"]
+texture = ExtResource("2_mtyrb")
+
+[node name="scroll_container" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel" index="1"]
+vertical_scroll_mode = 1
+
+[node name="source" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="0" instance=ExtResource("2_wupjg")]
+layout_mode = 2
+file_mode = 2
+label_text = "Source Directory"
+persist_disabled = true
+
+[node name="target" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="1" instance=ExtResource("2_wupjg")]
+layout_mode = 2
+file_mode = 2
+label_text = "Target Directory"
+persist_disabled = true
+
+[node name="h_separator" type="HSeparator" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="2"]
+layout_mode = 2
+
+[node name="filter_include" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="3" instance=ExtResource("3_x5r7d")]
+layout_mode = 2
+tooltip_text = "Filenames (INCLUDING extension) matching this regex filter will be added to the final image(s)."
+_value = "\\.png$"
+allow_empty = false
+label_text = "Inclusion Filter"
+normal_tooltip = "Filenames (INCLUDING extension) matching this regex filter will be added to the final image(s)."
+
+[node name="filter_exclude" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="4" instance=ExtResource("3_x5r7d")]
+layout_mode = 2
+tooltip_text = "Filenames (INCLUDING extension) matching this regex filter will be NOT added to the final image(s). Leave blank to exclude none."
+label_text = "Exclusion Filter"
+normal_tooltip = "Filenames (INCLUDING extension) matching this regex filter will be NOT added to the final image(s). Leave blank to exclude none."
+
+[node name="parameter_remap_collection" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" instance=ExtResource("5_mtyrb")]
+layout_mode = 2

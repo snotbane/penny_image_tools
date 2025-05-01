@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://gw43251yvai5"]
+
+[ext_resource type="Script" uid="uid://d2scfuxn67qlo" path="res://game/scenes/parameter/color_remap/subparam_channel_remap.gd" id="1_xsn0t"]
+[ext_resource type="Script" uid="uid://dte0ukackq1ls" path="res://game/scenes/parameter/color_remap/channel_colors_list.gd" id="3_bxlf2"]
+[ext_resource type="PackedScene" uid="uid://ddtiw5lldl1wt" path="res://game/scenes/parameter/color_remap/subparam_color_remap.tscn" id="3_uvfci"]
+[ext_resource type="Texture2D" uid="uid://fme535s2d2n4" path="res://game/icons/Add.svg" id="4_fxshe"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_agr4a"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+
+[node name="subparam_channel_remap" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_agr4a")
+script = ExtResource("1_xsn0t")
+suffix = "_"
+metadata/_tab_index = 0
+
+[node name="settings" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="colors" type="VBoxContainer" parent="settings"]
+layout_mode = 2
+script = ExtResource("3_bxlf2")
+
+[node name="subparam_color_remap" parent="settings/colors" instance=ExtResource("3_uvfci")]
+layout_mode = 2
+
+[node name="add_color" type="Button" parent="settings/colors"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "New Entry"
+icon = ExtResource("4_fxshe")
+
+[connection signal="pressed" from="settings/colors/add_color" to="settings/colors" method="_on_add_color_pressed"]

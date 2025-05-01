@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddtiw5lldl1wt"]
+
+[ext_resource type="Texture2D" uid="uid://bkws2f7s6bw5x" path="res://game/icons/Remove.svg" id="1_833jr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0wmf6"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+
+[node name="subparam_color_remap" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 32)
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0wmf6")
+
+[node name="h_box_container" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="a" type="ColorPickerButton" parent="h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="h_separator" type="HSeparator" parent="h_box_container"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="b" type="ColorPickerButton" parent="h_box_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+
+[node name="remove" type="Button" parent="h_box_container"]
+layout_mode = 2
+icon = ExtResource("1_833jr")
+
+[connection signal="pressed" from="h_box_container/remove" to="." method="queue_free"]

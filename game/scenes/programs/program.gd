@@ -108,6 +108,7 @@ func get_python_arguments() -> PackedStringArray:
 	result.push_back(ProjectSettings.globalize_path(bus_path))
 	for i in parameters_container.get_children():
 		if i is not Parameter: continue
+		if i.ignore: continue
 		result.push_back(i.value_as_python_argument)
 	if self.print_output:
 		print("%s args: %s" % [self.identifier, result])

@@ -12,6 +12,7 @@ signal parameters_changed
 
 const PROGRAMS_BY_IDENTIFIER : Dictionary = {
 	&"dummy":		preload("res://game/scenes/programs/program_dummy.tscn"),
+	&"remap":		preload("res://game/scenes/programs/program_remap.tscn"),
 	&"optipng":		preload("res://game/scenes/programs/program_optipng.tscn"),
 	&"laigter":		preload("res://game/scenes/programs/program_laigter.tscn"),
 	&"fatlas":		preload("res://game/scenes/programs/program_fatlas.tscn"),
@@ -20,6 +21,7 @@ const PROGRAMS_BY_IDENTIFIER : Dictionary = {
 const PROGRAM_TASK_NAMES : Dictionary = {
 	&"dummy":		"Dummy",
 	&"optipng":		"OptiPNG",
+	&"remap":		"Remap",
 	&"laigter":		"Laigter",
 	&"fatlas":		"Fatlas",
 	&"cleanup":		"Cleanup",

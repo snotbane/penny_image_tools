@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://bueivej7wxilg"]
+
+[ext_resource type="Script" uid="uid://cvu6vilfpj433" path="res://game/scenes/parameter/color_remap/parameter_remap_collection.gd" id="1_1pfsn"]
+[ext_resource type="PackedScene" uid="uid://gw43251yvai5" path="res://game/scenes/parameter/color_remap/subparam_channel_remap.tscn" id="2_d7xpn"]
+
+[node name="parameter_remap_collection" type="TabContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 10
+tab_alignment = 1
+current_tab = 4
+script = ExtResource("1_1pfsn")
+
+[node name="RGBA" parent="." instance=ExtResource("2_d7xpn")]
+visible = false
+layout_mode = 2
+
+[node name="R" parent="." instance=ExtResource("2_d7xpn")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 1
+metadata/_tab_index = 1
+
+[node name="G" parent="." instance=ExtResource("2_d7xpn")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="B" parent="." instance=ExtResource("2_d7xpn")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="A" parent="." instance=ExtResource("2_d7xpn")]
+layout_mode = 2
+metadata/_tab_index = 4

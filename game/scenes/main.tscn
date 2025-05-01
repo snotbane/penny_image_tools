@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://coxdxohawk630"]
+[gd_scene load_steps=30 format=3 uid="uid://coxdxohawk630"]
 
 [ext_resource type="Theme" uid="uid://cjww2dp7ckflf" path="res://game/theme.tres" id="1_20rwd"]
 [ext_resource type="Script" uid="uid://bh5joyc3jgyq3" path="res://game/scenes/main.gd" id="2_r75lq"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://b1vuosy42naos" path="res://game/icons/TerrainMatchSides.svg" id="8_aju45"]
 [ext_resource type="Texture2D" uid="uid://b5165yg63jan2" path="res://game/icons/AtlasTexture.svg" id="8_cxktm"]
 [ext_resource type="Texture2D" uid="uid://bpy2jo0tc8kww" path="res://game/icons/Load.svg" id="8_shkmv"]
+[ext_resource type="Texture2D" uid="uid://su0xicvtge8l" path="res://game/icons/CurveXYZTexture.svg" id="9_8g3t5"]
 [ext_resource type="Texture2D" uid="uid://c30c6b2b3hwjc" path="res://game/icons/Play.svg" id="9_j51q3"]
 [ext_resource type="Texture2D" uid="uid://clnl6kqjmjjlb" path="res://game/icons/Reload.svg" id="10_j51q3"]
 [ext_resource type="Texture2D" uid="uid://bkws2f7s6bw5x" path="res://game/icons/Remove.svg" id="11_6mtf4"]
@@ -206,6 +207,14 @@ tooltip_text = "Cleans up stray and/or near-transparent pixels in sprites.
 Allows you to view the changes before committing them."
 text = "Sprite Cleanup"
 icon = ExtResource("8_aju45")
+icon_alignment = 0
+
+[node name="remap" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]
+layout_mode = 2
+tooltip_text = "Cleans up stray and/or near-transparent pixels in sprites.
+Allows you to view the changes before committing them."
+text = "Color Remapper"
+icon = ExtResource("9_8g3t5")
 icon_alignment = 0
 
 [node name="laigter" parent="panel_container/margin_container/v_box_container/h_box_container/v_box_container/programs_list/scroll_container/margin_container/v_box_container" instance=ExtResource("8_7j1va")]

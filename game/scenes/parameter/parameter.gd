@@ -22,10 +22,16 @@ signal value_changed(val: Variant)
 
 
 @export var label_text : String :
-	get: return $hbox/label.text if self.find_child("label") else ""
+	get:
+		if not self.find_child("label"): return ""
+		return $hbox/label.text
 	set(value):
 		if not self.find_child("label"): return
 		$hbox/label.text = value
+
+
+## If enabled, this argument will not be passed to the python script.
+@export var ignore : bool = false
 
 
 var _normal_tooltip : String
@@ -65,7 +71,9 @@ func refresh_tooltip() -> void:
 
 
 @export var persist : bool :
-	get: return $hbox/persist/check.button_pressed if find_child("check") else false
+	get:
+		if not find_child("check"): return false
+		return $hbox/persist/check.button_pressed
 	set(val):
 		if not find_child("check"): return
 		$hbox/persist/check.button_pressed = val
@@ -119,6 +127,8 @@ func _ready() -> void:
 
 
 func load_persistent() -> void:
+	if not find_child("check"): return
+
 	var already_persistent := persist
 	var will_be_persistent := CONFIG.has_section_key(section_name, self.name)
 	$hbox/persist/check.button_pressed = will_be_persistent or already_persistent
