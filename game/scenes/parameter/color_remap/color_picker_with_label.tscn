@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=3 uid="uid://cfmq2xc7etety"]
+
+[ext_resource type="Script" uid="uid://c2matcy533xsk" path="res://game/scenes/parameter/color_remap/color_picker_with_label.gd" id="1_2s1w7"]
+[ext_resource type="FontFile" uid="uid://847p2h26v2lb" path="res://game/fonts/Inter_18pt-Medium.ttf" id="2_j0atm"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_iv0wq"]
+font = ExtResource("2_j0atm")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[node name="color_picker" type="ColorPickerButton"]
+custom_minimum_size = Vector2(0, 32)
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+color = Color(0.5, 0.5, 0.5, 1)
+edit_alpha = false
+script = ExtResource("1_2s1w7")
+
+[node name="label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "FFFFFF"
+label_settings = SubResource("LabelSettings_iv0wq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="color_changed" from="." to="." method="_on_color_changed"]

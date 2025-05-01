@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://gw43251yvai5"]
+[gd_scene load_steps=4 format=3 uid="uid://gw43251yvai5"]
 
 [ext_resource type="Script" uid="uid://d2scfuxn67qlo" path="res://game/scenes/parameter/color_remap/subparam_channel_remap.gd" id="1_xsn0t"]
-[ext_resource type="Script" uid="uid://dte0ukackq1ls" path="res://game/scenes/parameter/color_remap/channel_colors_list.gd" id="3_bxlf2"]
 [ext_resource type="Texture2D" uid="uid://fme535s2d2n4" path="res://game/icons/Add.svg" id="4_fxshe"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_agr4a"]
@@ -24,16 +23,15 @@ metadata/_tab_index = 0
 
 [node name="settings" type="VBoxContainer" parent="."]
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="colors" type="VBoxContainer" parent="settings"]
 layout_mode = 2
-script = ExtResource("3_bxlf2")
 
-[node name="add_color" type="Button" parent="settings/colors"]
+[node name="add_button" type="Button" parent="settings"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "New Entry"
+size_flags_vertical = 4
+text = "New Color"
 icon = ExtResource("4_fxshe")
 
-[connection signal="pressed" from="settings/colors/add_color" to="settings/colors" method="_on_add_color_pressed"]
+[connection signal="pressed" from="settings/add_button" to="." method="_on_add_button_pressed"]

@@ -52,3 +52,4 @@ normal_tooltip = "Filenames (INCLUDING extension) matching this regex filter wil
 
 [node name="parameter_remap_collection" parent="panel_container/margin_container/h_split_container/v_box_container/left_panel/scroll_container/margin_container/parameters" index="5" instance=ExtResource("5_mtyrb")]
 layout_mode = 2
+size_flags_vertical = 3
